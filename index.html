@@ -95,8 +95,8 @@
         }
     </style>
 
-    <aside class="w-68 bg-slate-950 text-slate-400 flex flex-col h-full flex-shrink-0 shadow-[4px_0_25px_rgba(0,0,0,0.15)] z-20 border-r border-slate-900">
-        <div class="p-6 flex items-center space-x-3.5 border-b border-slate-900 bg-slate-950">
+    <aside id="sidebar" class="w-68 bg-slate-950 text-slate-400 flex flex-col h-full flex-shrink-0 shadow-[4px_0_25px_rgba(0,0,0,0.15)] z-20 border-r border-slate-900 transition-all duration-300 overflow-hidden">
+        <div class="p-6 flex items-center space-x-3.5 border-b border-slate-900 bg-slate-950 whitespace-nowrap">
             <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl text-white shadow-[0_4px_12px_rgba(79,70,229,0.5)]">
                 <i class="fa-solid fa-chart-pie text-xl w-6 text-center"></i>
             </div>
@@ -106,7 +106,7 @@
             </div>
         </div>
 
-        <nav class="flex-1 overflow-y-auto p-4 space-y-2.5 text-sm">
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2.5 text-sm whitespace-nowrap">
             
             <button onclick="toggleSection('main-analyzer-container', 'arrow-main-analyzer')" class="w-full flex items-center justify-between px-3 py-2 text-[10px] font-bold text-slate-500 hover:text-indigo-400 uppercase tracking-widest transition-colors duration-200 group focus:outline-none">
                 <div class="flex items-center space-x-2">
@@ -171,7 +171,7 @@
             
         </nav>
 
-        <div class="p-4 border-t border-slate-900 bg-slate-950 text-xs flex items-center justify-between">
+        <div class="p-4 border-t border-slate-900 bg-slate-950 text-xs flex items-center justify-between whitespace-nowrap">
             <span class="text-slate-500 font-medium">Data State:</span>
             <span id="data-status-badge" class="px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-amber-500/20 shadow-md">Syncing</span>
         </div>
@@ -181,6 +181,9 @@
         
         <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-8 flex items-center justify-between flex-shrink-0 z-10 shadow-[0_2px_15px_rgba(0,0,0,0.02)]">
             <div class="flex items-center space-x-2.5">
+                <button onclick="toggleSidebar()" class="mr-2 text-slate-600 hover:text-indigo-600 p-2 rounded-xl hover:bg-slate-100 transition-all focus:outline-none" title="Sembunyikan/Tampilkan Menu">
+                    <i id="sidebar-toggle-icon" class="fa-solid fa-bars text-lg"></i>
+                </button>
                 <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">PT KUT Portal</span>
                 <span class="text-slate-300 text-sm">/</span>
                 <span id="breadcrumb-current" class="text-slate-900 font-bold text-base tracking-tight">Monitoring SVA</span>
@@ -348,10 +351,6 @@
             document.querySelectorAll('.view-pane').forEach(el => el.classList.add('hidden'));
             
             let targetPane = currentView;
-            if (targetPane.startsWith('asset-')) {
-                // Asset memiliki sub-view tersendiri
-            }
-            
             const paneEl = document.getElementById(`view-${targetPane}`);
             if(paneEl) {
                 paneEl.classList.remove('hidden');
@@ -446,7 +445,6 @@
 
         function applyFilters() { renderActiveView(globalDataset); }
 
-        // FUNGSI BARU KHUSUS UNTUK TOGGLE SECTION UTAMA DAN SUBMENU
         function toggleSection(containerId, arrowId) {
             const container = document.getElementById(containerId);
             const arrow = document.getElementById(arrowId);
@@ -456,6 +454,22 @@
 
         function toggleSubmenu(id) {
             toggleSection(id, `arrow-${id}`);
+        }
+
+        // FUNGSI BARU: TOGGLE MINIMIZE/HIDE SELURUH SIDEBAR UTAMA
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const icon = document.getElementById('sidebar-toggle-icon');
+            
+            if (sidebar.classList.contains('w-68')) {
+                sidebar.classList.remove('w-68');
+                sidebar.classList.add('w-0', 'border-r-0');
+                icon.className = 'fa-solid fa-outdent text-lg'; // Ubah ikon saat tertutup
+            } else {
+                sidebar.classList.remove('w-0', 'border-r-0');
+                sidebar.classList.add('w-68');
+                icon.className = 'fa-solid fa-bars text-lg'; // Kembalikan ikon hamburger
+            }
         }
 
         function renderActiveView(data) {
