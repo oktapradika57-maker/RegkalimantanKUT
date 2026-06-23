@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Operasional Live Spreadsheet</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
 
-    <div id="loading-screen" class="fixed inset-0 bg-slate-900/80 z-50 flex flex-col justify-center items-center text-white transition-all duration-300">
-        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p class="text-sm font-medium tracking-wide">Menghubungkan & Menarik Data dari Spreadsheet...</p>
+    <div id="loading-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col justify-center items-center text-white px-4 text-center">
+        <div id="loading-spinner" class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p id="loading-text" class="text-sm font-medium tracking-wide text-slate-300">Menghubungkan & Menarik Data dari Resource Asli Spreadsheet...</p>
     </div>
 
-    <div id="menu-hub" class="hidden flex flex-col justify-center items-center min-h-screen p-6 transition-all duration-500">
+    <div id="menu-hub" class="hidden flex flex-col justify-center items-center min-h-screen p-6 opacity-0 transition-opacity duration-500">
         <div class="text-center mb-12">
             <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
                 Sistem Analisis Data Operasional
@@ -115,7 +115,7 @@
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                         <span class="text-xs font-semibold text-amber-500 uppercase">Rata-rata Konsumsi</span>
-                        <h4 id="avg-liter-card" class="text-2xl font-bold text-slate-800 mt-1">0 Liter / Baris</h4>
+                        <h4 id="avg-liter-card" class="text-2xl font-bold text-slate-800 mt-1">0 Liter / Ops</h4>
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
@@ -168,7 +168,6 @@
     </div>
 
     <script>
-        // ID Google Spreadsheet dari Link yang Anda berikan
         const SPREADSHEET_ID = '1CrupWIBU3NP49ORN3AxC6ave7SD01ds_odu7NVBOIoI';
         const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
@@ -176,48 +175,125 @@
         let chart1Instance = null;
         let chart2Instance = null;
 
-        // Ambil Data Saat Aplikasi Pertama Kali Dibuka
         document.addEventListener('DOMContentLoaded', fetchSpreadsheetData);
 
         async function fetchSpreadsheetData() {
+            const loadingText = document.getElementById('loading-text');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            
             try {
                 const res = await fetch(SPREADSHEET_URL);
+                if (!res.ok) throw new Error("Gagal melakukan penarikan data HTTP.");
+                
                 const text = await res.text();
                 
-                // Parsing format JSON dari Google Visualization API
-                const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+                // Ambil string JSON di antara objek kurung kurawal
+                const startIdx = text.indexOf("{");
+                const endIdx = text.lastIndexOf("}");
+                if (startIdx === -1 || endIdx === -1) {
+                    throw new Error("Format respon data Google API tidak valid.");
+                }
+                
+                const jsonString = text.substring(startIdx, endIdx + 1);
                 const json = JSON.parse(jsonString);
                 
+                if (!json.table || !json.table.rows) {
+                    throw new Error("Struktur tabel data baris kosong.");
+                }
+
                 const rows = json.table.rows;
-                const cols = json.table.cols.map(c => c.label ? c.label.toLowerCase().trim() : '');
+                const cols = json.table.cols;
 
-                // Cari indeks kolom secara dinamis berdasarkan nama kolom Anda
-                const timeIdx = cols.findIndex(c => c.includes('time') || c.includes('durasi'));
-                const rhIdx = cols.findIndex(c => c.includes('rh') || c.includes('kelembaban'));
-                const literIdx = cols.findIndex(c => c.includes('liter') || c.includes('konsumsi'));
-                const tsIdx = 0; // Kolom pertama untuk ID / Timestamp
+                // Algoritma Proteksi Pencarian Kolom Secara Dinamis & Berlapis
+                let timeIdx = -1, rhIdx = -1, literIdx = -1;
 
-                // Bersihkan dan petakan data ke dalam Array global
-                dbData = rows.map((r, index) => {
-                    const cells = r.c;
-                    return {
-                        id: cells[tsIdx] && cells[tsIdx].v ? cells[tsIdx].v : `Data-${index + 1}`,
-                        deltaTime: (timeIdx !== -1 && cells[timeIdx] && cells[timeIdx].v) ? Number(cells[timeIdx].v) : 0,
-                        deltaRH: (rhIdx !== -1 && cells[rhIdx] && cells[rhIdx].v) ? Number(cells[rhIdx].v) : 0,
-                        jumlahLiter: (literIdx !== -1 && cells[literIdx] && cells[literIdx].v) ? Number(cells[literIdx].v) : 0,
-                    };
+                // Langkah 1: Cari dari label metadata bawaan Google Sheets
+                cols.forEach((c, idx) => {
+                    const label = c.label ? c.label.toLowerCase().trim() : '';
+                    if (label.includes('time') || label.includes('durasi')) timeIdx = idx;
+                    if (label.includes('rh') || label.includes('kelembaban')) rhIdx = idx;
+                    if (label.includes('liter') || label.includes('konsumsi') || label.includes('jumlah')) literIdx = idx;
                 });
 
-                // Jalankan kalkulasi & render tabel utama
+                // Langkah 2: Jika label kosong, deteksi manual dari baris ke-0 data (raw text)
+                let startRowIndex = 0;
+                if ((timeIdx === -1 || rhIdx === -1 || literIdx === -1) && rows.length > 0) {
+                    const firstRowCells = rows[0].c;
+                    if (firstRowCells) {
+                        firstRowCells.forEach((cell, idx) => {
+                            if (cell && cell.v) {
+                                const valStr = String(cell.v).toLowerCase();
+                                if (valStr.includes('time') || valStr.includes('durasi')) timeIdx = idx;
+                                if (valStr.includes('rh') || valStr.includes('kelembaban')) rhIdx = idx;
+                                if (valStr.includes('liter') || valStr.includes('konsumsi')) literIdx = idx;
+                            }
+                        });
+                        if (timeIdx !== -1 || rhIdx !== -1 || literIdx !== -1) {
+                            startRowIndex = 1; // Lewati indeks 0 karena bertindak sebagai header tekstual
+                        }
+                    }
+                }
+
+                // Langkah 3: Batas aman mutlak jika kolom masih tidak terpetakan (Fallback Default)
+                if (timeIdx === -1) timeIdx = 1;
+                if (rhIdx === -1) rhIdx = 2;
+                if (literIdx === -1) literIdx = 3;
+
+                // Ekstraksi data & pembersihan string kotor ke format angka bersih
+                dbData = [];
+                for (let i = startRowIndex; i < rows.length; i++) {
+                    const cells = rows[i].c;
+                    if (!cells) continue;
+
+                    const cleanNumber = (index) => {
+                        if (index !== -1 && cells[index] && cells[index].v !== null && cells[index].v !== undefined) {
+                            const parsed = Number(String(cells[index].v).replace(/[^0-9.-]/g, ''));
+                            return isNaN(parsed) ? 0 : parsed;
+                        }
+                        return 0;
+                    };
+
+                    const getId = (cells, currentIdx) => {
+                        if (cells[0] && cells[0].v !== null) return String(cells[0].v);
+                        return `Data_Row_${currentIdx}`;
+                    };
+
+                    dbData.push({
+                        id: getId(cells, i),
+                        deltaTime: cleanNumber(timeIdx),
+                        deltaRH: cleanNumber(rhIdx),
+                        jumlahLiter: cleanNumber(literIdx)
+                    });
+                }
+
+                if (dbData.length === 0) {
+                    throw new Error("Resource baris data spreadsheet Anda terdeteksi kosong.");
+                }
+
+                // Jalankan proses matematika kalkulasi & render tabel
                 prosesKalkulasiData();
                 
-                // Hilangkan layar loading, tampilkan Launchpad utama
+                // Hilangkan layar loading dan buka Launchpad Utama
                 document.getElementById('loading-screen').classList.add('hidden');
-                document.getElementById('menu-hub').classList.remove('hidden');
+                const menuHub = document.getElementById('menu-hub');
+                menuHub.classList.remove('hidden');
+                setTimeout(() => menuHub.classList.remove('opacity-0'), 50);
 
             } catch (error) {
-                console.error("Gagal menarik data:", error);
-                alert("Gagal memuat resource data asli. Pastikan sheet sudah disetting 'Anyone with link can view'.");
+                console.error("Detail Error Log:", error);
+                loadingSpinner.classList.add('hidden');
+                loadingText.innerHTML = `
+                    <div class="bg-red-500/10 border border-red-500 p-6 rounded-xl max-w-md mx-auto text-left">
+                        <h3 class="text-red-500 font-bold text-lg mb-2"><i class="fa-solid fa-circle-xmark mr-1"></i> Gagal Memuat Data</h3>
+                        <p class="text-xs text-red-400 mb-4">${error.message}</p>
+                        <hr class="border-red-500/20 mb-4">
+                        <span class="text-xs text-slate-400 block font-normal leading-relaxed">
+                            <strong>Solusi Perbaikan:</strong><br>
+                            1. Pastikan Spreadsheet sudah diset ke <strong>"Anyone with link can view"</strong> (Siapa saja dapat melihat).<br>
+                            2. Pastikan terdapat nama kolom yang mengandung kata <strong>Time</strong>, <strong>RH</strong>, dan <strong>Liter</strong> di lembar kerja Anda.
+                        </span>
+                    </div>
+                `;
             }
         }
 
@@ -233,46 +309,44 @@
                 totalRH += row.deltaRH;
                 totalLiter += row.jumlahLiter;
 
-                // Masukkan baris data ke dalam tabel secara dinamis
                 tableBody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition-all">
+                    <tr class="hover:bg-slate-50/80 transition-all">
                         <td class="p-4 font-medium text-slate-900">${i + 1}</td>
-                        <td class="p-4">${row.id}</td>
+                        <td class="p-4 text-xs font-mono">${row.id}</td>
                         <td class="p-4 text-center">${row.deltaTime}</td>
                         <td class="p-4 text-center">${row.deltaRH} %</td>
-                        <td class="p-4 text-right font-semibold text-slate-900">${row.jumlahLiter} L</td>
+                        <td class="p-4 text-right font-semibold text-slate-900">${row.jumlahLiter.toLocaleString('id-ID')} L</td>
                     </tr>
                 `;
             });
 
-            // Hitung nilai rata-rata
             const totalRows = dbData.length || 1;
             const avgTime = (totalTime / totalRows).toFixed(1);
             const avgRH = (totalRH / totalRows).toFixed(1);
             const avgLiter = (totalLiter / totalRows).toFixed(1);
 
-            // Update nilai teks pada Kartu Statistik & Tabel Footer secara Real-time
+            // Tembakkan hasil kalkulasi matematika ke elemen UI
             document.getElementById('avg-time').innerText = `${avgTime} Menit`;
             document.getElementById('avg-rh').innerText = `${avgRH} %`;
             document.getElementById('total-liter-card').innerText = `${totalLiter.toLocaleString('id-ID')} Liter`;
-            document.getElementById('avg-liter-card').innerText = `${avgLiter} Liter / Ops`;
+            document.getElementById('avg-liter-card').innerText = `${avgLiter} Liter / Baris`;
 
             document.getElementById('total-time-row').innerText = `${totalTime} Menit`;
             document.getElementById('total-rh-row').innerText = `${totalRH} %`;
             document.getElementById('total-liter-row').innerText = `${totalLiter.toLocaleString('id-ID')} L`;
 
-            // Analisis kesesuaian sederhana antara Delta Time dan Delta RH
+            // Logika Analisis Kesesuaian Delta Time & Delta RH
             const statusAnalisis = document.getElementById('status-analisis');
-            if (avgTime > 40 && avgRH > 15) {
-                statusAnalisis.innerText = "Sangat Sesuai";
+            if (avgTime > 0 && avgRH > 0) {
+                statusAnalisis.innerText = "Sesuai Teranalisis";
                 statusAnalisis.className = "text-2xl font-bold text-emerald-600 mt-1";
             } else {
-                statusAnalisis.innerText = "Kurang Sesuai";
+                statusAnalisis.innerText = "Data Nihil / Kosong";
                 statusAnalisis.className = "text-2xl font-bold text-amber-600 mt-1";
             }
         }
 
-        // Navigasi Launchpad Menu Hub
+        // Navigasi Launchpad Menu Utama
         function openModule(moduleId, moduleTitle) {
             document.getElementById('menu-hub').classList.add('hidden');
             document.getElementById('content-view').classList.remove('hidden');
@@ -292,9 +366,9 @@
             ['rh-time', 'liter', 'database'].forEach(t => {
                 document.getElementById('tab-' + t).className = "px-4 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition-all cursor-pointer";
             });
-            document.getElementById('tab-' + moduleId).className = "px-4 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-900 shadow-xs transition-all cursor-pointer";
+            document.getElementById('tab-' + moduleId).className = "px-4 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-900 shadow-sm transition-all cursor-pointer";
 
-            // Pasok data asli live ke Chart.js sewaktu tab dibuka
+            // Render/Refresh Grafik secara Lazy-Load saat tab dibuka agar responsive 100%
             if (moduleId === 'rh-time') {
                 initRHTimeChart();
             } else if (moduleId === 'liter') {
@@ -302,9 +376,8 @@
             }
         }
 
-        // Render Grafik Dinamis Menggunakan Data Riil Spreadsheet
         function initRHTimeChart() {
-            if (chart1Instance) chart1Instance.destroy(); // Hapus instance lama agar ter-refresh fresh
+            if (chart1Instance) chart1Instance.destroy();
             
             const labels = dbData.map(d => d.id);
             const timeData = dbData.map(d => d.deltaTime);
@@ -320,7 +393,7 @@
                             label: 'Delta Time (Menit)',
                             data: timeData,
                             borderColor: '#6366f1',
-                            backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                            backgroundColor: 'rgba(99, 102, 241, 0.04)',
                             borderWidth: 3,
                             tension: 0.2,
                             fill: true
@@ -329,7 +402,7 @@
                             label: 'Delta RH (%)',
                             data: rhData,
                             borderColor: '#a855f7',
-                            backgroundColor: 'rgba(168, 85, 247, 0.05)',
+                            backgroundColor: 'rgba(168, 85, 247, 0.04)',
                             borderWidth: 3,
                             tension: 0.2,
                             fill: true
