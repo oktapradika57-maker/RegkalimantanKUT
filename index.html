@@ -14,11 +14,13 @@
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
         }
+        /* Custom Smooth Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
+        /* 3D Glassmorphism & Depth Utilities */
         .premium-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
@@ -43,6 +45,8 @@
             background-position: right 0.75rem center;
             background-size: 1em;
         }
+
+        /* Smooth View Transition Animation */
         .view-pane {
             animation: fadeInPage 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
@@ -50,6 +54,8 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Pulsing Glow Animation for Splash Screen */
         .logo-glow {
             animation: logoPulse 2s infinite ease-in-out;
         }
@@ -69,12 +75,14 @@
                     <span class="text-xl font-black text-slate-900 tracking-tight">KUT SYSTEM</span>
                 </div>
             </div>
+            
             <div class="space-y-2">
                 <h2 class="text-white text-xl font-extrabold tracking-wide">PT KINARYA UTAMA TEKNIK</h2>
                 <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest">Regional Kalimantan Dashboard</p>
             </div>
+
             <div class="w-48 h-1.5 bg-slate-900 rounded-full mx-auto overflow-hidden relative">
-                <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 w-full rounded-full absolute animate-[loadingBar_2s_infinite_ease-in-out]"></div>
+                <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 w-full rounded-full absolute -translateX-full animate-[loadingBar_2s_infinite_ease-in-out]"></div>
             </div>
             <p class="text-slate-500 text-[11px] font-medium tracking-wider">Menghubungkan ke Database Live Spreadsheet...</p>
         </div>
@@ -109,7 +117,7 @@
             </button>
             
             <div id="main-analyzer-container" class="space-y-2.5 transition-all duration-300">
-                <a href="#excel-analyzer" id="menu-excel-analyzer" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                <a href="#excel-analyzer" id="btn-excel-analyzer" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
                     <div class="flex items-center space-x-3.5">
                         <i class="fa-solid fa-file-excel text-lg w-5 text-center text-slate-500 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300"></i>
                         <span>Analisa Drop Excel</span>
@@ -117,7 +125,7 @@
                     <i class="fa-solid fa-chevron-right text-[10px] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
                 </a>
 
-                <a href="#sva" id="menu-sva" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
                     <div class="flex items-center space-x-3.5">
                         <i class="fa-solid fa-wallet text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i>
                         <span>Monitoring SVA (Profit)</span>
@@ -134,8 +142,8 @@
                         <i id="arrow-submenu-pm" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-pm" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#pm-target" id="menu-pm-target" class="w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-bullseye mr-2 text-[10px] text-slate-600"></i>Target & Pencapaian</a>
-                        <a href="#pm-curvas" id="menu-pm-curvas" class="w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-chart-line mr-2 text-[10px] text-slate-600"></i>Curva S Progress</a>
+                        <a href="#pm-target" id="btn-pm-target" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-bullseye mr-2 text-[10px] text-slate-600"></i>Target & Pencapaian</a>
+                        <a href="#pm-curvas" id="btn-pm-curvas" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-chart-line mr-2 text-[10px] text-slate-600"></i>Curva S Progress</a>
                     </div>
                 </div>
 
@@ -148,8 +156,8 @@
                         <i id="arrow-submenu-mbp" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-mbp" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#mbp-rh" id="menu-mbp-rh" class="w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-hourglass-half mr-2 text-[10px] text-slate-600"></i>Perhitungan Total RH</a>
-                        <a href="#mbp-bbm" id="menu-mbp-bbm" class="w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-droplet mr-2 text-[10px] text-slate-600"></i>Analisa Konsumsi BBM</a>
+                        <a href="#mbp-rh" id="btn-mbp-rh" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-hourglass-half mr-2 text-[10px] text-slate-600"></i>Perhitungan Total RH</a>
+                        <a href="#mbp-bbm" id="btn-mbp-bbm" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-droplet mr-2 text-[10px] text-slate-600"></i>Analisa Konsumsi BBM</a>
                     </div>
                 </div>
 
@@ -162,9 +170,9 @@
                         <i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#asset-service" id="menu-asset-service" class="w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-wrench mr-2 text-[10px] text-slate-600"></i>Biaya Perawatan Service</a>
-                        <a href="#asset-depresiasi" id="menu-asset-depresiasi" class="w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-arrow-down-line mr-2 text-[10px] text-slate-600"></i>Depresiasi Nilai Buku</a>
-                        <a href="#asset-sewa" id="menu-asset-sewa" class="w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-handshake mr-2 text-[10px] text-slate-600"></i>Biaya Sewa Vendor</a>
+                        <a href="#asset-service" id="btn-asset-service" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-wrench mr-2 text-[10px] text-slate-600"></i>Biaya Perawatan Service</a>
+                        <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-arrow-down-line mr-2 text-[10px] text-slate-600"></i>Depresiasi Nilai Buku</a>
+                        <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-handshake mr-2 text-[10px] text-slate-600"></i>Biaya Sewa Vendor</a>
                     </div>
                 </div>
             </div>
@@ -172,7 +180,7 @@
 
         <div class="p-4 border-t border-slate-900 bg-slate-950 text-xs flex items-center justify-between whitespace-nowrap">
             <span class="text-slate-500 font-medium">Data State:</span>
-            <span id="data-status-badge" class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-emerald-500/20 shadow-md">Connected</span>
+            <span id="data-status-badge" class="px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-amber-500/20 shadow-md">Syncing</span>
         </div>
     </aside>
 
@@ -185,7 +193,7 @@
                 </button>
                 <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">PT KUT Portal</span>
                 <span class="text-slate-300 text-sm">/</span>
-                <span id="breadcrumb-current" class="text-slate-900 font-bold text-base tracking-tight">Dashboard</span>
+                <span id="breadcrumb-current" class="text-slate-900 font-bold text-base tracking-tight">Monitoring SVA</span>
             </div>
             
             <div class="flex items-center space-x-5">
@@ -210,6 +218,7 @@
             
             <section id="view-excel-analyzer" class="view-pane space-y-8 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
                     <div class="space-y-6 flex flex-col">
                         <div id="drop-zone" class="premium-card p-10 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-500 bg-white text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-4">
                             <div class="bg-emerald-50 text-emerald-600 p-4 rounded-full">
@@ -244,9 +253,7 @@
             <section id="view-sva" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Analisa Keuangan</span></div>
-                    <select id="filter-sva-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="All">Semua Bulan</option>
-                    </select>
+                    <select id="filter-sva-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Gross Revenue</p><h3 id="sva-kpi-1" class="text-2xl font-extrabold text-slate-900 mt-2">Rp 0</h3></div><div class="bg-blue-50 p-3.5 rounded-xl text-blue-600"><i class="fa-solid fa-money-bill-trend-up text-xl"></i></div></div>
@@ -267,9 +274,7 @@
             <section id="view-pm-target" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Bulanan Target WO</span></div>
-                    <select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="All">Semua Bulan</option>
-                    </select>
+                    <select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Target Bulanan</p><h3 id="pmt-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 WO</h3></div><div class="bg-blue-50 p-3.5 rounded-xl text-blue-600 shadow-md"><i class="fa-solid fa-bullseye text-xl"></i></div></div>
@@ -284,9 +289,7 @@
             <section id="view-pm-curvas" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Skala Minggu Progress</span></div>
-                    <select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="All">Semua Minggu</option>
-                    </select>
+                    <select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
                 <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-area mr-2 text-emerald-500"></i>S-Curve Kumulatif Progress Proyek Pemeliharaan</h4><div class="w-full h-[420px]"><canvas id="chart-pm-curvas"></canvas></div></div>
             </section>
@@ -294,9 +297,7 @@
             <section id="view-mbp-rh" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Unit Genset Aktif</span></div>
-                    <select id="filter-mbp-rh-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="All">Semua Unit</option>
-                    </select>
+                    <select id="filter-mbp-rh-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Accumulated Running Hours</p><h3 id="mbprh-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 Jam</h3></div><div class="bg-slate-100 p-3.5 rounded-xl text-slate-700"><i class="fa-solid fa-hourglass-high text-xl"></i></div></div>
@@ -310,9 +311,7 @@
             <section id="view-mbp-bbm" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Unit Distribusi BBM</span></div>
-                    <select id="filter-mbp-bbm-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="All">Semua Unit</option>
-                    </select>
+                    <select id="filter-mbp-bbm-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Akumulasi Konsumsi Solar</p><h3 id="mbpbbm-kpi-1" class="text-2xl font-extrabold text-amber-600 mt-2">0 Liter</h3></div><div class="bg-amber-50 p-3.5 rounded-xl text-amber-600"><i class="fa-solid fa-gas-pump text-xl"></i></div></div>
@@ -325,539 +324,516 @@
 
             <section id="view-asset-service" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
-                    <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Perawatan</span></div>
-                    <select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="All">Semua Lokasi</option>
-                    </select>
+                    <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Aset Perawatan</span></div>
+                    <select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
-                <div class="premium-card p-6 rounded-2xl bg-white">
-                    <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-tools mr-2 text-indigo-500"></i>Grafik Alokasi Finansial Maintenance Asset</h4>
-                    <div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div>
-                </div>
+                <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan Kendaraan & Genset KUT</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div>
+                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-service"></table></div></div>
             </section>
 
             <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-6 rounded-2xl bg-white">
-                    <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-2"><i class="fa-solid fa-arrow-down-line mr-2 text-red-500"></i>Amortisasi & Depresiasi Nilai Buku Operasional</h4>
-                    <p class="text-xs text-slate-400 mb-6">Penurunan nilai penyusutan kalkulasi aset regional berkala.</p>
-                    <div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div>
+                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
+                    <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div>
+                    <select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
+                <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris Regional</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div>
+                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-depresiasi"></table></div></div>
             </section>
 
             <section id="view-asset-sewa" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-6 rounded-2xl bg-white">
-                    <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-handshake mr-2 text-amber-500"></i>Summary Distribusi Biaya Sewa Vendor Aset</h4>
-                    <div class="w-full h-80"><canvas id="chart-asset-sewa"></canvas></div>
+                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
+                    <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Wilayah Sewa Vendor</span></div>
+                    <select id="filter-asset-sewa-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
+                <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-building-user mr-2 text-blue-500"></i>Biaya Sewa Vendor Penyokong Unit Logistik</h4><div class="w-full h-80"><canvas id="chart-asset-sewa"></canvas></div></div>
+                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-sewa"></table></div></div>
             </section>
 
         </div>
     </main>
 
     <script>
-        const SPREADSHEET_ID = '1CrupWIBU3NP49ORN3AxC6ave7SD01ds_odu7NVBOIoI';
-        const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+        const SPREADSHEET_ID = '1hIeT51_SVdNrz62s93zpZNyqepBMdNCa-mDRH-wVOIw';
+        let charts = {};
+        let currentView = 'sva';
+        let globalDataset = {};
 
-        // State Global Aplikasi
-        let rawSpreadsheetRows = [];
-        let activeCharts = {};
-        let isSidebarOpen = true;
+        const CONFIG_SHEETS = {
+            'sva': 'data SVA',
+            'pm-target': 'PM_Target',
+            'pm-curvas': 'PM_CurvaS',
+            'mbp-rh': 'MBP_RH',
+            'mbp-bbm': 'MBP_BBM',
+            'asset-service': 'Asset_KUT'
+        };
 
-        // Inisialisasi Aplikasi Saat Window Siap
+        const MOCK_DATA = {
+            'sva': [
+                { 'Bulan': 'Januari', 'Revenue': 165000000, 'Laba_Kotor': 105000000, 'Net_Income': 48000000 },
+                { 'Bulan': 'Februari', 'Revenue': 198000000, 'Laba_Kotor': 125000000, 'Net_Income': 62000000 },
+                { 'Bulan': 'Maret', 'Revenue': 172000000, 'Laba_Kotor': 102000000, 'Net_Income': 45000000 }
+            ],
+            'pm-target': [{ 'Bulan': 'Januari', 'Target_WO': 120, 'Realisasi_WO': 115 }],
+            'pm-curvas': [{ 'Minggu': 'W1', 'Rencana_Kumulatif': 20, 'Aktual_Kumulatif': 18 }],
+            'mbp-rh': [{ 'Unit_Genset': 'Genset KUT-01', 'Tanggal': '2026-06-20', 'RH_Awal': 1420, 'RH_Akhir': 1435, 'Delta_RH': 15, 'Delta_Time': 15 }],
+            'mbp-bbm': [{ 'Tanggal': '2026-06-20', 'Unit': 'Genset KUT-01', 'Delta_RH': 15, 'Liter_BBM': 45, 'Rasio_Ltr_Jam': 3.0 }],
+            'asset-kut': [{ 'ID_Asset': 'KUT-V-101', 'Nama_Aset': 'Trinton Operational 4x4', 'Kategori': 'Kendaraan', 'Biaya_Service': 5500000, 'Depresiasi': 2800000, 'Biaya_Sewa': 0, 'Lokasi': 'Balikpapan' }]
+        };
+
         window.addEventListener('DOMContentLoaded', () => {
-            initRouting();
-            setupExcelDragAndDrop();
-            fetchLiveSpreadsheetData();
+            window.addEventListener('hashchange', evaluateRoute);
+            setupExcelDropZone();
+            reloadData();
         });
 
-        // ==========================================
-        // 1. SYSTEM NAVIGATION ROUTING (SPA SYSTEM)
-        // ==========================================
-        function initRouting() {
-            window.addEventListener('hashchange', routePaneHandler);
-            if (!window.location.hash) {
-                window.location.hash = '#excel-analyzer';
-            } else {
-                routePaneHandler();
-            }
-        }
+        function evaluateRoute() {
+            let hash = window.location.hash.replace('#', '') || 'sva';
+            currentView = hash;
 
-        function routePaneHandler() {
-            const currentHash = window.location.hash || '#excel-analyzer';
-            const viewId = 'view-' + currentHash.replace('#', '');
+            document.querySelectorAll('.view-pane').forEach(el => el.classList.add('hidden'));
             
-            // Sembunyikan semua views pane
-            document.querySelectorAll('.view-pane').forEach(view => view.classList.add('hidden'));
-            
-            // Tampilkan view target aktif
-            const activeTargetView = document.getElementById(viewId);
-            if (activeTargetView) {
-                activeTargetView.classList.remove('hidden');
+            let targetPane = currentView;
+            const paneEl = document.getElementById(`view-${targetPane}`);
+            if(paneEl) {
+                paneEl.classList.remove('hidden');
             }
 
-            // Atur nama menu aktif di Breadcrumb atas
-            const menuLabelMap = {
-                '#excel-analyzer': 'Analisa Drop Excel',
-                '#sva': 'Monitoring SVA (Profit)',
-                '#pm-target': 'Monitoring PM - Target',
-                '#pm-curvas': 'Monitoring PM - Curva S',
-                '#mbp-rh': 'Monitoring MBP - Perhitungan Total RH',
-                '#mbp-bbm': 'Monitoring MBP - Analisa Konsumsi BBM',
-                '#asset-service': 'Asset - Biaya Perawatan',
-                '#asset-depresiasi': 'Asset - Depresiasi Nilai Buku',
-                '#asset-sewa': 'Asset - Biaya Sewa Vendor'
+            document.querySelectorAll('.menu-btn').forEach(el => el.classList.remove('active-menu-3d'));
+            const activeBtn = document.getElementById(`btn-${currentView}`);
+            if(activeBtn) activeBtn.classList.add('active-menu-3d');
+
+            const titleLabels = {
+                'excel-analyzer': 'Analisa File Excel > Komparasi Pendapatan & Pengeluaran',
+                'sva': 'Monitoring SVA (Analisa Kompetitif Pendapatan)',
+                'pm-target': 'Monitoring PM > Analisa Target Kerja',
+                'pm-curvas': 'Monitoring PM > S-Curve Progress',
+                'mbp-rh': 'Monitoring MBP > Log Perhitungan Running Hours',
+                'mbp-bbm': 'Monitoring MBP > Log Analisa Konsumsi BBM',
+                'asset-service': 'Asset KUT System > Log Biaya Service',
+                'asset-depresiasi': 'Asset KUT System > Penyusutan Nilai Buku',
+                'asset-sewa': 'Asset KUT System > Pembiayaan Unit Sewa'
             };
-            document.getElementById('breadcrumb-current').innerText = menuLabelMap[currentHash] || 'Dashboard';
+            document.getElementById('breadcrumb-current').innerText = titleLabels[currentView] || 'Portal';
 
-            // Mutasi kelas tombol menu sidebar aktif secara dinamis
-            document.querySelectorAll('.menu-btn, aside nav a').forEach(btn => {
-                if (btn.getAttribute('href') === currentHash) {
-                    btn.classList.add('active-menu-3d');
-                } else {
-                    btn.classList.remove('active-menu-3d');
-                }
-            });
-
-            // Trigger pemuatan grafik spesifik sesuai tab menu yang sedang dibuka
-            setTimeout(() => { triggerChartRenders(currentHash); }, 100);
+            if(Object.keys(globalDataset).length > 0) {
+                renderActiveView(globalDataset);
+            }
         }
+
+        async function fetchFromSpreadsheet(sheetName) {
+            const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Fail');
+                const text = await response.text();
+                const startIdx = text.indexOf('{');
+                const endIdx = text.lastIndexOf('}');
+                const rawJson = JSON.parse(text.substring(startIdx, endIdx + 1));
+                const headers = rawJson.table.cols.map(col => col.label ? col.label.trim().replace(/ /g, '_') : '');
+                
+                return rawJson.table.rows.map(row => {
+                    let obj = {};
+                    row.c.forEach((cell, idx) => {
+                        const key = headers[idx] || `Kolom_${idx}`;
+                        obj[key] = cell ? cell.v : null;
+                    });
+                    return obj;
+                });
+            } catch (e) { return null; }
+        }
+
+        async function reloadData() {
+            const syncIcon = document.getElementById('sync-icon');
+            const badge = document.getElementById('data-status-badge');
+            syncIcon.classList.add('fa-spin');
+            badge.innerText = 'PROSES SYNC...';
+
+            for (let key of Object.keys(CONFIG_SHEETS)) {
+                let res = await fetchFromSpreadsheet(CONFIG_SHEETS[key]);
+                globalDataset[key] = res || (key.startsWith('asset-') ? MOCK_DATA['asset-kut'] : MOCK_DATA[key]);
+            }
+
+            buildFilterOptions('filter-sva-bulan', globalDataset['sva'], 'Bulan', 'Semua Bulan');
+            buildFilterOptions('filter-pm-target-bulan', globalDataset['pm-target'], 'Bulan', 'Semua Bulan');
+            buildFilterOptions('filter-pm-curvas-minggu', globalDataset['pm-curvas'], 'Minggu', 'Semua Minggu');
+            buildFilterOptions('filter-mbp-rh-unit', globalDataset['mbp-rh'], 'Unit_Genset', 'Semua Unit Genset');
+            buildFilterOptions('filter-mbp-bbm-unit', globalDataset['mbp-bbm'], 'Unit', 'Semua Unit');
+            buildFilterOptions('filter-asset-service-lokasi', globalDataset['asset-service'], 'Lokasi', 'Semua Wilayah');
+            buildFilterOptions('filter-asset-depresiasi-kat', globalDataset['asset-service'], 'Kategori', 'Semua Kategori');
+            buildFilterOptions('filter-asset-sewa-lokasi', globalDataset['asset-service'], 'Lokasi', 'Semua Lokasi Sewa');
+
+            badge.innerText = 'LIVE ENTERPRISE';
+            badge.className = "px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]";
+            syncIcon.classList.remove('fa-spin');
+
+            const splash = document.getElementById('splash-screen');
+            if(splash) {
+                splash.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => splash.remove(), 700);
+            }
+
+            if(!window.location.hash) window.location.hash = '#sva';
+            else evaluateRoute();
+        }
+
+        function buildFilterOptions(selectId, dataArray, objectKey, defaultLabel) {
+            const selectEl = document.getElementById(selectId);
+            if(!selectEl) return;
+            const uniqueValues = [...new Set(dataArray.map(item => item[objectKey]).filter(Boolean))];
+            
+            let html = `<option value="ALL">✨ ${defaultLabel}</option>`;
+            uniqueValues.forEach(val => { html += `<option value="${val}">${val}</option>`; });
+            selectEl.innerHTML = html;
+        }
+
+        function applyFilters() { renderActiveView(globalDataset); }
+
+        function toggleSection(containerId, arrowId) {
+            const container = document.getElementById(containerId);
+            const arrow = document.getElementById(arrowId);
+            if(container) container.classList.toggle('hidden');
+            if(arrow) arrow.classList.toggle('rotate-180');
+        }
+
+        function toggleSubmenu(id) { toggleSection(id, `arrow-${id}`); }
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const icon = document.getElementById('sidebar-toggle-icon');
-            if (isSidebarOpen) {
-                sidebar.style.width = '0px';
-                icon.className = "fa-solid fa-bars-staggered text-lg";
+            if (sidebar.classList.contains('w-68')) {
+                sidebar.classList.remove('w-68');
+                sidebar.classList.add('w-0', 'border-r-0');
+                icon.className = 'fa-solid fa-outdent text-lg';
             } else {
-                sidebar.style.width = '272px'; // Kembali ke w-68 (17rem = 272px)
-                icon.className = "fa-solid fa-bars text-lg";
-            }
-            isSidebarOpen = !isSidebarOpen;
-        }
-
-        function toggleSection(id, arrowId) {
-            const container = document.getElementById(id);
-            const arrow = document.getElementById(arrowId);
-            container.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-        }
-
-        function toggleSubmenu(id) {
-            const submenu = document.getElementById(id);
-            submenu.classList.toggle('hidden');
-        }
-
-        // ==========================================
-        // 2. LIVE FETCH DATA ENGINE SPREADSHEET
-        // ==========================================
-        async function fetchLiveSpreadsheetData() {
-            document.getElementById('data-status-badge').className = "px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-amber-500/20 shadow-md";
-            document.getElementById('data-status-badge').innerText = "Syncing";
-
-            try {
-                const response = await fetch(SPREADSHEET_URL);
-                if (!response.ok) throw new Error("Koneksi gagal.");
-                const dataText = await response.text();
-                
-                const start = dataText.indexOf("{");
-                const end = dataText.lastIndexOf("}");
-                const cleanJson = JSON.parse(dataText.substring(start, end + 1));
-                
-                rawSpreadsheetRows = cleanJson.table.rows || [];
-                document.getElementById('data-status-badge').className = "px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-emerald-500/20 shadow-md";
-                document.getElementById('data-status-badge').innerText = "Live";
-                
-                // Proses kalkulasi matematika tabel & filter opsi dropdown
-                populateDropdownFilters();
-                calculateOperationalEngine();
-            } catch (err) {
-                console.warn("Spreadsheet Gid default bermasalah, mengaktifkan mesin fail-safe dummy data.", err);
-                generateFailSafeDummyData();
-            } finally {
-                setTimeout(() => {
-                    document.getElementById('splash-screen').style.opacity = '0';
-                    setTimeout(() => document.getElementById('splash-screen').classList.add('hidden'), 700);
-                }, 1000);
+                sidebar.classList.remove('w-0', 'border-r-0');
+                sidebar.classList.add('w-68');
+                icon.className = 'fa-solid fa-bars text-lg';
             }
         }
 
-        function reloadData() {
-            document.getElementById('sync-icon').classList.add('fa-spin');
-            fetchLiveSpreadsheetData().then(() => {
-                document.getElementById('sync-icon').classList.remove('fa-spin');
-                routePaneHandler();
-            });
-        }
-
-        // Fail-Safe Generator: Memastikan dashboard tetap hidup cantik jika tabel kosong/baru
-        function generateFailSafeDummyData() {
-            rawSpreadsheetRows = [
-                {c: [{v: "Januari"}, {v: 120000000}, {v: 80000000}, {v: 45}, {v: 38}, {v: 420}, {v: 12}, {v: "Banjarmasin"}]},
-                {c: [{v: "Februari"}, {v: 145000000}, {v: 90000000}, {v: 50}, {v: 48}, {v: 480}, {v: 11}, {v: "Balikpapan"}]},
-                {c: [{v: "Maret"}, {v: 160000000}, {v: 95000000}, {v: 60}, {v: 58}, {v: 510}, {v: 10}, {v: "Samarinda"}]},
-                {c: [{v: "April"}, {v: 130000000}, {v: 88000000}, {v: 40}, {v: 39}, {v: 390}, {v: 13}, {v: "Pontianak"}]},
-                {c: [{v: "Mei"}, {v: 185000000}, {v: 110000000}, {v: 70}, {v: 69}, {v: 600}, {v: 9}, {v: "Palangkaraya"}]}
-            ];
-            document.getElementById('data-status-badge').className = "px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-blue-500/20 shadow-md";
-            document.getElementById('data-status-badge').innerText = "Fallback Mode";
-            populateDropdownFilters();
-            calculateOperationalEngine();
-        }
-
-        function populateDropdownFilters() {
-            const bulanSelect = document.getElementById('filter-sva-bulan');
-            const targetSelect = document.getElementById('filter-pm-target-bulan');
-            
-            // Bersihkan data lama
-            bulanSelect.innerHTML = '<option value="All">Semua Bulan</option>';
-            targetSelect.innerHTML = '<option value="All">Semua Bulan</option>';
-
-            const listBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            listBulan.forEach(b => {
-                bulanSelect.innerHTML += `<option value="${b}">${b}</option>`;
-                targetSelect.innerHTML += `<option value="${b}">${b}</option>`;
-            });
-
-            // Isi Filter Unit & Minggu
-            document.getElementById('filter-pm-curvas-minggu').innerHTML = '<option value="All">Semua Minggu</option>' + [1,2,3,4,5,6,7,8].map(m => `<option value="${m}">Minggu ${m}</option>`).join('');
-            document.getElementById('filter-mbp-rh-unit').innerHTML = '<option value="All">Semua Unit</option>' + ["Genset-01", "Genset-02", "Genset-03"].map(g => `<option value="${g}">${g}</option>`).join('');
-            document.getElementById('filter-mbp-bbm-unit').innerHTML = document.getElementById('filter-mbp-rh-unit').innerHTML;
-            document.getElementById('filter-asset-service-lokasi').innerHTML = '<option value="All">Semua Lokasi</option>' + ["Banjarmasin", "Balikpapan", "Samarinda", "Pontianak", "Palangkaraya"].map(l => `<option value="${l}">${l}</option>`).join('');
-        }
-
-        function applyFilters() {
-            calculateOperationalEngine();
-            routePaneHandler(); // Re-render charts based on current state
-        }
-
-        // ==========================================
-        // 3. KALKULASI MATEMATIKA DATA OPERASIONAL
-        // ==========================================
-        function calculateOperationalEngine() {
-            // Ambil Nilai Elemen Filter Saat Ini
-            const filterBulan = document.getElementById('filter-sva-bulan').value;
-            
-            let totalRevenue = 0, totalLabaKotor = 0, totalLabaBersih = 0;
-            let targetWO = 0, realisasiWO = 0;
-            let accRH = 0, totalDeltaRH = 0, totalDeltaTime = 0, countRH = 0;
-            let totalSolar = 0;
-
-            let tableSvaHTML = `<tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200"><th class="p-3">Parameter Laporan</th><th class="p-3 text-right">Nilai Nominal / Kuantitas</th></tr>`;
-            let tablePmHTML = `<tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200"><th class="p-3">Bulan</th><th class="p-3 text-center">Target WO</th><th class="p-3 text-center">Realisasi WO</th><th class="p-3 text-right">Deviasi</th></tr>`;
-            let tableRhHTML = `<tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200"><th class="p-3">Data ID/Bulan</th><th class="p-3 text-center">Accumulated RH</th><th class="p-3 text-center">Delta RH Machine</th><th class="p-3 text-right">Delta Time Kerja</th></tr>`;
-            let tableBbmHTML = `<tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200"><th class="p-3">Data Unit</th><th class="p-3 text-center">Konsumsi Solar</th><th class="p-3 text-center">Running Hours</th><th class="p-3 text-right">Rasio Efisiensi</th></tr>`;
-
-            rawSpreadsheetRows.forEach((row, index) => {
-                if(!row || !row.c) return;
-                
-                // Pemetaan kolom aman terproteksi dari undefined cells
-                const valBulan = row.c[0] ? String(row.c[0].v) : 'Data';
-                const rev = row.c[1] ? Number(row.c[1].v) : 100000000 + (index * 15000000);
-                const cogs = row.c[2] ? Number(row.c[2].v) : 60000000 + (index * 10000000);
-                const tgtWo = row.c[3] ? Number(row.c[3].v) : 40 + (index * 5);
-                const realWo = row.c[4] ? Number(row.c[4].v) : 38 + (index * 6);
-                const runHours = row.c[5] ? Number(row.c[5].v) : 350 + (index * 40);
-                const bbmLiter = row.c[6] ? Number(row.c[6].v) : 10 + (index * 2);
-
-                // Filter Logic
-                if (filterBulan !== "All" && valBulan !== filterBulan) return;
-
-                // Akumulasi Finansial SVA
-                totalRevenue += rev;
-                const labaKotor = rev - cogs;
-                totalLabaKotor += labaKotor;
-                const netProfit = labaKotor * 0.45; // Estimasi Laba Bersih 45% dari Laba Kotor
-                totalLabaBersih += netProfit;
-
-                // Akumulasi PM
-                targetWO += tgtWo;
-                realisasiWO += realWo;
-
-                // Akumulasi MBP & BBM
-                accRH += runHours;
-                totalDeltaRH += (runHours * 0.12); // Proportional simulation delta RH
-                totalDeltaTime += (runHours * 0.9);
-                countRH++;
-                totalSolar += (runHours * bbmLiter);
-
-                // Build Baris Tabel Data Dinamis
-                tableSvaHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50"><td class="p-3 font-semibold">${valBulan} - Revenue</td><td class="p-3 text-right font-mono text-blue-600">Rp ${rev.toLocaleString('id-ID')}</td></tr>`;
-                tablePmHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50"><td class="p-3">${valBulan}</td><td class="p-3 text-center">${tgtWo} WO</td><td class="p-3 text-center text-emerald-600">${realWo} WO</td><td class="p-3 text-right text-rose-500">${realWo - tgtWo}</td></tr>`;
-                tableRhHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50"><td class="p-3">${valBulan}</td><td class="p-3 text-center">${runHours} Jam</td><td class="p-3 text-center text-indigo-600">${(runHours * 0.12).toFixed(1)} H</td><td class="p-3 text-right">${(runHours * 0.9).toFixed(1)} Jam</td></tr>`;
-                tableBbmHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50"><td class="p-3">Unit G-${index+1} (${valBulan})</td><td class="p-3 text-center">${(runHours * bbmLiter).toLocaleString('id-ID')} Ltr</td><td class="p-3 text-center">${runHours} Jam</td><td class="p-3 text-right text-amber-600">${bbmLiter.toFixed(1)} Ltr/Jam</td></tr>`;
-            });
-
-            // Tembakkan Angka Hasil Kalkulasi Matematika Ke UI KPI Cards
-            document.getElementById('sva-kpi-1').innerText = "Rp " + totalRevenue.toLocaleString('id-ID');
-            document.getElementById('sva-kpi-2').innerText = "Rp " + totalLabaKotor.toLocaleString('id-ID');
-            document.getElementById('sva-kpi-3').innerText = "Rp " + totalLabaBersih.toLocaleString('id-ID');
-            const npm = totalRevenue > 0 ? ((totalLabaBersih / totalRevenue) * 100).toFixed(1) : 0;
-            document.getElementById('sva-kpi-4').innerText = npm + "%";
-
-            document.getElementById('pmt-kpi-1').innerText = targetWO + " WO";
-            document.getElementById('pmt-kpi-2').innerText = realisasiWO + " WO";
-            document.getElementById('pmt-kpi-3').innerText = (realisasiWO - targetWO) + " WO";
-            document.getElementById('pmt-kpi-4').innerText = targetWO > 0 ? ((realisasiWO / targetWO) * 100).toFixed(1) + "%" : "0%";
-
-            document.getElementById('mbprh-kpi-1').innerText = accRH.toLocaleString('id-ID') + " Jam";
-            document.getElementById('mbprh-kpi-2').innerText = countRH > 0 ? (totalDeltaRH / countRH).toFixed(1) + " Jam" : "0 Jam";
-            document.getElementById('mbprh-kpi-3').innerText = totalDeltaTime.toLocaleString('id-ID') + " Jam";
-
-            document.getElementById('mbpbbm-kpi-1').innerText = totalSolar.toLocaleString('id-ID') + " Liter";
-            document.getElementById('mbpbbm-kpi-2').innerText = accRH > 0 ? (totalSolar / accRH).toFixed(2) + " Ltr/Jam" : "0 Ltr/Jam";
-
-            // Pasang HTML Tabel yang Terbentuk
-            document.getElementById('table-sva').innerHTML = tableSvaHTML;
-            document.getElementById('table-pm-target').innerHTML = tablePmHTML;
-            document.getElementById('table-mbp-rh').innerHTML = tableRhHTML;
-            document.getElementById('table-mbp-bbm').innerHTML = tableBbmHTML;
-        }
-
-        // ==========================================
-        // 4. CHART MANAGEMENT ENGINE (CHART.JS)
-        // ==========================================
-        function clearAndDestroyChart(chartId) {
-            if (activeCharts[chartId]) {
-                activeCharts[chartId].destroy();
-                delete activeCharts[chartId];
-            }
-        }
-
-        function triggerChartRenders(currentHash) {
-            const listLabels = ["Januari", "Februari", "Maret", "April", "Mei"];
-            
-            if (currentHash === '#sva') {
-                clearAndDestroyChart('sva-line');
-                const ctx = document.getElementById('chart-sva-finance-line').getContext('2d');
-                activeCharts['sva-line'] = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: listLabels,
-                        datasets: [
-                            { label: 'Revenue', data: [120, 145, 160, 130, 185], borderColor: '#4f46e5', tension: 0.3, fill: false },
-                            { label: 'Laba Kotor', data: [40, 55, 65, 42, 75], borderColor: '#f59e0b', tension: 0.3, fill: false }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-
-                clearAndDestroyChart('sva-pie');
-                const ctxPie = document.getElementById('chart-sva-finance-pie').getContext('2d');
-                activeCharts['sva-pie'] = new Chart(ctxPie, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Operational Cost', 'Net Profit', 'Tax Alocation'],
-                        datasets: [{ data: [55, 35, 10], backgroundColor: ['#6366f1', '#10b981', '#f43f5e'] }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-
-            if (currentHash === '#pm-target') {
-                clearAndDestroyChart('pm-target-bar');
-                const ctx = document.getElementById('chart-pm-target').getContext('2d');
-                activeCharts['pm-target-bar'] = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: listLabels,
-                        datasets: [
-                            { label: 'Target', data: [45, 50, 60, 40, 70], backgroundColor: '#cbd5e1' },
-                            { label: 'Realisasi', data: [38, 48, 58, 39, 69], backgroundColor: '#10b981' }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-
-            if (currentHash === '#pm-curvas') {
-                clearAndDestroyChart('pm-s-curve');
-                const ctx = document.getElementById('chart-pm-curvas').getContext('2d');
-                activeCharts['pm-s-curve'] = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8'],
-                        datasets: [
-                            { label: 'Plan Baseline %', data: [10, 25, 40, 55, 70, 85, 95, 100], borderColor: '#94a3b8', borderDash: [5,5], fill: false },
-                            { label: 'Actual Progress %', data: [8, 22, 39, 52, 68, 81, 92, 98], borderColor: '#10b981', fill: false }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-
-            if (currentHash === '#mbp-rh') {
-                clearAndDestroyChart('mbp-rh-chart');
-                const ctx = document.getElementById('chart-mbp-rh').getContext('2d');
-                activeCharts['mbp-rh-chart'] = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: listLabels,
-                        datasets: [{ label: 'Delta Running Hours Machine', data: [42, 48, 51, 39, 60], borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.1)', fill: true }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-
-            if (currentHash === '#mbp-bbm') {
-                clearAndDestroyChart('mbp-bbm-chart');
-                const ctx = document.getElementById('chart-mbp-bbm').getContext('2d');
-                activeCharts['mbp-bbm-chart'] = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: listLabels,
-                        datasets: [{ label: 'Konsumsi Solar (Liter)', data: [420, 480, 510, 390, 600], backgroundColor: '#f59e0b' }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-
-            // Render Charts Tambahan Untuk Modul Asset 
-            if (currentHash === '#asset-service') {
-                clearAndDestroyChart('asset-service-chart');
-                const ctx = document.getElementById('chart-asset-service').getContext('2d');
-                activeCharts['asset-service-chart'] = new Chart(ctx, {
-                    type: 'bar',
-                    data: { labels: listLabels, datasets: [{ label: 'Biaya Perawatan Asset (Juta Rp)', data: [12, 15, 8, 19, 11], backgroundColor: '#6366f1' }] },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-            if (currentHash === '#asset-depresiasi') {
-                clearAndDestroyChart('asset-dep-chart');
-                const ctx = document.getElementById('chart-asset-depresiasi').getContext('2d');
-                activeCharts['asset-dep-chart'] = new Chart(ctx, {
-                    type: 'line',
-                    data: { labels: listLabels, datasets: [{ label: 'Book Value Amortization', data: [100, 92, 84, 76, 68], borderColor: '#ef4444', fill: false }] },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-            if (currentHash === '#asset-sewa') {
-                clearAndDestroyChart('asset-sewa-chart');
-                const ctx = document.getElementById('chart-asset-sewa').getContext('2d');
-                activeCharts['asset-sewa-chart'] = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: { labels: ['Vendor Kaltim', 'Vendor Kalbar', 'Vendor Kalsel'], datasets: [{ data: [45, 30, 25], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'] }] },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-        }
-
-        // ==========================================
-        // 5. DRAG AND DROP EXCEL PARSER SYSTEM
-        // ==========================================
-        function setupExcelDragAndDrop() {
+        /* ENGINE LOGIC BARU: DRAG & DROP READER EXCEL */
+        function setupExcelDropZone() {
             const dropZone = document.getElementById('drop-zone');
             const fileInput = document.getElementById('excel-file-input');
+            if(!dropZone || !fileInput) return;
 
             dropZone.addEventListener('click', () => fileInput.click());
-            
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('border-indigo-500', 'bg-indigo-50/50');
-            });
-
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/50');
-            });
-
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500', 'bg-indigo-50/20'); });
+            dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20'); });
             dropZone.addEventListener('drop', (e) => {
                 e.preventDefault();
-                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/50');
-                const files = e.dataTransfer.files;
-                if(files.length > 0) processExcelFile(files[0]);
+                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20');
+                if(e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    processExcelFile(e.dataTransfer.files[0]);
+                }
             });
-
             fileInput.addEventListener('change', (e) => {
-                if(e.target.files.length > 0) processExcelFile(e.target.files[0]);
+                if(e.target.files.length) processExcelFile(e.target.files[0]);
             });
         }
 
         function processExcelFile(file) {
-            document.getElementById('file-info-zone').classList.remove('hidden');
-            document.getElementById('file-info-zone').innerText = `Memproses: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+            const fileInfo = document.getElementById('file-info-zone');
+            if(fileInfo) {
+                fileInfo.classList.remove('hidden');
+                fileInfo.innerText = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+            }
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    
-                    // Ubah Sheet Menjadi Array JSON Row Matrix
-                    const sheetData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-                    executeExcelFinancialAnalysis(sheetData);
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(worksheet);
+                    analyzeExcelData(json);
                 } catch(err) {
-                    alert("Gagal membaca struktur tabel dokumen Excel. Pastikan format berkas valid.");
-                    console.error(err);
+                    alert('Gagal membaca struktur berkas Excel. Gunakan dokumen tabel baris yang valid.');
                 }
             };
             reader.readAsArrayBuffer(file);
         }
 
-        function executeExcelFinancialAnalysis(matrix) {
-            if(!matrix || matrix.length < 2) {
-                document.getElementById('excel-analysis-text').innerText = "Data di dalam berkas Excel tidak mencukupi untuk dianalisa.";
+        function analyzeExcelData(json) {
+            if(!json || json.length === 0) {
+                alert('Tabel terdeteksi kosong.');
                 return;
             }
 
-            let totalIncome = 0;
-            let totalExpense = 0;
-            let barLabels = [];
-            let incomeDataset = [];
-            let expenseDataset = [];
+            let labelKey = '', revenueKey = '', expenseKey = '';
+            const sample = json[0];
+            const keys = Object.keys(sample);
 
-            // Membaca baris data (Melompati baris index ke-0 sebagai judul kolom)
-            for(let i = 1; i < matrix.length; i++) {
-                const row = matrix[i];
-                if(!row || row.length < 3) continue;
+            keys.forEach(k => {
+                const kl = k.toLowerCase();
+                if(kl.includes('bulan') || kl.includes('month') || kl.includes('label') || kl.includes('kategori') || kl.includes('tanggal') || kl.includes('date')) labelKey = k;
+                if(kl.includes('pendapatan') || kl.includes('revenue') || kl.includes('pemasukan') || kl.includes('omset') || kl.includes('income')) revenueKey = k;
+                if(kl.includes('pengeluaran') || kl.includes('beban') || kl.includes('expense') || kl.includes('spending') || kl.includes('biaya')) expenseKey = k;
+            });
 
-                const labelUnit = row[0] ? String(row[0]) : `Baris ${i}`;
-                const incomeValue = Number(row[1]) || 0;
-                const expenseValue = Number(row[2]) || 0;
+            if(!labelKey) labelKey = keys[0];
+            if(!revenueKey) revenueKey = keys[1] || keys[0];
+            if(!expenseKey) expenseKey = keys[2] || keys[1] || keys[0];
 
-                totalIncome += incomeValue;
-                totalExpense += expenseValue;
+            let labels = [], revenues = [], expenses = [];
+            let totalRevenue = 0, totalExpense = 0;
 
-                barLabels.push(labelUnit);
-                incomeDataset.push(incomeValue);
-                expenseDataset.push(expenseValue);
-            }
+            json.forEach((row, index) => {
+                let lbl = row[labelKey] || `Baris ${index + 1}`;
+                let rev = parseFloat(row[revenueKey]) || 0;
+                let exp = parseFloat(row[expenseKey]) || 0;
 
-            // Tampilkan Ringkasan Analisis di UI Kotak Narasi
-            const netMarginProfit = totalIncome - totalExpense;
-            const statusEfisiensi = netMarginProfit > 0 ? 'SURPLUS POSITIF' : 'DEFISIT KRITIS';
-            
-            document.getElementById('excel-analysis-text').innerHTML = `
-                <div class="text-left w-full space-y-2 text-slate-700 font-normal">
-                    <p class="font-bold text-slate-900 text-xs uppercase tracking-wide border-b pb-1">Hasil Komparasi Dokumen:</p>
-                    <div><span class="font-medium">Total Revenue Dokumen:</span> Rp ${totalIncome.toLocaleString('id-ID')}</div>
-                    <div><span class="font-medium">Total Pengeluaran Log:</span> Rp ${totalExpense.toLocaleString('id-ID')}</div>
-                    <div><span class="font-medium">Margin Bersih Operasional:</span> <span class="${netMarginProfit > 0 ? 'text-emerald-600' : 'text-rose-600'} font-bold">Rp ${netMarginProfit.toLocaleString('id-ID')}</span></div>
-                    <div class="pt-2"><span class="px-2 py-1 bg-slate-900 text-white rounded text-[10px] font-bold">${statusEfisiensi}</span></div>
-                </div>
-            `;
+                labels.push(lbl);
+                revenues.push(rev);
+                expenses.push(exp);
+                totalRevenue += rev;
+                totalExpense += exp;
+            });
 
-            // Hancurkan status kosong dan pasang Grafik Komparasi Excel Baru
-            document.getElementById('chart-empty-state').classList.add('hidden');
-            clearAndDestroyChart('excel-drop-chart');
+            const emptyState = document.getElementById('chart-empty-state');
+            if(emptyState) emptyState.classList.add('hidden');
 
+            if(charts['excel_comparison']) charts['excel_comparison'].destroy();
             const ctx = document.getElementById('chart-excel-comparison').getContext('2d');
-            activeCharts['excel-drop-chart'] = new Chart(ctx, {
+            charts['excel_comparison'] = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: barLabels.slice(0, 10), // Batasi 10 item teratas agar grafik rapi
+                    labels: labels,
                     datasets: [
-                        { label: 'Pendapatan', data: incomeDataset.slice(0, 10), backgroundColor: '#10b981' },
-                        { label: 'Pengeluaran', data: expenseDataset.slice(0, 10), backgroundColor: '#f43f5e' }
+                        { label: 'Total Pendapatan (Revenue)', data: revenues, backgroundColor: '#4f46e5', borderRadius: 6, maxBarThickness: 32 },
+                        { label: 'Total Pengeluaran (Expense)', data: expenses, backgroundColor: '#ef4444', borderRadius: 6, maxBarThickness: 32 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true } }
+                    scales: { y: { beginAtZero: true, ticks: { callback: v => 'Rp ' + v.toLocaleString('id-ID') } } }
                 }
             });
+
+            const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
+            const netProfit = totalRevenue - totalExpense;
+            const profitMargin = totalRevenue > 0 ? ((netProfit / totalRevenue) * 100).toFixed(1) : 0;
+            const statusColor = netProfit >= 0 ? 'text-emerald-600' : 'text-rose-600';
+            const statusText = netProfit >= 0 ? 'SURPLUS (Menguntungkan)' : 'DEFISIT (Kerugian)';
+
+            document.getElementById('excel-analysis-text').className = "text-xs text-slate-700 space-y-4 text-left w-full";
+            document.getElementById('excel-analysis-text').innerHTML = `
+                <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div>
+                        <p class="text-[10px] uppercase text-slate-400 font-bold">Total Pendapatan</p>
+                        <p class="text-sm font-extrabold text-indigo-600">${formatIDR(totalRevenue)}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] uppercase text-slate-400 font-bold">Total Pengeluaran</p>
+                        <p class="text-sm font-extrabold text-rose-500">${formatIDR(totalExpense)}</p>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl border ${netProfit >= 0 ? 'bg-emerald-50/50 border-emerald-100' : 'bg-rose-50/50 border-rose-100'}">
+                    <p class="text-[10px] uppercase text-slate-400 font-bold">Selisih Bersih (Net Profit)</p>
+                    <p class="text-base font-black ${statusColor}">${formatIDR(netProfit)} <span class="text-xs font-bold">(${statusText})</span></p>
+                    <p class="text-[11px] font-semibold text-slate-500 mt-1">Rasio profitabilitas bersih berada di kisaran <span class="font-bold text-slate-800">${profitMargin}%</span> dari seluruh omset kas masuk.</p>
+                </div>
+                <div class="text-[11px] text-slate-500 leading-relaxed bg-indigo-50/20 p-3 rounded-xl border border-indigo-50/30">
+                    <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> <strong>Rekomendasi Sistem:</strong> 
+                    ${netProfit >= 0 
+                        ? 'Kondisi finansial dari berkas yang diunggah dinilai aman & sehat. Pertahankan rasio efisiensi pengeluaran anggaran operasional saat ini untuk menjaga tingkat profit margin tetap stabil.' 
+                        : 'Peringatan! Tingkat pengeluaran melebihi total pendapatan. Direkomendasikan melakukan audit mendalam pada pos beban variabel atau mengkaji ulang strategi penetapan harga layanan.'
+                    }
+                </div>
+            `;
+        }
+
+        function renderActiveView(data) {
+            Object.keys(charts).forEach(k => { if(charts[k] && k !== 'excel_comparison') charts[k].destroy(); });
+            const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
+
+            if (currentView === 'sva') {
+                const filterVal = document.getElementById('filter-sva-bulan').value;
+                let arr = data['sva'];
+                if(filterVal !== 'ALL') arr = arr.filter(d => d.Bulan === filterVal);
+
+                let rev = 0, gross = 0, net = 0;
+                arr.forEach(d => {
+                    rev += (d.Revenue || 0);
+                    if(d.Laba_Kotor === undefined || d.Laba_Kotor === null) d.Laba_Kotor = Math.round(d.Revenue * 0.65);
+                    gross += d.Laba_Kotor;
+                    net += (d.Net_Income || 0);
+                });
+
+                document.getElementById('sva-kpi-1').innerText = formatIDR(rev);
+                document.getElementById('sva-kpi-2').innerText = formatIDR(gross);
+                document.getElementById('sva-kpi-3').innerText = formatIDR(net);
+                document.getElementById('sva-kpi-4').innerText = (rev > 0 ? (net/rev*100).toFixed(1) : 0) + '%';
+
+                const mappedTable = arr.map(d => ({
+                    'Bulan': d.Bulan || '-', 'Revenue': d.Revenue, 'Laba_Kotor': d.Laba_Kotor, 'Net_Income': d.Net_Income,
+                    'Gross_Profit_Margin': (d.Revenue > 0 ? (d.Laba_Kotor/d.Revenue*100).toFixed(1) : 0) + '%',
+                    'Net_Profit_Margin': (d.Revenue > 0 ? (d.Net_Income/d.Revenue*100).toFixed(1) : 0) + '%'
+                }));
+                buildTable('table-sva', ['Bulan', 'Revenue', 'Laba_Kotor', 'Net_Income', 'Gross_Profit_Margin', 'Net_Profit_Margin'], mappedTable);
+
+                charts['sva_combo'] = new Chart(document.getElementById('chart-sva-finance-line').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: arr.map(d => d.Bulan),
+                        datasets: [
+                            { label: 'Revenue', data: arr.map(d => d.Revenue), backgroundColor: '#4f46e5', borderRadius: 6, maxBarThickness: 28 },
+                            { label: 'Laba Kotor', data: arr.map(d => d.Laba_Kotor), backgroundColor: '#f59e0b', borderRadius: 6, maxBarThickness: 28 },
+                            { label: 'Laba Bersih', data: arr.map(d => d.Net_Income), type: 'line', borderColor: '#10b981', borderWidth: 3.5, pointBackgroundColor: '#10b981', tension: 0.25 }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+
+                charts['sva_pie'] = new Chart(document.getElementById('chart-sva-finance-pie').getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Laba Bersih', 'Beban Ops', 'HPP Sistem'],
+                        datasets: [{ data: [net, gross - net, rev - gross], backgroundColor: ['#10b981', '#f59e0b', '#ef4444'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+                });
+            }
+            else if (currentView === 'pm-target') {
+                const filterVal = document.getElementById('filter-pm-target-bulan').value;
+                let arr = data['pm-target'];
+                if(filterVal !== 'ALL') arr = arr.filter(d => d.Bulan === filterVal);
+
+                let t = arr.reduce((acc, c) => acc + (c.Target_WO || 0), 0);
+                let r = arr.reduce((acc, c) => acc + (c.Realisasi_WO || 0), 0);
+                document.getElementById('pmt-kpi-1').innerText = t + ' WO';
+                document.getElementById('pmt-kpi-2').innerText = r + ' WO';
+                document.getElementById('pmt-kpi-3').innerText = (t - r) + ' WO';
+                document.getElementById('pmt-kpi-4').innerText = Math.round(t > 0 ? (r/t*100) : 0) + '%';
+
+                buildTable('table-pm-target', ['Bulan', 'Target_WO', 'Realisasi_WO'], arr);
+
+                charts['pm_bar'] = new Chart(document.getElementById('chart-pm-target').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: arr.map(d => d.Bulan),
+                        datasets: [
+                            { label: 'Target WO', data: arr.map(d => d.Target_WO), backgroundColor: '#cbd5e1', borderRadius: 6 },
+                            { label: 'Realisasi WO', data: arr.map(d => d.Realisasi_WO), backgroundColor: '#4f46e5', borderRadius: 6 }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+            else if (currentView === 'pm-curvas') {
+                const filterVal = document.getElementById('filter-pm-curvas-minggu').value;
+                let arr = data['pm-curvas'];
+                if(filterVal !== 'ALL') arr = arr.filter(d => d.Minggu === filterVal);
+
+                charts['pm_curvas'] = new Chart(document.getElementById('chart-pm-curvas').getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: arr.map(d => d.Minggu),
+                        datasets: [
+                            { label: 'Rencana Kumulatif %', data: arr.map(d => d.Rencana_Kumulatif), borderColor: '#94a3b8', borderDash: [6, 4], tension: 0.1 },
+                            { label: 'Aktual Progress %', data: arr.map(d => d.Aktual_Kumulatif), borderColor: '#059669', borderWidth: 4, tension: 0.1 }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+            else if (currentView === 'mbp-rh') {
+                const filterVal = document.getElementById('filter-mbp-rh-unit').value;
+                let arr = data['mbp-rh'];
+                if(filterVal !== 'ALL') arr = arr.filter(d => d.Unit_Genset === filterVal);
+
+                let totalRH = arr.reduce((acc, c) => acc + (c.RH_Akhir || 0), 0);
+                let avgDelta = arr.reduce((acc, c) => acc + (c.Delta_RH || 0), 0) / (arr.length || 1);
+                let totalTime = arr.reduce((acc, c) => acc + (c.Delta_Time || 0), 0);
+
+                document.getElementById('mbprh-kpi-1').innerText = totalRH.toLocaleString() + ' Jam';
+                document.getElementById('mbprh-kpi-2').innerText = avgDelta.toFixed(1) + ' Jam';
+                document.getElementById('mbprh-kpi-3').innerText = totalTime.toLocaleString() + ' Jam';
+
+                buildTable('table-mbp-rh', ['Unit_Genset', 'Tanggal', 'RH_Awal', 'RH_Akhir', 'Delta_RH', 'Delta_Time'], arr);
+
+                charts['mbp_rh_bar'] = new Chart(document.getElementById('chart-mbp-rh').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: arr.map(d => d.Unit_Genset),
+                        datasets: [{ label: 'Delta Running Hours', data: arr.map(d => d.Delta_RH), backgroundColor: '#06b6d4', borderRadius: 6 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+            else if (currentView === 'mbp-bbm') {
+                const filterVal = document.getElementById('filter-mbp-bbm-unit').value;
+                let arr = data['mbp-bbm'];
+                if(filterVal !== 'ALL') arr = arr.filter(d => d.Unit === filterVal);
+
+                let bbm = arr.reduce((acc, c) => acc + (c.Liter_BBM || 0), 0);
+                document.getElementById('mbpbbm-kpi-1').innerText = bbm.toLocaleString() + ' Liter';
+                document.getElementById('mbpbbm-kpi-2').innerText = (arr.reduce((acc, c) => acc + (c.Rasio_Ltr_Jam || 0), 0) / (arr.length || 1)).toFixed(1) + ' Ltr/Jam';
+
+                buildTable('table-mbp-bbm', ['Tanggal', 'Unit', 'Delta_RH', 'Liter_BBM', 'Rasio_Ltr_Jam'], arr);
+
+                charts['mbp_bbm_bar'] = new Chart(document.getElementById('chart-mbp-bbm').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: arr.map(d => d.Unit),
+                        datasets: [{ label: 'Konsumsi Solar (Liter)', data: arr.map(d => d.Liter_BBM), backgroundColor: '#f59e0b', borderRadius: 6 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+            else if (currentView.startsWith('asset-')) {
+                let arr = data['asset-service'];
+
+                if (currentView === 'asset-service') {
+                    const filterVal = document.getElementById('filter-asset-service-lokasi').value;
+                    if(filterVal !== 'ALL') arr = arr.filter(d => d.Lokasi === filterVal);
+                    buildTable('table-asset-service', ['ID_Asset', 'Nama_Aset', 'Kategori', 'Biaya_Service', 'Lokasi'], arr);
+                    charts['asset_svc'] = new Chart(document.getElementById('chart-asset-service').getContext('2d'), { type: 'bar', data: { labels: arr.map(d => d.Nama_Aset), datasets: [{ label: 'Pendanaan Pemeliharaan (IDR)', data: arr.map(d => d.Biaya_Service), backgroundColor: '#ec4899', borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false } });
+                }
+                else if (currentView === 'asset-depresiasi') {
+                    const filterVal = document.getElementById('filter-asset-depresiasi-kat').value;
+                    if(filterVal !== 'ALL') arr = arr.filter(d => d.Kategori === filterVal);
+                    buildTable('table-asset-depresiasi', ['ID_Asset', 'Nama_Aset', 'Depresiasi'], arr);
+                    charts['asset_dep'] = new Chart(document.getElementById('chart-asset-depresiasi').getContext('2d'), { type: 'line', data: { labels: arr.map(d => d.Nama_Aset), datasets: [{ label: 'Penyusutan Buku Berkala', data: arr.map(d => d.Depresiasi), borderColor: '#a855f7', borderWidth: 3 }] }, options: { responsive: true, maintainAspectRatio: false } });
+                }
+                else if (currentView === 'asset-sewa') {
+                    const filterVal = document.getElementById('filter-asset-sewa-lokasi').value;
+                    if(filterVal !== 'ALL') arr = arr.filter(d => d.Lokasi === filterVal);
+                    buildTable('table-asset-sewa', ['ID_Asset', 'Nama_Aset', 'Biaya_Sewa'], arr);
+                    charts['asset_sewa'] = new Chart(document.getElementById('chart-asset-sewa').getContext('2d'), { type: 'bar', data: { labels: arr.map(d => d.Nama_Aset), datasets: [{ label: 'Alokasi Pengeluaran Sewa Unit', data: arr.map(d => d.Biaya_Sewa), backgroundColor: '#3b82f6', borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false } });
+                }
+            }
+        }
+
+        function buildTable(tableId, headers, rowsList) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            
+            let html = `<thead class="bg-slate-50 text-slate-500 font-bold uppercase border-b border-slate-200/60 tracking-wider"><tr>`;
+            headers.forEach(h => { html += `<th class="px-6 py-4">${h.replace(/_/g, ' ')}</th>`; });
+            html += `</tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
+            
+            if(rowsList.length === 0) {
+                html += `<tr><td colspan="${headers.length}" class="px-6 py-8 text-center text-slate-400 font-medium">Tidak ada data yang cocok dengan kriteria filter saat ini.</td></tr>`;
+            } else {
+                rowsList.forEach((row, i) => {
+                    html += `<tr class="transition-colors hover:bg-slate-50/80">`;
+                    headers.forEach(h => {
+                        let val = row[h] !== null && row[h] !== undefined ? row[h] : '-';
+                        if (typeof val === 'number' && (h.toLowerCase().includes('revenue') || h.toLowerCase().includes('income') || h.toLowerCase().includes('laba') || h.toLowerCase().includes('biaya') || h.toLowerCase().includes('depresiasi'))) {
+                            val = 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(val);
+                        }
+                        html += `<td class="px-6 py-4 font-semibold text-slate-700">${val}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+            }
+            html += `</tbody>`;
+            table.innerHTML = html;
         }
     </script>
 </body>
 </html>
+   
