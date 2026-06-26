@@ -91,10 +91,7 @@
 
         <nav class="flex-1 overflow-y-auto p-4 space-y-2.5 text-sm whitespace-nowrap">
             <button onclick="toggleSection('main-analyzer-container', 'arrow-main-analyzer')" class="w-full flex items-center justify-between px-3 py-2 text-[10px] font-bold text-slate-500 hover:text-indigo-400 uppercase tracking-widest transition-colors duration-200 group focus:outline-none">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-layer-group text-slate-600 group-hover:text-indigo-400"></i>
-                    <span>Main Analyzer</span>
-                </div>
+                <div class="flex items-center space-x-2"><i class="fa-solid fa-layer-group text-slate-600 group-hover:text-indigo-400"></i><span>Main Analyzer</span></div>
                 <i id="arrow-main-analyzer" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
             </button>
             
@@ -152,11 +149,11 @@
 
                 <div class="space-y-1">
                     <button onclick="toggleSubmenu('submenu-asset')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-car text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Asset KUT System</span></div>
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-car text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Master Mobil</span></div>
                         <i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#asset-master" id="btn-asset-master" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-database mr-2 text-[10px] text-slate-600"></i>Data Master Asset</a>
+                        <a href="#asset-master" id="btn-asset-master" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-database mr-2 text-[10px] text-slate-600"></i>Data Master Mobil</a>
                         <a href="#asset-service" id="btn-asset-service" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-wrench mr-2 text-[10px] text-slate-600"></i>Biaya Perawatan Service</a>
                         <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-arrow-down-line mr-2 text-[10px] text-slate-600"></i>Depresiasi Nilai Buku</a>
                         <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-handshake mr-2 text-[10px] text-slate-600"></i>Biaya Sewa Vendor</a>
@@ -200,7 +197,7 @@
                     <div class="space-y-6 flex flex-col">
                         <div id="drop-zone" class="premium-card p-10 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-500 bg-white text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-4">
                             <div class="bg-emerald-50 text-emerald-600 p-4 rounded-full"><i class="fa-solid fa-cloud-arrow-up text-3xl"></i></div>
-                            <div><p class="text-sm font-bold text-slate-800">Tarik & Lepas File Excel Anda Di Sini</p></div>
+                            <div><p class="text-sm font-bold text-slate-800">Tarik & Lepas File Excel Anda Di Sini</p><p class="text-xs text-slate-400 mt-1">Mendukung format berkas .xlsx, .xls, atau .csv</p></div>
                             <input type="file" id="excel-file-input" class="hidden" accept=".xlsx, .xls, .csv">
                             <div id="file-info-zone" class="hidden text-xs bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1.5 rounded-xl font-semibold"></div>
                         </div>
@@ -219,7 +216,7 @@
             <section id="view-sva" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Analisa Keuangan</span></div>
-                    <select id="filter-sva-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+                    <select id="filter-sva-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select>
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -241,24 +238,32 @@
             </section>
 
             <section id="view-asset-master" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
                     <div>
-                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-database mr-2 text-indigo-500"></i>Data Master Asset</h3>
-                        <p class="text-xs text-slate-500 mt-1">Daftar rincian aset, status kepemilikan, dan kondisi operasional unit Regional Kalimantan.</p>
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-database mr-2 text-indigo-500"></i>Data Master Mobil</h3>
+                        <p class="text-xs text-slate-500 mt-1">Daftar rincian aset, status kepemilikan, dan kondisi operasional unit.</p>
                     </div>
-                    <div class="flex items-center space-x-2 text-indigo-600 bg-slate-50 p-2 rounded-xl border border-slate-200 shadow-sm">
-                        <i class="fa-solid fa-filter text-sm ml-2"></i>
-                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select w-48 bg-transparent text-slate-700 text-xs font-semibold px-2 py-1 pr-8 focus:outline-none"></select>
+                    
+                    <div class="flex items-center gap-2 flex-wrap justify-end">
+                        <select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua NOP</option>
+                        </select>
+                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua Kondisi</option>
+                        </select>
+                        <select id="filter-asset-master-status" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua Status</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="premium-card p-6 rounded-2xl flex flex-col">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-tags mr-1 text-indigo-400"></i> Proporsi Merek Asset</h4>
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-tags mr-1 text-indigo-400"></i> Proporsi Merek Mobil</h4>
                         <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-merek"></canvas></div>
                     </div>
                     <div class="premium-card p-6 rounded-2xl flex flex-col">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-layer-group mr-1 text-emerald-400"></i> Distribusi Jenis Asset</h4>
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-layer-group mr-1 text-emerald-400"></i> Distribusi Jenis Unit</h4>
                         <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-jenis"></canvas></div>
                     </div>
                     <div class="premium-card p-6 rounded-2xl flex flex-col">
@@ -280,30 +285,24 @@
             <section id="view-project" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Project</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-project"></table></div></div></section>
 
             <section id="view-pm-target" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Bulanan Target WO</span></div><select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select></div>
+                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Bulanan Target WO</span></div><select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6"><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Target Bulanan</p><h3 id="pmt-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 WO</h3></div><div class="bg-blue-50 p-3.5 rounded-xl text-blue-600 shadow-md"><i class="fa-solid fa-bullseye text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Pencapaian Realisasi</p><h3 id="pmt-kpi-2" class="text-2xl font-extrabold text-emerald-600 mt-2">0 WO</h3></div><div class="bg-emerald-50 p-3.5 rounded-xl text-emerald-600 shadow-md"><i class="fa-solid fa-circle-check text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sisa Deviasi Sifat</p><h3 id="pmt-kpi-3" class="text-2xl font-extrabold text-rose-600 mt-2">0 WO</h3></div><div class="bg-rose-50 p-3.5 rounded-xl text-rose-600 shadow-md"><i class="fa-solid fa-triangle-exclamation text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">% Pencapaian</p><h3 id="pmt-kpi-4" class="text-2xl font-extrabold text-indigo-600 mt-2">0%</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600 shadow-md"><i class="fa-solid fa-chart-line text-xl"></i></div></div></div>
                 <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Visualisasi Matriks Komparatif PM Target</h4><div class="w-full h-80"><canvas id="chart-pm-target"></canvas></div></div>
                 <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-pm-target"></table></div></div>
             </section>
-            <section id="view-pm-curvas" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Skala Minggu Progress</span></div><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-area mr-2 text-emerald-500"></i>S-Curve Kumulatif Progress Proyek Pemeliharaan</h4><div class="w-full h-[420px]"><canvas id="chart-pm-curvas"></canvas></div></div></section>
+            
+            <section id="view-pm-curvas" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Skala Minggu Progress</span></div><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-area mr-2 text-emerald-500"></i>S-Curve Kumulatif Progress Proyek Pemeliharaan</h4><div class="w-full h-[420px]"><canvas id="chart-pm-curvas"></canvas></div></div></section>
             
             <section id="view-mbp-rh" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
-                    <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Unit Genset Aktif</span></div>
-                    <select id="filter-mbp-rh-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Accumulated Running Hours</p><h3 id="mbprh-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 Jam</h3></div><div class="bg-slate-100 p-3.5 rounded-xl text-slate-700"><i class="fa-solid fa-hourglass-high text-xl"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Rata-Rata Delta RH Mesin</p><h3 id="mbprh-kpi-2" class="text-2xl font-extrabold text-indigo-600 mt-2">0 Jam</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600"><i class="fa-solid fa-bolt text-xl"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Durasi Kerja (Delta Time)</p><h3 id="mbprh-kpi-3" class="text-2xl font-extrabold text-teal-600 mt-2">0 Jam</h3></div><div class="bg-teal-50 p-3.5 rounded-xl text-teal-600"><i class="fa-solid fa-clock text-xl"></i></div></div>
-                </div>
+                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Unit Genset</span></div><select id="filter-mbp-rh-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Running Hours</p><h3 id="mbprh-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 Jam</h3></div><div class="bg-slate-100 p-3.5 rounded-xl text-slate-700"><i class="fa-solid fa-hourglass-high text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Rata-Rata Delta</p><h3 id="mbprh-kpi-2" class="text-2xl font-extrabold text-indigo-600 mt-2">0 Jam</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600"><i class="fa-solid fa-bolt text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Durasi Kerja</p><h3 id="mbprh-kpi-3" class="text-2xl font-extrabold text-teal-600 mt-2">0 Jam</h3></div><div class="bg-teal-50 p-3.5 rounded-xl text-teal-600"><i class="fa-solid fa-clock text-xl"></i></div></div></div>
                 <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Grafik Log Jam Kerja Genset (Running Hours)</h4><div class="w-full h-80"><canvas id="chart-mbp-rh"></canvas></div></div>
                 <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-mbp-rh"></table></div></div>
             </section>
             
-            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi Bahan Bakar Minyak (BBM) per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-mbp-bbm"></table></div></div></section>
-            <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Aset Perawatan</span></div><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan Kendaraan & Genset KUT</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-service"></table></div></div></section>
-            <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris Regional</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-depresiasi"></table></div></div></section>
+            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi BBM per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-mbp-bbm"></table></div></div></section>
+            <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Perawatan</span></div><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-service"></table></div></div></section>
+            <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-depresiasi"></table></div></div></section>
             <section id="view-asset-sewa" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white"><h3 class="text-sm font-bold text-slate-800">Pembiayaan Unit Sewa Vendor</h3></div></section>
         </div>
     </main>
@@ -327,10 +326,10 @@
             'pm-curvas': 'Monitoring PM > S-Curve Progress',
             'mbp-rh': 'Monitoring MBP > Log Perhitungan Running Hours',
             'mbp-bbm': 'Monitoring MBP > Log Analisa Konsumsi BBM',
-            'asset-master': 'Asset KUT System > Data Master Asset',
-            'asset-service': 'Asset KUT System > Log Biaya Service',
-            'asset-depresiasi': 'Asset KUT System > Penyusutan Nilai Buku',
-            'asset-sewa': 'Asset KUT System > Pembiayaan Unit Sewa'
+            'asset-master': 'Mobil KUT System > Data Master Mobil',
+            'asset-service': 'Mobil KUT System > Log Biaya Service',
+            'asset-depresiasi': 'Mobil KUT System > Penyusutan Nilai Buku',
+            'asset-sewa': 'Mobil KUT System > Pembiayaan Unit Sewa'
         };
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -390,17 +389,6 @@
                 buildFilterOptions('filter-asset-service-lokasi', globalDataset['asset-kut'], 'Lokasi', 'Semua Wilayah');
                 buildFilterOptions('filter-asset-depresiasi-kat', globalDataset['asset-kut'], 'Kategori', 'Semua Kategori');
 
-                // BUILD CUSTOM FILTER UNTUK ASSET MASTER
-                const assetMasterRaw = globalDataset['asset-master'] || [];
-                const parsedKondisi = assetMasterRaw.map(d => extractStringValue(d, ['Kondisi Unit', 'Kondisi'])).filter(val => val !== '-');
-                const uniqueKondisi = [...new Set(parsedKondisi)];
-                const selectKondisi = document.getElementById('filter-asset-master-kondisi');
-                if (selectKondisi) {
-                    let html = `<option value="ALL">✨ Semua Kondisi</option>`;
-                    uniqueKondisi.forEach(val => { html += `<option value="${val}">${val}</option>`; });
-                    selectKondisi.innerHTML = html;
-                }
-
                 const splash = document.getElementById('splash-screen');
                 if(splash) { splash.classList.add('opacity-0'); setTimeout(() => splash.remove(), 700); }
                 if(!window.location.hash) window.location.hash = '#sva'; else evaluateRoute();
@@ -440,7 +428,23 @@
             selectEl.innerHTML = html;
         }
 
+        // Helper untuk Dropdown Dinamis Asset Master agar pilihan user tidak reset otomatis
+        function updateDropdownOptions(selectId, dataArray, key, defaultLabel) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            const currentVal = select.value;
+            const uniqueVals = [...new Set(dataArray.map(item => item[key]).filter(v => v && v !== '-'))].sort();
+            
+            let html = `<option value="ALL">✨ ${defaultLabel}</option>`;
+            uniqueVals.forEach(v => { html += `<option value="${v}">${v}</option>`; });
+            select.innerHTML = html;
+            
+            if (uniqueVals.includes(currentVal)) { select.value = currentVal; } 
+            else { select.value = 'ALL'; }
+        }
+
         function applyFilters() { renderActiveView(globalDataset); }
+        
         function toggleSection(containerId, arrowId) {
             const c = document.getElementById(containerId); const a = document.getElementById(arrowId);
             if(c) c.classList.toggle('hidden'); if(a) a.classList.toggle('rotate-180');
@@ -550,37 +554,52 @@
                 if (arr.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData); else buildTable('table-sva', ['Keterangan'], []);
                 renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
             
+            // LOGIKA PEMETAAN DAN FILTER DATA MASTER MOBIL
             } else if (currentView === 'asset-master') {
-                const filterKondisi = document.getElementById('filter-asset-master-kondisi').value;
                 let arr = data['asset-master'] || [];
                 
+                // 1. Pemetaan Data Awal
                 let tableData = arr.map(d => {
                     return {
-                        'User': extractStringValue(d, ['User', 'Pengguna']),
+                        'User': extractStringValue(d, ['User', 'Pengguna', 'Nama']),
                         'Merek': extractStringValue(d, ['Merek', 'Merk']),
-                        'Type': extractStringValue(d, ['Type', 'Tipe']),
+                        'Tipe_Unit': extractStringValue(d, ['Tipe', 'Type', 'Kolom C', 'Spesifikasi']), // Pemetaan Kolom C
+                        'NOP': extractStringValue(d, ['NOP', 'No Polisi', 'Nomor Polisi']),
                         'Jenis': extractStringValue(d, ['Jenis']),
                         'Kondisi_Unit': extractStringValue(d, ['Kondisi Unit', 'Kondisi']),
-                        'Kepemilikan': extractStringValue(d, ['Kepemilikan']),
-                        'Status_Pemakaian': extractStringValue(d, ['Terpakai/Tidak Terpakai', 'Terpakai', 'Status'])
+                        'Status_Pemakaian': extractStringValue(d, ['Status Pemakaian', 'Terpakai/Tidak Terpakai', 'Terpakai', 'Status']) // Status Pemakaian Baru
                     };
                 });
 
-                // Hapus data kosong yang tidak valid dari sheet
-                tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Type !== '-' || d.Jenis !== '-');
+                // Hapus data kosong / header yang tidak valid
+                tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Tipe_Unit !== '-');
 
-                // Terapkan Filter
-                if (filterKondisi !== 'ALL') {
-                    tableData = tableData.filter(d => d.Kondisi_Unit === filterKondisi);
-                }
+                // 2. Refresh Dropdown secara dinamis (menyimpan pilihan sebelumnya)
+                updateDropdownOptions('filter-asset-master-nop', tableData, 'NOP', 'Semua NOP');
+                updateDropdownOptions('filter-asset-master-kondisi', tableData, 'Kondisi_Unit', 'Semua Kondisi');
+                updateDropdownOptions('filter-asset-master-status', tableData, 'Status_Pemakaian', 'Semua Status');
 
-                if (tableData.length > 0) {
-                    buildTable('table-asset-master', Object.keys(tableData[0]), tableData);
+                // 3. Ambil Nilai Filter
+                const filterNop = document.getElementById('filter-asset-master-nop').value;
+                const filterKondisi = document.getElementById('filter-asset-master-kondisi').value;
+                const filterStatus = document.getElementById('filter-asset-master-status').value;
+
+                // 4. Proses Penyaringan Berdasarkan Semua Filter
+                let filteredData = tableData.filter(d => {
+                    const matchNop = (filterNop === 'ALL' || d.NOP === filterNop);
+                    const matchKondisi = (filterKondisi === 'ALL' || d.Kondisi_Unit === filterKondisi);
+                    const matchStatus = (filterStatus === 'ALL' || d.Status_Pemakaian === filterStatus);
+                    return matchNop && matchKondisi && matchStatus;
+                });
+
+                // 5. Render Tabel & Chart
+                if (filteredData.length > 0) {
+                    buildTable('table-asset-master', ['User', 'Merek', 'Tipe_Unit', 'NOP', 'Jenis', 'Kondisi_Unit', 'Status_Pemakaian'], filteredData);
                 } else {
                     buildTable('table-asset-master', ['Keterangan'], []);
                 }
 
-                renderAssetMasterCharts(tableData);
+                renderAssetMasterCharts(filteredData);
 
             } else if (['kpi', 'operational', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
                 let targetKey = currentView.includes('aging') ? 'pjb-aging' : currentView;
@@ -604,7 +623,6 @@
             }
         }
 
-        // FUNGSI RENDER CHART ASSET MASTER
         function renderAssetMasterCharts(tableData) {
             const countFrequencies = (key) => {
                 return tableData.reduce((acc, row) => {
@@ -675,9 +693,70 @@
             }
         }
 
-        function setupExcelDropZone() { /* ... excel logic ... */ }
-        function handleDroppedExcel(file) { /* ... excel logic ... */ }
-        function processExcelData(rows) { /* ... excel logic ... */ }
+        function setupExcelDropZone() {
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('excel-file-input');
+            if(!dropZone || !fileInput) return;
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500', 'bg-indigo-50/20'); });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20'));
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20');
+                if(e.dataTransfer.files.length) handleDroppedExcel(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', (e) => {
+                if(fileInput.files.length) handleDroppedExcel(fileInput.files[0]);
+            });
+        }
+
+        function handleDroppedExcel(file) {
+            document.getElementById('file-info-zone').classList.remove('hidden');
+            document.getElementById('file-info-zone').innerText = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const rows = XLSX.utils.sheet_to_json(worksheet);
+                processExcelData(rows);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function processExcelData(rows) {
+            if(rows.length === 0) return;
+            let keys = Object.keys(rows[0]);
+            let labelKey = keys.find(k => k.toLowerCase().includes('bulan') || k.toLowerCase().includes('tanggal') || k.toLowerCase().includes('nama')) || keys[0];
+            let revenueKey = keys.find(k => k.toLowerCase().includes('revenue') || k.toLowerCase().includes('pendapatan') || k.toLowerCase().includes('omset')) || keys[1];
+            let expenseKey = keys.find(k => k.toLowerCase().includes('expense') || k.toLowerCase().includes('pengeluaran') || k.toLowerCase().includes('biaya')) || keys[2];
+
+            let labels = [], revenues = [], expenses = [];
+            rows.forEach(row => {
+                labels.push(row[labelKey] || '');
+                revenues.push(parseFloat(row[revenueKey]) || 0);
+                expenses.push(parseFloat(row[expenseKey]) || 0);
+            });
+
+            const emptyState = document.getElementById('chart-empty-state');
+            if(emptyState) emptyState.classList.add('hidden');
+            if(charts['excel_comparison']) charts['excel_comparison'].destroy();
+            
+            charts['excel_comparison'] = new Chart(document.getElementById('chart-excel-comparison').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Pendapatan', data: revenues, backgroundColor: '#4f46e5', borderRadius: 6 },
+                        { label: 'Pengeluaran', data: expenses, backgroundColor: '#ef4444', borderRadius: 6 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+            document.getElementById('excel-analysis-text').innerHTML = `<p class="text-slate-700 font-semibold text-xs">Analisa berhasil dirender dari file excel secara otomatis dengan struktur visualisasi grafik komparasi disamping.</p>`;
+        }
     </script>
 </body>
 </html>
