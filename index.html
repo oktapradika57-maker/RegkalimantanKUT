@@ -297,14 +297,17 @@
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Analisa Keuangan</span></div>
                     <select id="filter-sva-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Gross Revenue</p><h3 id="sva-kpi-1" class="text-2xl font-extrabold text-slate-900 mt-2">Rp 0</h3></div><div class="bg-blue-50 p-3.5 rounded-xl text-blue-600"><i class="fa-solid fa-money-bill-trend-up text-xl"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Laba Kotor</p><h3 id="sva-kpi-2" class="text-2xl font-extrabold text-amber-600 mt-2">Rp 0</h3></div><div class="bg-amber-50 p-3.5 rounded-xl text-amber-600"><i class="fa-solid fa-sack-dollar text-xl"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Laba Bersih</p><h3 id="sva-kpi-3" class="text-2xl font-extrabold text-emerald-600 mt-2">Rp 0</h3></div><div class="bg-emerald-50 p-3.5 rounded-xl text-emerald-600"><i class="fa-solid fa-building-columns text-xl"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Net Profit Margin</p><h3 id="sva-kpi-4" class="text-2xl font-extrabold text-indigo-600 mt-2">0%</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600"><i class="fa-solid fa-percent text-xl"></i></div></div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Revenue (H)</p><h3 id="sva-kpi-1" class="text-xl font-extrabold text-slate-900 mt-2">Rp 0</h3></div><div class="bg-blue-50 p-3 rounded-xl text-blue-600"><i class="fa-solid fa-money-bill-trend-up text-lg"></i></div></div>
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Biaya (I)</p><h3 id="sva-kpi-2" class="text-xl font-extrabold text-rose-600 mt-2">Rp 0</h3></div><div class="bg-rose-50 p-3 rounded-xl text-rose-600"><i class="fa-solid fa-wallet text-lg"></i></div></div>
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Pengembalian (J)</p><h3 id="sva-kpi-3" class="text-xl font-extrabold text-amber-600 mt-2">Rp 0</h3></div><div class="bg-amber-50 p-3 rounded-xl text-amber-600"><i class="fa-solid fa-sack-dollar text-lg"></i></div></div>
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Net Income (K)</p><h3 id="sva-kpi-4" class="text-xl font-extrabold text-emerald-600 mt-2">Rp 0</h3></div><div class="bg-emerald-50 p-3 rounded-xl text-emerald-600"><i class="fa-solid fa-building-columns text-lg"></i></div></div>
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Net Profit Margin (L)</p><h3 id="sva-kpi-5" class="text-xl font-extrabold text-indigo-600 mt-2">0%</h3></div><div class="bg-indigo-50 p-3 rounded-xl text-indigo-600"><i class="fa-solid fa-percent text-lg"></i></div></div>
                 </div>
+                
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="premium-card p-6 rounded-2xl lg:col-span-2"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Tren Skala Finansial SVA Bulanan</h4><div class="w-full h-80"><canvas id="chart-sva-finance-line"></canvas></div></div>
+                    <div class="premium-card p-6 rounded-2xl lg:col-span-2"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Tren Skala Finansial Bulanan</h4><div class="w-full h-80"><canvas id="chart-sva-finance-line"></canvas></div></div>
                     <div class="premium-card p-6 rounded-2xl lg:col-span-1"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i>Proporsi Struktur Alokasi</h4><div class="relative w-full h-72 flex items-center justify-center"><canvas id="chart-sva-finance-pie"></canvas></div></div>
                 </div>
                 <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
@@ -445,7 +448,6 @@
         let charts = {};
         let currentView = 'sva';
 
-        // INTEGRASI ROUTING UNTUK MENU BARU
         const titleLabels = {
             'excel-analyzer': 'Analisa File Excel > Komparasi Pendapatan & Pengeluaran',
             'sva': 'Monitoring SVA (Analisa Kompetitif Pendapatan)',
@@ -470,7 +472,6 @@
             reloadData();
         });
 
-        // PERBAIKAN EVALUATE ROUTE: Otomatis mendeteksi dan membuka sub-menu dropdwon aktif
         function evaluateRoute() {
             let hash = window.location.hash.replace('#', '') || 'sva';
             currentView = hash;
@@ -484,11 +485,9 @@
             if(activeBtn) {
                 activeBtn.classList.add('active-menu-3d');
                 
-                // SOLUSI: Otomatis buka sub-menu induk jika menu ini berada di dalam dropdown
                 const parentSubmenu = activeBtn.closest('[id^="submenu-"]');
                 if (parentSubmenu) {
                     parentSubmenu.classList.remove('hidden');
-                    // Otomatis putar panah dropdown induknya jika ada
                     const arrow = document.getElementById(`arrow-${parentSubmenu.id}`);
                     if (arrow) arrow.classList.add('rotate-180');
                 }
@@ -507,17 +506,27 @@
             if(icon) icon.classList.add('animate-spin');
 
             try {
-                // Fetch sheets data secara pararel
-                const sheets = ['sva', 'pm-target', 'pm-curvas', 'mbp-rh', 'asset-kut', 'kpi', 'operational', 'pjb-aging', 'project'];
-                const results = await Promise.all(sheets.map(s => fetchFromSpreadsheet(s).catch(() => [])));
+                const sheetMapping = {
+                    'sva': 'data SVA',
+                    'kpi': 'data KPI',
+                    'operational': 'data Operational',
+                    'project': 'data project',
+                    'pm-target': 'data PM',
+                    'pm-curvas': 'data PM',
+                    'mbp-rh': 'data MBP',
+                    'asset-kut': 'asset-kut', 
+                    'pjb-aging': 'pjb-aging'   
+                };
+
+                const keys = Object.keys(sheetMapping);
+                const results = await Promise.all(keys.map(k => fetchFromSpreadsheet(sheetMapping[k]).catch(() => [])));
                 
-                sheets.forEach((sheet, idx) => {
-                    globalDataset[sheet] = results[idx];
+                keys.forEach((key, idx) => {
+                    globalDataset[key] = results[idx];
                 });
 
                 if(badge) { badge.className = 'px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-emerald-500/20 shadow-md'; badge.innerText = 'Connected'; }
                 
-                // Isi filter dropdown bawaan
                 buildFilterOptions('filter-sva-bulan', globalDataset['sva'], 'Bulan', 'Semua Bulan');
                 buildFilterOptions('filter-pm-target-bulan', globalDataset['pm-target'], 'Bulan', 'Semua Bulan');
                 buildFilterOptions('filter-pm-curvas-minggu', globalDataset['pm-curvas'], 'Minggu', 'Semua Minggu');
@@ -537,7 +546,12 @@
         }
 
         async function fetchFromSpreadsheet(sheetName) {
-            const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            
+            if (sheetName === 'data SVA') {
+                url += '&range=A:M';
+            }
+
             const response = await fetch(url);
             if (!response.ok) throw new Error('Fail');
             const text = await response.text();
@@ -571,7 +585,6 @@
         }
         function toggleSubmenu(id) { toggleSection(id, `arrow-${id}`); }
         
-        // PERBAIKAN SIDEBAR TOGGLE: Menggunakan ukuran standar w-72 Tailwind CSS
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const icon = document.getElementById('sidebar-toggle-icon');
@@ -597,7 +610,7 @@
                     html += `<tr class="hover:bg-slate-50/80 transition-colors">`;
                     headers.forEach(h => {
                         let val = row[h] !== null && row[h] !== undefined ? row[h] : '-';
-                        if (typeof val === 'number' && (h.toLowerCase().includes('revenue') || h.toLowerCase().includes('income') || h.toLowerCase().includes('laba') || h.toLowerCase().includes('biaya'))) {
+                        if (typeof val === 'number' && (h.toLowerCase().includes('revenue') || h.toLowerCase().includes('income') || h.toLowerCase().includes('laba') || h.toLowerCase().includes('biaya') || h.toLowerCase().includes('pengembalian'))) {
                             val = 'Rp ' + val.toLocaleString('id-ID');
                         }
                         html += `<td class="px-6 py-4 font-semibold">${val}</td>`;
@@ -609,6 +622,40 @@
             table.innerHTML = html;
         }
 
+        function parseFlexibleNumber(rawVal) {
+            if (rawVal === null || rawVal === undefined) return 0;
+            if (typeof rawVal === 'number') return rawVal;
+            let str = String(rawVal).trim();
+            if (str === '-' || str === '' || str === 'null') return 0;
+            
+            str = str.replace(/Rp/g, '').replace(/%/g, '').replace(/\s/g, '');
+            
+            if (str.includes('.') && str.includes(',')) {
+                str = str.replace(/\./g, '').replace(',', '.');
+            } else if (str.includes('.') && !str.includes(',')) {
+                const parts = str.split('.');
+                if (parts[parts.length - 1].length === 3) { str = str.replace(/\./g, ''); }
+            } else if (str.includes(',')) {
+                const parts = str.split(',');
+                if (parts[parts.length - 1].length === 3) { str = str.replace(/,/g, ''); } else { str = str.replace(/,/g, '.'); }
+            }
+            let num = parseFloat(str);
+            return isNaN(num) ? 0 : num;
+        }
+
+        function extractValue(row, structuralNames) {
+            for (let key in row) {
+                let normalizedKey = key.toLowerCase().replace(/[\s_]/g, '');
+                for (let name of structuralNames) {
+                    let normalizedName = name.toLowerCase().replace(/[\s_]/g, '');
+                    if (normalizedKey === normalizedName) {
+                        return parseFlexibleNumber(row[key]);
+                    }
+                }
+            }
+            return 0;
+        }
+
         function renderActiveView(data) {
             const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
             
@@ -616,13 +663,56 @@
                 const filterVal = document.getElementById('filter-sva-bulan').value;
                 let arr = data['sva'] || [];
                 if(filterVal !== 'ALL') arr = arr.filter(d => d.Bulan === filterVal);
-                let rev = 0, gross = 0, net = 0;
-                arr.forEach(d => { rev += (d.Revenue || 0); gross += (d.Laba_Kotor || Math.round(d.Revenue * 0.65)); net += (d.Net_Income || 0); });
-                document.getElementById('sva-kpi-1').innerText = formatIDR(rev);
-                document.getElementById('sva-kpi-2').innerText = formatIDR(gross);
-                document.getElementById('sva-kpi-3').innerText = formatIDR(net);
-                document.getElementById('sva-kpi-4').innerText = (rev > 0 ? (net/rev*100).toFixed(1) : 0) + '%';
-                buildTable('table-sva', ['Bulan', 'Revenue', 'Laba_Kotor', 'Net_Income'], arr);
+                
+                let totalRevenue = 0, totalBiaya = 0, totalPengembalian = 0, totalNetIncome = 0;
+                
+                let tableData = arr.map(d => {
+                    let r = extractValue(d, ['Revenue', 'TotalGrossRevenue', 'GrossRevenue']);
+                    let b = extractValue(d, ['Biaya', 'TotalLabaKotor', 'LabaKotor', 'biaya']);
+                    let p = extractValue(d, ['Pengembalian', 'TotalLabaBersih', 'LabaBersih', 'pengembalian']);
+                    let ni = extractValue(d, ['NetIncome', 'Net_Income', 'Laba_Bersih']);
+                    let npmVal = extractValue(d, ['NetProfitMargin', 'Net_Profit_Margin', 'NPM']);
+                    
+                    if (ni === 0 && r > 0) {
+                        ni = r - b - p; 
+                    }
+                    
+                    if (npmVal === 0 && r > 0) {
+                        npmVal = (ni / r) * 100;
+                    } else if (npmVal > 0 && npmVal < 1) {
+                        npmVal = npmVal * 100;
+                    }
+                    
+                    totalRevenue += r;
+                    totalBiaya += b;
+                    totalPengembalian += p;
+                    totalNetIncome += ni;
+                    
+                    return {
+                        Bulan: d.Bulan || d.bulan || '-',
+                        Revenue: r,
+                        Biaya: b,
+                        Pengembalian: p,
+                        Net_Income: ni,
+                        Net_Profit_Margin: npmVal.toFixed(1) + '%'
+                    };
+                });
+                
+                document.getElementById('sva-kpi-1').innerText = formatIDR(totalRevenue);
+                document.getElementById('sva-kpi-2').innerText = formatIDR(totalBiaya);
+                document.getElementById('sva-kpi-3').innerText = formatIDR(totalPengembalian);
+                document.getElementById('sva-kpi-4').innerText = formatIDR(totalNetIncome);
+                
+                let finalNpm = totalRevenue > 0 ? (totalNetIncome / totalRevenue) * 100 : 0;
+                document.getElementById('sva-kpi-5').innerText = finalNpm.toFixed(1) + '%';
+                
+                if (arr.length > 0) {
+                    buildTable('table-sva', Object.keys(arr[0]), arr);
+                } else {
+                    buildTable('table-sva', ['Keterangan'], []);
+                }
+                
+                renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
             
             } else if (['kpi', 'operational', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
                 let targetKey = currentView.includes('aging') ? 'pjb-aging' : currentView;
@@ -649,6 +739,41 @@
                 document.getElementById('pmt-kpi-3').innerText = (t - r) + ' WO';
                 document.getElementById('pmt-kpi-4').innerText = (t > 0 ? (r/t*100).toFixed(1) : 0) + '%';
                 buildTable('table-pm-target', ['Bulan', 'Target_WO', 'Realisasi_WO'], arr);
+            }
+        }
+
+        function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
+            if (charts['sva_line']) charts['sva_line'].destroy();
+            const ctxLine = document.getElementById('chart-sva-finance-line');
+            if (ctxLine) {
+                charts['sva_line'] = new Chart(ctxLine.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: tableData.map(t => t.Bulan),
+                        datasets: [
+                            { label: 'Revenue', data: tableData.map(t => t.Revenue), borderColor: '#4f46e5', tension: 0.2, fill: false },
+                            { label: 'Biaya', data: tableData.map(t => t.Biaya), borderColor: '#f43f5e', tension: 0.2, fill: false },
+                            { label: 'Net Income', data: tableData.map(t => t.Net_Income), borderColor: '#10b981', tension: 0.2, fill: false }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            if (charts['sva_pie']) charts['sva_pie'].destroy();
+            const ctxPie = document.getElementById('chart-sva-finance-pie');
+            if (ctxPie) {
+                charts['sva_pie'] = new Chart(ctxPie.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Biaya', 'Pengembalian', 'Net Income'],
+                        datasets: [{
+                            data: [totalBiaya, totalPengembalian, totalNetIncome],
+                            backgroundColor: ['#f43f5e', '#f59e0b', '#10b981']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
             }
         }
 
