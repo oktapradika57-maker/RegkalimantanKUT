@@ -213,9 +213,18 @@
                         <i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#asset-service" id="btn-asset-service" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-wrench mr-2 text-[10px] text-slate-600"></i>Biaya Perawatan Service</a>
-                        <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-arrow-down-line mr-2 text-[10px] text-slate-600"></i>Depresiasi Nilai Buku</a>
-                        <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-handshake mr-2 text-[10px] text-slate-600"></i>Biaya Sewa Vendor</a>
+                        <a href="#asset-master" id="btn-asset-master" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300">
+                            <i class="fa-solid fa-database mr-2 text-[10px] text-slate-600"></i>Data Master Asset
+                        </a>
+                        <a href="#asset-service" id="btn-asset-service" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300">
+                            <i class="fa-solid fa-wrench mr-2 text-[10px] text-slate-600"></i>Biaya Perawatan Service
+                        </a>
+                        <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300">
+                            <i class="fa-solid fa-arrow-down-line mr-2 text-[10px] text-slate-600"></i>Depresiasi Nilai Buku
+                        </a>
+                        <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300">
+                            <i class="fa-solid fa-handshake mr-2 text-[10px] text-slate-600"></i>Biaya Sewa Vendor
+                        </a>
                     </div>
                 </div>
             </div>
@@ -418,6 +427,16 @@
                 <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-mbp-bbm"></table></div></div>
             </section>
 
+            <section id="view-asset-master" class="view-pane space-y-8 hidden">
+                <div class="premium-card p-6 rounded-2xl bg-white shadow-md">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-database mr-2 text-indigo-500"></i>Data Master Asset</h3>
+                    <p class="text-xs text-slate-500 mt-1">Daftar rincian aset, status kepemilikan, dan kondisi operasional unit Regional Kalimantan.</p>
+                </div>
+                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
+                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-master"></table></div>
+                </div>
+            </section>
+
             <section id="view-asset-service" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Aset Perawatan</span></div>
@@ -448,6 +467,7 @@
         let charts = {};
         let currentView = 'sva';
 
+        // PENYESUAIAN PENGATURAN TEKS HEADER BREADCRUMB
         const titleLabels = {
             'excel-analyzer': 'Analisa File Excel > Komparasi Pendapatan & Pengeluaran',
             'sva': 'Monitoring SVA (Analisa Kompetitif Pendapatan)',
@@ -461,6 +481,7 @@
             'pm-curvas': 'Monitoring PM > S-Curve Progress',
             'mbp-rh': 'Monitoring MBP > Log Perhitungan Running Hours',
             'mbp-bbm': 'Monitoring MBP > Log Analisa Konsumsi BBM',
+            'asset-master': 'Asset KUT System > Data Master Asset',
             'asset-service': 'Asset KUT System > Log Biaya Service',
             'asset-depresiasi': 'Asset KUT System > Penyusutan Nilai Buku',
             'asset-sewa': 'Asset KUT System > Pembiayaan Unit Sewa'
@@ -472,6 +493,7 @@
             reloadData();
         });
 
+        // PERBAIKAN EVALUATE ROUTE UNTUK MENCEGAH MENU TERTUTUP SAAT DI RELOAD
         function evaluateRoute() {
             let hash = window.location.hash.replace('#', '') || 'sva';
             currentView = hash;
@@ -485,6 +507,7 @@
             if(activeBtn) {
                 activeBtn.classList.add('active-menu-3d');
                 
+                // Mencegah dropdown induk (seperti Asset) menutup otomatis jika menunya sedang aktif
                 const parentSubmenu = activeBtn.closest('[id^="submenu-"]');
                 if (parentSubmenu) {
                     parentSubmenu.classList.remove('hidden');
@@ -506,6 +529,7 @@
             if(icon) icon.classList.add('animate-spin');
 
             try {
+                // MENAMBAHKAN PEMETAAN NAMA SHEET BARU "data Asset" KE INTERNAL KEY
                 const sheetMapping = {
                     'sva': 'data SVA',
                     'kpi': 'data KPI',
@@ -514,6 +538,7 @@
                     'pm-target': 'data PM',
                     'pm-curvas': 'data PM',
                     'mbp-rh': 'data MBP',
+                    'asset-master': 'data Asset',
                     'asset-kut': 'asset-kut', 
                     'pjb-aging': 'pjb-aging'   
                 };
@@ -585,6 +610,7 @@
         }
         function toggleSubmenu(id) { toggleSection(id, `arrow-${id}`); }
         
+        // PERBAIKAN SIDEBAR TOGGLE MENJADI STANDAR UKURAN W-72
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const icon = document.getElementById('sidebar-toggle-icon');
@@ -645,15 +671,29 @@
 
         function extractValue(row, structuralNames) {
             for (let key in row) {
-                let normalizedKey = key.toLowerCase().replace(/[\s_]/g, '');
+                let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
                 for (let name of structuralNames) {
-                    let normalizedName = name.toLowerCase().replace(/[\s_]/g, '');
+                    let normalizedName = name.toLowerCase().replace(/[\s_\/]/g, '');
                     if (normalizedKey === normalizedName) {
                         return parseFlexibleNumber(row[key]);
                     }
                 }
             }
             return 0;
+        }
+
+        // FUNGSI PEMBERSIH TEKS STRING UNTUK MASTER ASSET
+        function extractStringValue(row, structuralNames) {
+            for (let key in row) {
+                let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
+                for (let name of structuralNames) {
+                    let normalizedName = name.toLowerCase().replace(/[\s_\/]/g, '');
+                    if (normalizedKey === normalizedName) {
+                        return row[key] !== null && row[key] !== undefined && String(row[key]).trim() !== '' ? String(row[key]) : '-';
+                    }
+                }
+            }
+            return '-';
         }
 
         function renderActiveView(data) {
@@ -707,13 +747,38 @@
                 document.getElementById('sva-kpi-5').innerText = finalNpm.toFixed(1) + '%';
                 
                 if (arr.length > 0) {
-                    buildTable('table-sva', Object.keys(arr[0]), arr);
+                    buildTable('table-sva', Object.keys(tableData[0]), tableData);
                 } else {
                     buildTable('table-sva', ['Keterangan'], []);
                 }
                 
                 renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
             
+            // MENU BARU: LOGIKA MENAMPILKAN DAN MENYARING DATA MASTER ASSET
+            } else if (currentView === 'asset-master') {
+                let arr = data['asset-master'] || [];
+                
+                let tableData = arr.map(d => {
+                    return {
+                        'User': extractStringValue(d, ['User', 'Pengguna']),
+                        'Merek': extractStringValue(d, ['Merek', 'Merk']),
+                        'Type': extractStringValue(d, ['Type', 'Tipe']),
+                        'Jenis': extractStringValue(d, ['Jenis']),
+                        'Kondisi_Unit': extractStringValue(d, ['Kondisi Unit', 'Kondisi']),
+                        'Kepemilikan': extractStringValue(d, ['Kepemilikan']),
+                        'Status_Pemakaian': extractStringValue(d, ['Terpakai/Tidak Terpakai', 'Terpakai', 'Status'])
+                    };
+                });
+
+                // Menyaring baris kosong yang ikut terbawa dari spreadsheet API
+                tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Type !== '-' || d.Jenis !== '-');
+
+                if (tableData.length > 0) {
+                    buildTable('table-asset-master', Object.keys(tableData[0]), tableData);
+                } else {
+                    buildTable('table-asset-master', ['Keterangan'], []);
+                }
+
             } else if (['kpi', 'operational', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
                 let targetKey = currentView.includes('aging') ? 'pjb-aging' : currentView;
                 let arr = data[targetKey] || [];
