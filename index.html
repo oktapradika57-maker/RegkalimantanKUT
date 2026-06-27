@@ -154,6 +154,10 @@
                     </button>
                     <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
                         <a href="#asset-master" id="btn-asset-master" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-database mr-2 text-[10px] text-slate-600"></i>Data Master Mobil</a>
+                        
+                        <!-- Penambahan Menu Data Master Genset -->
+                        <a href="#asset-genset" id="btn-asset-genset" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-server mr-2 text-[10px] text-slate-600"></i>Data Master Genset</a>
+                        
                         <a href="#asset-service" id="btn-asset-service" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-wrench mr-2 text-[10px] text-slate-600"></i>Biaya Perawatan Service</a>
                         <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-arrow-down-line mr-2 text-[10px] text-slate-600"></i>Depresiasi Nilai Buku</a>
                         <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-handshake mr-2 text-[10px] text-slate-600"></i>Biaya Sewa Vendor</a>
@@ -276,6 +280,40 @@
                     <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-master"></table></div>
                 </div>
             </section>
+            
+            <!-- Penambahan Section Data Master Genset -->
+            <section id="view-asset-genset" class="view-pane space-y-8 hidden">
+                <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-server mr-2 text-indigo-500"></i>Data Master Genset</h3>
+                        <p class="text-xs text-slate-500 mt-1">Daftar rincian aset genset, kepemilikan, dan status operasional.</p>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 flex-wrap justify-end">
+                        <select id="filter-asset-genset-nop" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua NOP</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="premium-card p-6 rounded-2xl flex flex-col">
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-handshake mr-1 text-indigo-400"></i> Proporsi Aset / Sewa</h4>
+                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-genset-sewa"></canvas></div>
+                    </div>
+                    <div class="premium-card p-6 rounded-2xl flex flex-col justify-center items-center">
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-6 text-center">Ringkasan Unit Genset</h4>
+                        <div class="grid grid-cols-2 gap-6 w-full max-w-md">
+                             <div class="bg-indigo-50 p-6 rounded-xl text-center border border-indigo-100 shadow-sm"><h3 id="genset-total" class="text-4xl font-black text-indigo-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Total Unit</p></div>
+                             <div class="bg-emerald-50 p-6 rounded-xl text-center border border-emerald-100 shadow-sm"><h3 id="genset-aktif" class="text-4xl font-black text-emerald-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Unit Aktif</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
+                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-genset"></table></div>
+                </div>
+            </section>
 
             <section id="view-kpi" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data KPI</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-kpi"></table></div></div></section>
             <section id="view-operational" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Operational</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-operational"></table></div></div></section>
@@ -329,7 +367,8 @@
             'asset-master': 'Asset KUT System > Data Master Mobil',
             'asset-service': 'Asset KUT System > Log Biaya Service',
             'asset-depresiasi': 'Asset KUT System > Penyusutan Nilai Buku',
-            'asset-sewa': 'Asset KUT System > Pembiayaan Unit Sewa'
+            'asset-sewa': 'Asset KUT System > Pembiayaan Unit Sewa',
+            'asset-genset': 'Asset KUT System > Data Master Genset'
         };
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -369,10 +408,12 @@
             if(icon) icon.classList.add('animate-spin');
 
             try {
+                // PASTIKAN NAMA TAB DI SPREADSHEET ADALAH 'data Genset'
                 const sheetMapping = {
                     'sva': 'data SVA', 'kpi': 'data KPI', 'operational': 'data Operational', 'project': 'data project',
                     'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP',
-                    'asset-master': 'data Asset', 'asset-kut': 'asset-kut', 'pjb-aging': 'pjb-aging'   
+                    'asset-master': 'data Asset', 'asset-kut': 'asset-kut', 'pjb-aging': 'pjb-aging',
+                    'asset-genset': 'data Genset'   
                 };
 
                 const keys = Object.keys(sheetMapping);
@@ -428,7 +469,6 @@
             selectEl.innerHTML = html;
         }
 
-        // Helper Dropdown untuk Asset Master agar tidak ter-reset
         function updateDropdownOptions(selectId, dataArray, key, defaultLabel) {
             const select = document.getElementById(selectId);
             if (!select) return;
@@ -554,11 +594,9 @@
                 if (arr.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData); else buildTable('table-sva', ['Keterangan'], []);
                 renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
             
-            // LOGIKA PEMETAAN DAN FILTER DATA MASTER MOBIL
             } else if (currentView === 'asset-master') {
                 let arr = data['asset-master'] || [];
                 
-                // 1. Pemetaan Data
                 let tableData = arr.map(d => {
                     return {
                         'User': extractStringValue(d, ['User', 'Pengguna', 'Nama']),
@@ -567,24 +605,20 @@
                         'NOP': extractStringValue(d, ['NOP', 'No Polisi', 'Nomor Polisi']),
                         'Jenis': extractStringValue(d, ['Jenis']),
                         'Kondisi_Unit': extractStringValue(d, ['Kondisi Unit', 'Kondisi']),
-                        'Status_Pemakaian': extractStringValue(d, ['Status Pemakaian', 'Terpakai/Tidak Terpakai', 'Terpakai', 'Status']) // Filter Status
+                        'Status_Pemakaian': extractStringValue(d, ['Status Pemakaian', 'Terpakai/Tidak Terpakai', 'Terpakai', 'Status'])
                     };
                 });
 
-                // Hapus baris yang kosong atau invalid
                 tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Jenis !== '-');
 
-                // 2. Update Opsi Filter Dropdown secara Dinamis
                 updateDropdownOptions('filter-asset-master-nop', tableData, 'NOP', 'Semua NOP');
                 updateDropdownOptions('filter-asset-master-kondisi', tableData, 'Kondisi_Unit', 'Semua Kondisi');
                 updateDropdownOptions('filter-asset-master-status', tableData, 'Status_Pemakaian', 'Semua Status');
 
-                // 3. Ambil Pilihan Filter Aktif
                 const filterNop = document.getElementById('filter-asset-master-nop').value;
                 const filterKondisi = document.getElementById('filter-asset-master-kondisi').value;
                 const filterStatus = document.getElementById('filter-asset-master-status').value;
 
-                // 4. Proses Filter Ganda (Multi-filter)
                 let filteredData = tableData.filter(d => {
                     const matchNop = (filterNop === 'ALL' || d.NOP === filterNop);
                     const matchKondisi = (filterKondisi === 'ALL' || d.Kondisi_Unit === filterKondisi);
@@ -592,7 +626,6 @@
                     return matchNop && matchKondisi && matchStatus;
                 });
 
-                // 5. Render Hasilnya ke Tabel dan Chart
                 if (filteredData.length > 0) {
                     buildTable('table-asset-master', ['User', 'Merek', 'Tipe_Unit', 'NOP', 'Jenis', 'Kondisi_Unit', 'Status_Pemakaian'], filteredData);
                 } else {
@@ -600,6 +633,40 @@
                 }
 
                 renderAssetMasterCharts(filteredData);
+            
+            // LOGIKA TAMBAHAN UNTUK DATA MASTER GENSET
+            } else if (currentView === 'asset-genset') {
+                let arr = data['asset-genset'] || [];
+                
+                let tableData = arr.map(d => {
+                    return {
+                        'NOP': extractStringValue(d, ['NOP']),
+                        'Cluster': extractStringValue(d, ['Cluster']),
+                        'Aset_Sewa': extractStringValue(d, ['Aset/Sewa', 'Aset / Sewa', 'Aset_Sewa']),
+                        'Status_Kepemilikan': extractStringValue(d, ['Status Kepemilikan']),
+                        'No_Asset': extractStringValue(d, ['No Asset', 'No_Asset']),
+                        'Kondisi': extractStringValue(d, ['Kondisi']),
+                        'Status_Aktif': extractStringValue(d, ['Aktif/Non Aktif', 'Aktif/Non-Aktif', 'Status Aktif']),
+                        'Validasi_NOP': extractStringValue(d, ['Validasi NOP']),
+                        'Remark': extractStringValue(d, ['Remark', 'Remark Remark Service', 'Remark Service']),
+                        'Peruntukan': extractStringValue(d, ['Peruntukan', 'Peuntukan'])
+                    };
+                });
+
+                tableData = tableData.filter(d => d.NOP !== '-');
+
+                updateDropdownOptions('filter-asset-genset-nop', tableData, 'NOP', 'Semua NOP');
+                const filterNop = document.getElementById('filter-asset-genset-nop').value;
+
+                let filteredData = tableData.filter(d => filterNop === 'ALL' || d.NOP === filterNop);
+
+                if (filteredData.length > 0) {
+                    buildTable('table-asset-genset', ['NOP', 'Cluster', 'Aset_Sewa', 'Status_Kepemilikan', 'No_Asset', 'Kondisi', 'Status_Aktif', 'Validasi_NOP', 'Remark', 'Peruntukan'], filteredData);
+                } else {
+                    buildTable('table-asset-genset', ['Keterangan'], []);
+                }
+
+                renderAssetGensetCharts(filteredData);
 
             } else if (['kpi', 'operational', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
                 let targetKey = currentView.includes('aging') ? 'pjb-aging' : currentView;
@@ -666,6 +733,39 @@
                     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
                 });
             }
+        }
+
+        // FUNGSI RENDER CHART GENSET
+        function renderAssetGensetCharts(tableData) {
+            const countAsetSewa = tableData.reduce((acc, row) => {
+                let val = row['Aset_Sewa'];
+                if (val && val !== '-') acc[val] = (acc[val] || 0) + 1;
+                return acc;
+            }, {});
+
+            if (charts['asset_genset_sewa']) charts['asset_genset_sewa'].destroy();
+            const ctxSewa = document.getElementById('chart-asset-genset-sewa');
+            if (ctxSewa) {
+                charts['asset_genset_sewa'] = new Chart(ctxSewa.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { 
+                        labels: Object.keys(countAsetSewa), 
+                        datasets: [{ data: Object.values(countAsetSewa), backgroundColor: ['#4f46e5', '#f59e0b', '#10b981', '#f43f5e'] }] 
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } } } }
+                });
+            }
+
+            const total = tableData.length;
+            const aktif = tableData.filter(d => {
+                let st = String(d.Status_Aktif).toLowerCase();
+                return st.includes('aktif') && !st.includes('non');
+            }).length;
+            
+            const totalEl = document.getElementById('genset-total');
+            const aktifEl = document.getElementById('genset-aktif');
+            if(totalEl) totalEl.innerText = total;
+            if(aktifEl) aktifEl.innerText = aktif;
         }
 
         function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
