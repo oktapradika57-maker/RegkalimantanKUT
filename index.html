@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT Kinarya Utama Teknik - Regional Kalimantan Enterprise Dashboard</title>
+    <title>PT Kinarya Utama Teknik - Regional Kalimantan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Plugin tambahan untuk memunculkan teks label (Total & Persen) di dalam grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -300,11 +302,11 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="premium-card p-6 rounded-2xl flex flex-col">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-handshake mr-1 text-indigo-400"></i> Proporsi Aset / Sewa</h4>
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-handshake mr-1 text-indigo-400"></i> Proporsi Aset / Sewa (Klik Area Grafik Untuk Filter)</h4>
                         <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-genset-sewa"></canvas></div>
                     </div>
                     <div class="premium-card p-6 rounded-2xl flex flex-col justify-center items-center">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-6 text-center">Ringkasan Unit Genset</h4>
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-6 text-center">Ringkasan Unit Genset Aktif</h4>
                         <div class="grid grid-cols-2 gap-6 w-full max-w-md">
                              <div class="bg-indigo-50 p-6 rounded-xl text-center border border-indigo-100 shadow-sm"><h3 id="genset-total" class="text-4xl font-black text-indigo-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Total Unit</p></div>
                              <div class="bg-emerald-50 p-6 rounded-xl text-center border border-emerald-100 shadow-sm"><h3 id="genset-aktif" class="text-4xl font-black text-emerald-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Unit Aktif</p></div>
@@ -424,7 +426,6 @@
                 };
 
                 const keys = Object.keys(sheetMapping);
-                // PERBAIKAN LOADING SCREEN DISINI MENGGUNAKAN Promise.allSettled
                 const results = await Promise.allSettled(keys.map(k => fetchFromSpreadsheet(sheetMapping[k])));
                 
                 keys.forEach((key, idx) => { 
@@ -447,7 +448,6 @@
             } catch (err) {
                 if(badge) { badge.className = 'px-2.5 py-1 bg-rose-500/10 text-rose-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-rose-500/20 shadow-md'; badge.innerText = 'Offline Error'; }
             } finally {
-                // INI MEMASTIKAN LOADING SCREEN HILANG
                 if(splash) { 
                     splash.classList.add('opacity-0'); 
                     setTimeout(() => splash.remove(), 700); 
@@ -487,7 +487,7 @@
             selectEl.innerHTML = html;
         }
 
-        // Helper Dropdown untuk Asset agar tidak ter-reset
+        // Helper Dropdown
         function updateDropdownOptions(selectId, dataArray, key, defaultLabel) {
             const select = document.getElementById(selectId);
             if (!select) return;
@@ -523,7 +523,7 @@
             const table = document.getElementById(tableId);
             if(!table) return;
             let html = `<thead class="bg-slate-50 border-b border-slate-200/60 uppercase tracking-wider text-slate-500 font-bold text-[10px]"><tr>`;
-            headers.forEach(h => { html += `<th class="px-6 py-4">${h.replace(/_/g, ' ')}</th>`; });
+            headers.forEach(h => { html += `<th class="px-6 py-4 whitespace-nowrap">${h.replace(/_/g, ' ')}</th>`; });
             html += `</tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
             if(rowsList.length === 0) {
                 html += `<tr><td colspan="${headers.length}" class="px-6 py-8 text-center text-slate-400 font-medium">Tidak ada data saat ini.</td></tr>`;
@@ -535,7 +535,7 @@
                         if (typeof val === 'number' && (h.toLowerCase().includes('revenue') || h.toLowerCase().includes('income') || h.toLowerCase().includes('laba') || h.toLowerCase().includes('biaya') || h.toLowerCase().includes('pengembalian'))) {
                             val = 'Rp ' + val.toLocaleString('id-ID');
                         }
-                        html += `<td class="px-6 py-4 font-semibold">${val}</td>`;
+                        html += `<td class="px-6 py-4 font-semibold whitespace-nowrap">${val}</td>`;
                     });
                     html += `</tr>`;
                 });
@@ -653,7 +653,7 @@
 
                 renderAssetMasterCharts(filteredData);
 
-            // LOGIKA TAMBAHAN UNTUK DATA MASTER GENSET
+            // LOGIKA UNTUK DATA MASTER GENSET
             } else if (currentView === 'asset-genset') {
                 let arr = data['asset-genset'] || [];
                 
@@ -672,10 +672,8 @@
                     };
                 });
 
-                // Hapus data kosong berdasarkan NOP
                 tableData = tableData.filter(d => d.NOP !== '-');
 
-                // Update Opsi Filter Dropdown
                 updateDropdownOptions('filter-asset-genset-nop', tableData, 'NOP', 'Semua NOP');
                 updateDropdownOptions('filter-asset-genset-sewa', tableData, 'Aset_Sewa', 'Semua Aset/Sewa');
                 updateDropdownOptions('filter-asset-genset-kondisi', tableData, 'Kondisi', 'Semua Kondisi');
@@ -684,21 +682,19 @@
                 const filterSewa = document.getElementById('filter-asset-genset-sewa').value;
                 const filterKondisi = document.getElementById('filter-asset-genset-kondisi').value;
 
-                // Terapkan Filter
                 let filteredData = tableData.filter(d => {
                     return (filterNop === 'ALL' || d.NOP === filterNop) &&
                            (filterSewa === 'ALL' || d.Aset_Sewa === filterSewa) &&
                            (filterKondisi === 'ALL' || d.Kondisi === filterKondisi);
                 });
 
-                // Render Tabel
                 if (filteredData.length > 0) {
                     buildTable('table-asset-genset', ['NOP', 'Cluster', 'Aset_Sewa', 'Status_Kepemilikan', 'No_Asset', 'Kondisi', 'Status_Aktif', 'Validasi_NOP', 'Remark', 'Peruntukan'], filteredData);
                 } else {
                     buildTable('table-asset-genset', ['Keterangan'], []);
                 }
 
-                // Render Chart Genset
+                // Render Chart Genset dengan Plugin DataLabels & Fitur Klik
                 renderAssetGensetCharts(filteredData);
 
             } else if (['kpi', 'operational', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
@@ -768,7 +764,7 @@
             }
         }
 
-        // FUNGSI RENDER CHART GENSET
+        // FUNGSI RENDER CHART GENSET - DILENGKAPI DATALABELS & INTERAKSI KLIK
         function renderAssetGensetCharts(tableData) {
             const countAsetSewa = tableData.reduce((acc, row) => {
                 let val = row['Aset_Sewa'];
@@ -778,6 +774,7 @@
 
             if (charts['asset_genset_sewa']) charts['asset_genset_sewa'].destroy();
             const ctxSewa = document.getElementById('chart-asset-genset-sewa');
+            
             if (ctxSewa) {
                 charts['asset_genset_sewa'] = new Chart(ctxSewa.getContext('2d'), {
                     type: 'doughnut',
@@ -785,7 +782,46 @@
                         labels: Object.keys(countAsetSewa), 
                         datasets: [{ data: Object.values(countAsetSewa), backgroundColor: ['#4f46e5', '#f59e0b', '#10b981', '#f43f5e'] }] 
                     },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } } } }
+                    plugins: [ChartDataLabels], // Menambahkan plugin ke dalam grafik
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { 
+                            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } },
+                            // Konfigurasi Tulisan (Total & Persen)
+                            datalabels: {
+                                color: '#ffffff',
+                                font: { weight: 'bold', size: 12 },
+                                formatter: (value, ctx) => {
+                                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    let percentage = (value * 100 / sum).toFixed(1) + "%";
+                                    return value + " (" + percentage + ")"; // Format Tampilan: Total (Persen)
+                                }
+                            }
+                        },
+                        // Fungsi Saat Grafik di Klik
+                        onClick: (event, elements, chart) => {
+                            const filterEl = document.getElementById('filter-asset-genset-sewa');
+                            if (!filterEl) return;
+
+                            if (elements.length > 0) {
+                                const label = chart.data.labels[elements[0].index];
+                                // Fitur Toggle: Jika diklik grafik yang sama, matikan filter (kembali ke ALL)
+                                if (filterEl.value === label) {
+                                    filterEl.value = 'ALL';
+                                } else {
+                                    filterEl.value = label;
+                                }
+                            } else {
+                                filterEl.value = 'ALL'; // Klik di luar grafik mereset filter
+                            }
+                            applyFilters(); // Memanggil ulang tabel
+                        },
+                        // Merubah cursor jadi tangan saat di-hover
+                        onHover: (event, elements) => {
+                            event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                        }
+                    }
                 });
             }
 
