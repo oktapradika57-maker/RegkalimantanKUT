@@ -149,7 +149,7 @@
 
                 <div class="space-y-1">
                     <button onclick="toggleSubmenu('submenu-asset')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-car text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Master Mobil</span></div>
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-car text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Asset KUT System</span></div>
                         <i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
@@ -326,10 +326,10 @@
             'pm-curvas': 'Monitoring PM > S-Curve Progress',
             'mbp-rh': 'Monitoring MBP > Log Perhitungan Running Hours',
             'mbp-bbm': 'Monitoring MBP > Log Analisa Konsumsi BBM',
-            'asset-master': 'Mobil KUT System > Data Master Mobil',
-            'asset-service': 'Mobil KUT System > Log Biaya Service',
-            'asset-depresiasi': 'Mobil KUT System > Penyusutan Nilai Buku',
-            'asset-sewa': 'Mobil KUT System > Pembiayaan Unit Sewa'
+            'asset-master': 'Asset KUT System > Data Master Mobil',
+            'asset-service': 'Asset KUT System > Log Biaya Service',
+            'asset-depresiasi': 'Asset KUT System > Penyusutan Nilai Buku',
+            'asset-sewa': 'Asset KUT System > Pembiayaan Unit Sewa'
         };
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -428,7 +428,7 @@
             selectEl.innerHTML = html;
         }
 
-        // Helper untuk Dropdown Dinamis Asset Master agar pilihan user tidak reset otomatis
+        // Helper Dropdown untuk Asset Master agar tidak ter-reset
         function updateDropdownOptions(selectId, dataArray, key, defaultLabel) {
             const select = document.getElementById(selectId);
             if (!select) return;
@@ -558,33 +558,33 @@
             } else if (currentView === 'asset-master') {
                 let arr = data['asset-master'] || [];
                 
-                // 1. Pemetaan Data Awal
+                // 1. Pemetaan Data
                 let tableData = arr.map(d => {
                     return {
                         'User': extractStringValue(d, ['User', 'Pengguna', 'Nama']),
                         'Merek': extractStringValue(d, ['Merek', 'Merk']),
-                        'Tipe_Unit': extractStringValue(d, ['Tipe', 'Type', 'Kolom C', 'Spesifikasi']), // Pemetaan Kolom C
+                        'Tipe_Unit': extractStringValue(d, ['Tipe', 'Type', 'Spesifikasi', 'Kolom_C']), 
                         'NOP': extractStringValue(d, ['NOP', 'No Polisi', 'Nomor Polisi']),
                         'Jenis': extractStringValue(d, ['Jenis']),
                         'Kondisi_Unit': extractStringValue(d, ['Kondisi Unit', 'Kondisi']),
-                        'Status_Pemakaian': extractStringValue(d, ['Status Pemakaian', 'Terpakai/Tidak Terpakai', 'Terpakai', 'Status']) // Status Pemakaian Baru
+                        'Status_Pemakaian': extractStringValue(d, ['Status Pemakaian', 'Terpakai/Tidak Terpakai', 'Terpakai', 'Status']) // Filter Status
                     };
                 });
 
-                // Hapus data kosong / header yang tidak valid
-                tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Tipe_Unit !== '-');
+                // Hapus baris yang kosong atau invalid
+                tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Jenis !== '-');
 
-                // 2. Refresh Dropdown secara dinamis (menyimpan pilihan sebelumnya)
+                // 2. Update Opsi Filter Dropdown secara Dinamis
                 updateDropdownOptions('filter-asset-master-nop', tableData, 'NOP', 'Semua NOP');
                 updateDropdownOptions('filter-asset-master-kondisi', tableData, 'Kondisi_Unit', 'Semua Kondisi');
                 updateDropdownOptions('filter-asset-master-status', tableData, 'Status_Pemakaian', 'Semua Status');
 
-                // 3. Ambil Nilai Filter
+                // 3. Ambil Pilihan Filter Aktif
                 const filterNop = document.getElementById('filter-asset-master-nop').value;
                 const filterKondisi = document.getElementById('filter-asset-master-kondisi').value;
                 const filterStatus = document.getElementById('filter-asset-master-status').value;
 
-                // 4. Proses Penyaringan Berdasarkan Semua Filter
+                // 4. Proses Filter Ganda (Multi-filter)
                 let filteredData = tableData.filter(d => {
                     const matchNop = (filterNop === 'ALL' || d.NOP === filterNop);
                     const matchKondisi = (filterKondisi === 'ALL' || d.Kondisi_Unit === filterKondisi);
@@ -592,7 +592,7 @@
                     return matchNop && matchKondisi && matchStatus;
                 });
 
-                // 5. Render Tabel & Chart
+                // 5. Render Hasilnya ke Tabel dan Chart
                 if (filteredData.length > 0) {
                     buildTable('table-asset-master', ['User', 'Merek', 'Tipe_Unit', 'NOP', 'Jenis', 'Kondisi_Unit', 'Status_Pemakaian'], filteredData);
                 } else {
