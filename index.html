@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT KUT - Enterprise Dashboard</title>
+    <title>PT KUT - Enterprise Full Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -12,27 +12,36 @@
         .view-pane { animation: fadeIn 0.3s forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .hidden { display: none; }
-        .active-menu { background: #1e293b; color: white; border-left: 4px solid #4f46e5; }
+        .active-menu { background: #312e81; color: white; }
     </style>
 </head>
 <body class="bg-slate-50 flex h-screen">
 
+    <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-[100] flex items-center justify-center text-white">
-        <div class="text-center"><i class="fa-solid fa-spinner animate-spin text-4xl mb-4 text-indigo-500"></i><p>Menyiapkan Data...</p></div>
+        <div class="text-center"><i class="fa-solid fa-spinner animate-spin text-4xl mb-4 text-indigo-500"></i><p>Memuat Sistem...</p></div>
     </div>
 
-    <aside class="w-72 bg-slate-950 text-slate-400 overflow-y-auto">
-        <div class="p-6 text-white font-bold text-lg">KUT DASHBOARD</div>
-        <nav class="space-y-1 px-2">
-            <a href="#sva" onclick="nav('sva')" class="nav-link block p-3 rounded hover:bg-slate-800">Monitoring SVA</a>
-            <a href="#asset-genset" onclick="nav('asset-genset')" class="nav-link block p-3 rounded hover:bg-slate-800">Data Master Genset</a>
+    <!-- Sidebar -->
+    <aside class="w-72 bg-slate-950 text-slate-300 overflow-y-auto">
+        <div class="p-6 font-bold text-white text-lg">KUT DASHBOARD</div>
+        <nav class="space-y-1 px-2 text-sm">
+            <a href="#sva" onclick="nav('sva')" class="nav-link block p-3 rounded hover:bg-slate-800">Monitoring SVA (Profit)</a>
+            <a href="#kpi" onclick="nav('kpi')" class="nav-link block p-3 rounded hover:bg-slate-800">Data KPI</a>
+            <a href="#operational" onclick="nav('operational')" class="nav-link block p-3 rounded hover:bg-slate-800">Data Operational</a>
             <a href="#sdm" onclick="nav('sdm')" class="nav-link block p-3 rounded hover:bg-slate-800">Data SDM & Tools</a>
+            <a href="#project" onclick="nav('project')" class="nav-link block p-3 rounded hover:bg-slate-800">Data Project</a>
+            <a href="#pm-target" onclick="nav('pm-target')" class="nav-link block p-3 rounded hover:bg-slate-800">Monitoring PM</a>
+            <a href="#mbp-rh" onclick="nav('mbp-rh')" class="nav-link block p-3 rounded hover:bg-slate-800">Monitoring MBP</a>
+            <a href="#asset-genset" onclick="nav('asset-genset')" class="nav-link block p-3 rounded hover:bg-slate-800">Master Genset</a>
+            <a href="#asset-master" onclick="nav('asset-master')" class="nav-link block p-3 rounded hover:bg-slate-800">Master Mobil</a>
         </nav>
     </aside>
 
     <main class="flex-1 p-8 overflow-y-auto">
         <div id="dashboard-content">
             
+            <!-- SVA Section -->
             <section id="view-sva" class="view-pane hidden">
                 <h2 class="text-xl font-bold mb-4">Monitoring SVA (Profit)</h2>
                 <div class="grid grid-cols-4 gap-4 mb-6 bg-white p-4 rounded shadow">
@@ -44,10 +53,21 @@
                 <div id="table-sva" class="bg-white p-4 rounded shadow overflow-x-auto"></div>
             </section>
 
+            <!-- SDM Section -->
             <section id="view-sdm" class="view-pane hidden">
-                <h2 class="text-xl font-bold mb-4">Data SDM & Total Tools (AB-DL)</h2>
+                <h2 class="text-xl font-bold mb-4">Data SDM & Kalkulasi Tools (Kolom AB - DL)</h2>
                 <div id="table-sdm" class="bg-white p-4 rounded shadow overflow-x-auto"></div>
             </section>
+
+            <!-- Lainnya (KPI, Ops, dll) -->
+            <section id="view-kpi" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Data KPI</h2><div id="table-kpi" class="bg-white p-4 rounded shadow"></div></section>
+            <section id="view-operational" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Data Operational</h2><div id="table-operational" class="bg-white p-4 rounded shadow"></div></section>
+            <section id="view-project" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Data Project</h2><div id="table-project" class="bg-white p-4 rounded shadow"></div></section>
+            <section id="view-pm-target" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Monitoring PM</h2><div id="table-pm-target" class="bg-white p-4 rounded shadow"></div></section>
+            <section id="view-mbp-rh" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Monitoring MBP</h2><div id="table-mbp-rh" class="bg-white p-4 rounded shadow"></div></section>
+            <section id="view-asset-genset" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Master Genset</h2><div id="table-asset-genset" class="bg-white p-4 rounded shadow"></div></section>
+            <section id="view-asset-master" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Master Mobil</h2><div id="table-asset-master" class="bg-white p-4 rounded shadow"></div></section>
+
         </div>
     </main>
 
@@ -56,9 +76,13 @@
         let globalDataset = {};
 
         async function init() {
-            const sheets = { 'sva': 'data SVA', 'sdm': 'SDM' };
-            const res = await Promise.allSettled(Object.values(sheets).map(s => fetchSheet(s)));
-            Object.keys(sheets).forEach((k, i) => globalDataset[k] = res[i].status === 'fulfilled' ? res[i].value : []);
+            const sheets = { 
+                'sva': 'data SVA', 'sdm': 'SDM', 'kpi': 'data KPI', 'operational': 'data Operational', 
+                'project': 'data project', 'pm-target': 'data PM', 'mbp-rh': 'data MBP', 
+                'asset-genset': 'data Genset', 'asset-master': 'data Asset' 
+            };
+            const results = await Promise.allSettled(Object.values(sheets).map(s => fetchSheet(s)));
+            Object.keys(sheets).forEach((k, i) => globalDataset[k] = results[i].status === 'fulfilled' ? results[i].value : []);
             
             document.getElementById('splash-screen').style.display = 'none';
             renderActiveView();
@@ -78,9 +102,9 @@
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
             document.getElementById('view-' + view)?.classList.remove('hidden');
             
+            // Logic SVA Filter
             if (view === 'sva') {
                 let data = globalDataset['sva'] || [];
-                // Update Filters
                 updateDropdown('f-sva-nop', data, 'NOP');
                 updateDropdown('f-sva-tgl', data, 'Tanggal');
                 updateDropdown('f-sva-bln', data, 'Bulan');
@@ -97,25 +121,28 @@
                 );
                 buildTable('table-sva', filtered);
             } 
+            // Logic SDM & Tools AB-DL
             else if (view === 'sdm') {
                 let data = globalDataset['sdm'] || [];
-                // Kalkulasi Tools (AB sampai DL)
                 let summary = data.reduce((acc, row) => {
-                    let kep = row['Kepemilikan'] || 'Tidak Diketahui';
+                    let kep = row['Kepemilikan'] || 'Tanpa Pemilik';
                     if (!acc[kep]) acc[kep] = 0;
-                    // Loop kolom AB (index 27) sampai DL (index 115)
-                    Object.keys(row).forEach((key, index) => {
-                        if (index >= 27 && index <= 115) acc[kep] += (parseFloat(row[key]) || 0);
-                    });
+                    // Ambil keys, AB adalah index 27, DL adalah index 115
+                    let keys = Object.keys(row);
+                    for(let i=27; i<=115; i++) {
+                        if(keys[i]) acc[kep] += (parseFloat(row[keys[i]]) || 0);
+                    }
                     return acc;
                 }, {});
-                
-                let tableFormatted = Object.keys(summary).map(k => ({ 'Kepemilikan': k, 'Total_Tools': summary[k] }));
-                buildTable('table-sdm', tableFormatted);
+                buildTable('table-sdm', Object.keys(summary).map(k => ({ 'Kepemilikan': k, 'Total_Tools': summary[k] })));
+            }
+            // Default Table Loader
+            else {
+                buildTable('table-' + view, globalDataset[view] || []);
             }
         }
 
-        function nav(id) { window.location.hash = '#' + id; }
+        function nav(id) { window.location.hash = '#' + id; setTimeout(renderActiveView, 100); }
         
         function updateDropdown(id, data, key) {
             const el = document.getElementById(id);
@@ -125,11 +152,12 @@
         }
 
         function buildTable(id, data) {
-            if(!data.length) { document.getElementById(id).innerHTML = "Data tidak ada."; return; }
+            const el = document.getElementById(id);
+            if(!data.length) { el.innerHTML = "Data kosong."; return; }
             const keys = Object.keys(data[0]);
             let html = `<table class="w-full text-sm"><thead><tr class="border-b bg-slate-100">${keys.map(k=>`<th class="p-3 text-left">${k}</th>`).join('')}</tr></thead>`;
             html += `<tbody>${data.map(r=>`<tr class="border-b">${keys.map(k=>`<td class="p-3">${r[k]||'-'}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
-            document.getElementById(id).innerHTML = html;
+            el.innerHTML = html;
         }
 
         init();
