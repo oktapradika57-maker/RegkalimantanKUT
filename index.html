@@ -6,7 +6,6 @@
     <title>PT Kinarya Utama Teknik - Regional Kalimantan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Plugin tambahan untuk memunculkan teks label (Total & Persen) di dalam grafik -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -44,7 +43,8 @@
             background-size: 1em;
         }
 
-        .view-pane { animation: fadeInPage 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .view-pane { display: none; animation: fadeInPage 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .view-pane.active { display: block; }
         @keyframes fadeInPage {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -54,6 +54,13 @@
         @keyframes logoPulse {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.3)); }
             50% { transform: scale(1.03); filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.6)); }
+        }
+
+        /* SDM specific styles */
+        .tool-badge {
+            display: inline-flex; align-items: center; padding: 4px 10px;
+            border-radius: 9999px; font-size: 0.7rem; font-weight: 600;
+            border: 1px solid; white-space: normal; text-align: left;
         }
     </style>
 </head>
@@ -101,6 +108,11 @@
                 <a href="#excel-analyzer" id="btn-excel-analyzer" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
                     <div class="flex items-center space-x-3.5"><i class="fa-solid fa-file-excel text-lg w-5 text-center text-slate-500 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300"></i><span>Analisa Drop Excel</span></div>
                 </a>
+                
+                <a href="#sdm" id="btn-sdm" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-users-gear text-lg w-5 text-center text-slate-500 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300"></i><span>Data SDM</span></div>
+                </a>
+
                 <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
                     <div class="flex items-center space-x-3.5"><i class="fa-solid fa-wallet text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring SVA (Profit)</span></div>
                 </a>
@@ -195,7 +207,7 @@
 
         <div class="flex-1 overflow-y-auto p-8 space-y-8" id="dashboard-content">
             
-            <section id="view-excel-analyzer" class="view-pane space-y-8 hidden">
+            <section id="view-excel-analyzer" class="view-pane space-y-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="space-y-6 flex flex-col">
                         <div id="drop-zone" class="premium-card p-10 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-500 bg-white text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-4">
@@ -216,7 +228,56 @@
                 </div>
             </section>
 
-            <section id="view-sva" class="view-pane space-y-8 hidden">
+            <section id="view-sdm" class="view-pane space-y-6">
+                <div class="premium-card p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 border-l-4 border-l-emerald-500 bg-white">
+                    <div class="flex-1">
+                        <h2 class="text-lg font-bold text-slate-800">Analisa Data SDM & Kompetensi PIC</h2>
+                        <p class="text-xs text-slate-500 mt-1">Unggah file <b class="text-slate-700">Data update SDM.xlsx</b> untuk memetakan kepemilikan Tools, Masa Kerja, Keahlian, dan Sertifikat.</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <input type="file" id="excel-sdm-input" class="hidden" accept=".xlsx, .xls, .csv">
+                        <button onclick="document.getElementById('excel-sdm-input').click()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl transition-all shadow-md flex items-center"><i class="fa-solid fa-upload mr-2"></i>Unggah Excel SDM</button>
+                    </div>
+                </div>
+
+                <div id="sdm-result-area" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="premium-card p-6 rounded-2xl border-b-4 border-blue-500 bg-white flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div>
+                            <div><p class="text-xs font-bold text-slate-400 uppercase">Total Personil Karyawan</p><h3 id="sdm-sum-pic" class="text-2xl font-black text-slate-800">0</h3></div>
+                        </div>
+                        <div class="premium-card p-6 rounded-2xl border-b-4 border-purple-500 bg-white flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-xl"><i class="fa-solid fa-award"></i></div>
+                            <div><p class="text-xs font-bold text-slate-400 uppercase">Karyawan Bersertifikat</p><h3 id="sdm-sum-cert" class="text-2xl font-black text-slate-800">0</h3></div>
+                        </div>
+                        <div class="premium-card p-6 rounded-2xl border-b-4 border-emerald-500 bg-white flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl"><i class="fa-solid fa-toolbox"></i></div>
+                            <div><p class="text-xs font-bold text-slate-400 uppercase">Total Tools Dibagikan</p><h3 id="sdm-sum-tools" class="text-2xl font-black text-slate-800">0</h3></div>
+                        </div>
+                    </div>
+
+                    <div class="premium-card rounded-2xl overflow-hidden bg-white border border-slate-200">
+                        <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+                            <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Tabel Kompetensi & Inventaris SDM</h4>
+                        </div>
+                        <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead class="sticky top-0 bg-slate-50 z-10 shadow-sm border-b border-slate-200 uppercase tracking-wider text-slate-500 font-bold text-[10px]">
+                                    <tr>
+                                        <th class="px-6 py-4 w-1/4">Nama & Jabatan</th>
+                                        <th class="px-6 py-4 whitespace-nowrap">Masa Kerja (PKWT)</th>
+                                        <th class="px-6 py-4">Keahlian & Sertifikat</th>
+                                        <th class="px-6 py-4 w-2/5">Rincian Tools Terpegang</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sdm-table-body" class="divide-y divide-slate-100 text-slate-700">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="view-sva" class="view-pane space-y-8">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
                     <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Analisa Keuangan</span></div>
                     <select id="filter-sva-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select>
@@ -240,113 +301,21 @@
                 </div>
             </section>
 
-            <section id="view-asset-master" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-database mr-2 text-indigo-500"></i>Data Master Mobil</h3>
-                        <p class="text-xs text-slate-500 mt-1">Daftar rincian aset, status kepemilikan, dan kondisi operasional unit.</p>
-                    </div>
-                    
-                    <div class="flex items-center gap-2 flex-wrap justify-end">
-                        <select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="ALL">✨ Semua NOP</option>
-                        </select>
-                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="ALL">✨ Semua Kondisi</option>
-                        </select>
-                        <select id="filter-asset-master-status" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="ALL">✨ Semua Status</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="premium-card p-6 rounded-2xl flex flex-col">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-tags mr-1 text-indigo-400"></i> Proporsi Merek Mobil</h4>
-                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-merek"></canvas></div>
-                    </div>
-                    <div class="premium-card p-6 rounded-2xl flex flex-col">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-layer-group mr-1 text-emerald-400"></i> Distribusi Jenis Unit</h4>
-                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-jenis"></canvas></div>
-                    </div>
-                    <div class="premium-card p-6 rounded-2xl flex flex-col">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-heart-pulse mr-1 text-rose-400"></i> Status Kondisi Unit</h4>
-                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-kondisi"></canvas></div>
-                    </div>
-                </div>
-
-                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
-                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-master"></table></div>
-                </div>
-            </section>
-
-            <!-- SECTION BARU: DATA MASTER GENSET -->
-            <section id="view-asset-genset" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-server mr-2 text-indigo-500"></i>Data Master Genset</h3>
-                        <p class="text-xs text-slate-500 mt-1">Daftar rincian aset genset, kepemilikan, dan status operasional.</p>
-                    </div>
-                    <div class="flex items-center gap-2 flex-wrap justify-end">
-                        <select id="filter-asset-genset-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="ALL">✨ Semua NOP</option>
-                        </select>
-                        <select id="filter-asset-genset-sewa" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="ALL">✨ Aset/Sewa</option>
-                        </select>
-                        <select id="filter-asset-genset-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="ALL">✨ Kondisi</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="premium-card p-6 rounded-2xl flex flex-col">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-handshake mr-1 text-indigo-400"></i> Proporsi Aset / Sewa (Klik Area Grafik Untuk Filter)</h4>
-                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-genset-sewa"></canvas></div>
-                    </div>
-                    <div class="premium-card p-6 rounded-2xl flex flex-col justify-center items-center">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-6 text-center">Ringkasan Unit Genset Aktif</h4>
-                        <div class="grid grid-cols-2 gap-6 w-full max-w-md">
-                             <div class="bg-indigo-50 p-6 rounded-xl text-center border border-indigo-100 shadow-sm"><h3 id="genset-total" class="text-4xl font-black text-indigo-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Total Unit</p></div>
-                             <div class="bg-emerald-50 p-6 rounded-xl text-center border border-emerald-100 shadow-sm"><h3 id="genset-aktif" class="text-4xl font-black text-emerald-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Unit Aktif</p></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
-                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-genset"></table></div>
-                </div>
-            </section>
-            <!-- END SECTION BARU -->
-
-            <section id="view-kpi" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data KPI</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-kpi"></table></div></div></section>
-            <section id="view-operational" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Operational</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-operational"></table></div></div></section>
-            <section id="view-aging-sva" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM SVA</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-sva"></table></div></div></section>
-            <section id="view-aging-ops" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM OPS</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-ops"></table></div></div></section>
-            <section id="view-aging-lainnya" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM Lainnya</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-lainnya"></table></div></div></section>
-            <section id="view-project" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Project</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-project"></table></div></div></section>
-
-            <section id="view-pm-target" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Bulanan Target WO</span></div><select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6"><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Target Bulanan</p><h3 id="pmt-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 WO</h3></div><div class="bg-blue-50 p-3.5 rounded-xl text-blue-600 shadow-md"><i class="fa-solid fa-bullseye text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Pencapaian Realisasi</p><h3 id="pmt-kpi-2" class="text-2xl font-extrabold text-emerald-600 mt-2">0 WO</h3></div><div class="bg-emerald-50 p-3.5 rounded-xl text-emerald-600 shadow-md"><i class="fa-solid fa-circle-check text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sisa Deviasi Sifat</p><h3 id="pmt-kpi-3" class="text-2xl font-extrabold text-rose-600 mt-2">0 WO</h3></div><div class="bg-rose-50 p-3.5 rounded-xl text-rose-600 shadow-md"><i class="fa-solid fa-triangle-exclamation text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">% Pencapaian</p><h3 id="pmt-kpi-4" class="text-2xl font-extrabold text-indigo-600 mt-2">0%</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600 shadow-md"><i class="fa-solid fa-chart-line text-xl"></i></div></div></div>
-                <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Visualisasi Matriks Komparatif PM Target</h4><div class="w-full h-80"><canvas id="chart-pm-target"></canvas></div></div>
-                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-pm-target"></table></div></div>
-            </section>
-            
-            <section id="view-pm-curvas" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Skala Minggu Progress</span></div><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-area mr-2 text-emerald-500"></i>S-Curve Kumulatif Progress Proyek Pemeliharaan</h4><div class="w-full h-[420px]"><canvas id="chart-pm-curvas"></canvas></div></div></section>
-            
-            <section id="view-mbp-rh" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Unit Genset</span></div><select id="filter-mbp-rh-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Running Hours</p><h3 id="mbprh-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 Jam</h3></div><div class="bg-slate-100 p-3.5 rounded-xl text-slate-700"><i class="fa-solid fa-hourglass-high text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Rata-Rata Delta</p><h3 id="mbprh-kpi-2" class="text-2xl font-extrabold text-indigo-600 mt-2">0 Jam</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600"><i class="fa-solid fa-bolt text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Durasi Kerja</p><h3 id="mbprh-kpi-3" class="text-2xl font-extrabold text-teal-600 mt-2">0 Jam</h3></div><div class="bg-teal-50 p-3.5 rounded-xl text-teal-600"><i class="fa-solid fa-clock text-xl"></i></div></div></div>
-                <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Grafik Log Jam Kerja Genset (Running Hours)</h4><div class="w-full h-80"><canvas id="chart-mbp-rh"></canvas></div></div>
-                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-mbp-rh"></table></div></div>
-            </section>
-            
-            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi BBM per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-mbp-bbm"></table></div></div></section>
-            <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Perawatan</span></div><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-service"></table></div></div></section>
-            <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-depresiasi"></table></div></div></section>
-            <section id="view-asset-sewa" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white"><h3 class="text-sm font-bold text-slate-800">Pembiayaan Unit Sewa Vendor</h3></div></section>
+            <section id="view-asset-master" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white"><h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-database mr-2 text-indigo-500"></i>Data Master Mobil</h3></div><div class="premium-card rounded-2xl overflow-hidden border border-slate-200"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-master"></table></div></div></section>
+            <section id="view-asset-genset" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white"><h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-server mr-2 text-indigo-500"></i>Data Master Genset</h3></div><div class="premium-card rounded-2xl overflow-hidden border border-slate-200"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-genset"></table></div></div></section>
+            <section id="view-kpi" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data KPI</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-kpi"></table></div></div></section>
+            <section id="view-operational" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Operational</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-operational"></table></div></div></section>
+            <section id="view-aging-sva" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM SVA</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-sva"></table></div></div></section>
+            <section id="view-aging-ops" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM OPS</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-ops"></table></div></div></section>
+            <section id="view-aging-lainnya" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM Lainnya</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-lainnya"></table></div></div></section>
+            <section id="view-project" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Project</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-project"></table></div></div></section>
+            <section id="view-pm-target" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Monitoring PM</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-pm-target"></table></div></div></section>
+            <section id="view-pm-curvas" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Curva S Progress</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-pm-curvas"></table></div></div></section>
+            <section id="view-mbp-rh" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Total RH</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-mbp-rh"></table></div></div></section>
+            <section id="view-mbp-bbm" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Analisa BBM</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-mbp-bbm"></table></div></div></section>
+            <section id="view-asset-service" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Biaya Service</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-asset-service"></table></div></div></section>
+            <section id="view-asset-depresiasi" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Depresiasi</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-asset-depresiasi"></table></div></div></section>
+            <section id="view-asset-sewa" class="view-pane space-y-8"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Sewa Vendor</h3></div></section>
         </div>
     </main>
 
@@ -357,7 +326,8 @@
         let currentView = 'sva';
 
         const titleLabels = {
-            'excel-analyzer': 'Analisa File Excel > Komparasi Pendapatan & Pengeluaran',
+            'excel-analyzer': 'Analisa File Excel > Komparasi Keuangan',
+            'sdm': 'Data SDM > Kompetensi & Inventaris Pekerja',
             'sva': 'Monitoring SVA (Analisa Kompetitif Pendapatan)',
             'kpi': 'Data KPI > Key Performance Indicators',
             'operational': 'Data Operational > Manajemen Operasional Terintegrasi',
@@ -379,6 +349,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             window.addEventListener('hashchange', evaluateRoute);
             setupExcelDropZone();
+            setupSdmDropZone(); // Setup listener untuk excel SDM
             reloadData();
         });
 
@@ -386,9 +357,9 @@
             let hash = window.location.hash.replace('#', '') || 'sva';
             currentView = hash;
             
-            document.querySelectorAll('.view-pane').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.view-pane').forEach(el => el.classList.remove('active'));
             const paneEl = document.getElementById(`view-${currentView}`);
-            if(paneEl) paneEl.classList.remove('hidden');
+            if(paneEl) paneEl.classList.add('active');
 
             document.querySelectorAll('.menu-btn').forEach(el => el.classList.remove('active-menu-3d'));
             const activeBtn = document.getElementById(`btn-${currentView}`);
@@ -406,56 +377,164 @@
             if(Object.keys(globalDataset).length > 0) { renderActiveView(globalDataset); }
         }
 
+        // ==========================
+        //  LOGIKA DATA SDM (BARU)
+        // ==========================
+        const colorPalette = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#f97316'];
+        let toolColorMap = {};
+        function getToolColor(name) {
+            if (!toolColorMap[name]) toolColorMap[name] = colorPalette[Object.keys(toolColorMap).length % colorPalette.length];
+            return toolColorMap[name];
+        }
+
+        function setupSdmDropZone() {
+            const fileInput = document.getElementById('excel-sdm-input');
+            if(!fileInput) return;
+            
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    
+                    // Mencari sheet SDM
+                    const sheetName = workbook.SheetNames.find(n => n.toUpperCase().includes('SDM')) || workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                    
+                    processSDMExcel(json);
+                };
+                reader.readAsArrayBuffer(file);
+                e.target.value = ''; // Reset input agar bisa upload file sama berulang
+            });
+        }
+
+        function processSDMExcel(rows) {
+            if(!rows || rows.length === 0) return;
+            document.getElementById('sdm-result-area').classList.remove('hidden');
+
+            // Daftar kolom non-alat (Informasi Karyawan) berdasarkan data update Anda
+            const nonToolColumns = [
+                'NIK', 'NAMA', 'NAMA PIC', 'JOB', 'PROJECT', 'ID PROJECT', 'LOKER', 'NOP', 'NO. KTP', 
+                'AKHIR PKWT', 'Status Karyawan', 'pakta Integritas', 'Keahlian', 'WAH', 'FA', 'FE', 
+                'EXP. CERT.', 'COUNSELING', 'RESUME CONSELING', 'WARNING LETTER', 'Safety Driving License', 
+                'Type Kendaraan', 'Jenis Kendaraan', 'Nopol', 'Status Asset Kendaraan', 'Type Genset', 
+                'KVA Genset', 'Status Genset', '__rowNum__'
+            ];
+
+            let sdmStruktur = [];
+            let totalToolsDibagikan = 0;
+            let totalKaryawanBersertifikat = 0;
+
+            rows.forEach(row => {
+                let nama = row['NAMA'] || row['NAMA PIC'] || '';
+                if(!nama || String(nama).trim() === '') return;
+
+                let masaKerja = row['AKHIR PKWT'] || 'Tidak Diketahui';
+                let keahlian = row['Keahlian'] || '-';
+                let sertifikat = row['EXP. CERT.'] || '';
+
+                if (sertifikat && String(sertifikat).trim() !== '') totalKaryawanBersertifikat++;
+
+                let toolsList = [];
+                // Mencari semua tools (kolom selain informasi dasar yang bernilai OK/1)
+                Object.keys(row).forEach(key => {
+                    if (!nonToolColumns.map(n => n.toLowerCase()).includes(key.toLowerCase())) {
+                        let val = row[key];
+                        if (val && (String(val).trim().toUpperCase() === 'OK' || String(val).trim() === '1')) {
+                            toolsList.push(key.trim());
+                            totalToolsDibagikan++;
+                        }
+                    }
+                });
+
+                sdmStruktur.push({
+                    nama: nama,
+                    jabatan: row['JOB'] || 'Karyawan',
+                    masaKerja: masaKerja,
+                    keahlian: keahlian,
+                    sertifikat: sertifikat,
+                    tools: toolsList
+                });
+            });
+
+            // Update Summary Cards
+            document.getElementById('sdm-sum-pic').innerText = sdmStruktur.length;
+            document.getElementById('sdm-sum-cert').innerText = totalKaryawanBersertifikat;
+            document.getElementById('sdm-sum-tools').innerText = totalToolsDibagikan;
+
+            // Render Table SDM
+            const tbody = document.getElementById('sdm-table-body');
+            tbody.innerHTML = '';
+
+            sdmStruktur.forEach(karyawan => {
+                // Formatting lencana Tools
+                const toolsHtml = karyawan.tools.length > 0 ? karyawan.tools.map(t => {
+                    const color = getToolColor(t);
+                    return `<div class="tool-badge bg-white shadow-sm mb-1 mr-1" style="border-color: ${color}50; color: ${color};">
+                                <i class="fa-solid fa-wrench mr-1.5 opacity-70 mt-0.5"></i>
+                                <span>${t}</span>
+                            </div>`;
+                }).join('') : '<span class="text-xs text-slate-400 italic">Tidak ada tools</span>';
+
+                // Formatting Keahlian & Sertifikat
+                let skillHtml = `<div class="font-bold text-emerald-600 mb-1"><i class="fa-solid fa-bolt mr-1"></i>${karyawan.keahlian}</div>`;
+                if (karyawan.sertifikat) {
+                    skillHtml += `<div class="text-[10px] bg-amber-50 text-amber-700 px-2 py-1 rounded inline-block border border-amber-200"><i class="fa-solid fa-certificate mr-1"></i>Exp: ${karyawan.sertifikat}</div>`;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/80 transition-colors';
+                tr.innerHTML = `
+                    <td class="px-6 py-4 align-top">
+                        <div class="font-bold text-slate-800 text-sm">${karyawan.nama}</div>
+                        <div class="text-[10px] text-slate-500 uppercase mt-0.5">${karyawan.jabatan}</div>
+                    </td>
+                    <td class="px-6 py-4 align-top whitespace-nowrap text-sm font-medium text-slate-700">
+                        <i class="fa-regular fa-calendar-check text-indigo-400 mr-2"></i>${karyawan.masaKerja}
+                    </td>
+                    <td class="px-6 py-4 align-top">
+                        ${skillHtml}
+                    </td>
+                    <td class="px-6 py-4 align-top">
+                        <div class="flex flex-wrap gap-1">${toolsHtml}</div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        // ==========================
+
         async function reloadData() {
             const badge = document.getElementById('data-status-badge');
             const icon = document.getElementById('sync-icon');
             const splash = document.getElementById('splash-screen');
             
-            if(badge) { 
-                badge.className = 'px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-amber-500/20 shadow-md'; 
-                badge.innerText = 'Syncing'; 
-            }
+            if(badge) { badge.className = 'px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-amber-500/20 shadow-md'; badge.innerText = 'Syncing'; }
             if(icon) icon.classList.add('animate-spin');
 
             try {
-                const sheetMapping = {
-                    'sva': 'data SVA', 'kpi': 'data KPI', 'operational': 'data Operational', 'project': 'data project',
-                    'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP',
-                    'asset-master': 'data Asset', 'asset-kut': 'asset-kut', 'pjb-aging': 'pjb-aging',
-                    'asset-genset': 'data Genset'   
-                };
-
+                const sheetMapping = { 'sva': 'data SVA', 'asset-master': 'data Asset', 'asset-genset': 'data Genset' };
                 const keys = Object.keys(sheetMapping);
                 const results = await Promise.allSettled(keys.map(k => fetchFromSpreadsheet(sheetMapping[k])));
                 
                 keys.forEach((key, idx) => { 
-                    if (results[idx].status === 'fulfilled') {
-                        globalDataset[key] = results[idx].value;
-                    } else {
-                        globalDataset[key] = []; 
-                    }
+                    if (results[idx].status === 'fulfilled') { globalDataset[key] = results[idx].value; } 
+                    else { globalDataset[key] = []; }
                 });
 
                 if(badge) { badge.className = 'px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-emerald-500/20 shadow-md'; badge.innerText = 'Connected'; }
-                
                 buildFilterOptions('filter-sva-bulan', globalDataset['sva'], 'Bulan', 'Semua Bulan');
-                buildFilterOptions('filter-pm-target-bulan', globalDataset['pm-target'], 'Bulan', 'Semua Bulan');
-                buildFilterOptions('filter-pm-curvas-minggu', globalDataset['pm-curvas'], 'Minggu', 'Semua Minggu');
-                buildFilterOptions('filter-mbp-rh-unit', globalDataset['mbp-rh'], 'Unit_Genset', 'Semua Unit Genset');
-                buildFilterOptions('filter-asset-service-lokasi', globalDataset['asset-kut'], 'Lokasi', 'Semua Wilayah');
-                buildFilterOptions('filter-asset-depresiasi-kat', globalDataset['asset-kut'], 'Kategori', 'Semua Kategori');
 
             } catch (err) {
                 if(badge) { badge.className = 'px-2.5 py-1 bg-rose-500/10 text-rose-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-rose-500/20 shadow-md'; badge.innerText = 'Offline Error'; }
             } finally {
-                if(splash) { 
-                    splash.classList.add('opacity-0'); 
-                    setTimeout(() => splash.remove(), 700); 
-                }
+                if(splash) { splash.classList.add('opacity-0'); setTimeout(() => splash.remove(), 700); }
                 if(icon) icon.classList.remove('animate-spin');
-                
-                if(!window.location.hash) window.location.hash = '#sva'; 
-                else evaluateRoute();
+                if(!window.location.hash) window.location.hash = '#sva'; else evaluateRoute();
             }
         }
 
@@ -485,21 +564,6 @@
             let html = `<option value="ALL">✨ ${defaultLabel}</option>`;
             uniqueValues.forEach(val => { html += `<option value="${val}">${val}</option>`; });
             selectEl.innerHTML = html;
-        }
-
-        // Helper Dropdown
-        function updateDropdownOptions(selectId, dataArray, key, defaultLabel) {
-            const select = document.getElementById(selectId);
-            if (!select) return;
-            const currentVal = select.value;
-            const uniqueVals = [...new Set(dataArray.map(item => item[key]).filter(v => v && v !== '-'))].sort();
-            
-            let html = `<option value="ALL">✨ ${defaultLabel}</option>`;
-            uniqueVals.forEach(v => { html += `<option value="${v}">${v}</option>`; });
-            select.innerHTML = html;
-            
-            if (uniqueVals.includes(currentVal)) { select.value = currentVal; } 
-            else { select.value = 'ALL'; }
         }
 
         function applyFilters() { renderActiveView(globalDataset); }
@@ -566,18 +630,6 @@
             return 0;
         }
 
-        function extractStringValue(row, structuralNames) {
-            for (let key in row) {
-                let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
-                for (let name of structuralNames) {
-                    if (normalizedKey === name.toLowerCase().replace(/[\s_\/]/g, '')) {
-                        return row[key] !== null && row[key] !== undefined && String(row[key]).trim() !== '' ? String(row[key]) : '-';
-                    }
-                }
-            }
-            return '-';
-        }
-
         function renderActiveView(data) {
             const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
             
@@ -587,7 +639,6 @@
                 if(filterVal !== 'ALL') arr = arr.filter(d => d.Bulan === filterVal);
                 
                 let totalRevenue = 0, totalBiaya = 0, totalPengembalian = 0, totalNetIncome = 0;
-                
                 let tableData = arr.map(d => {
                     let r = extractValue(d, ['Revenue', 'TotalGrossRevenue', 'GrossRevenue']);
                     let b = extractValue(d, ['Biaya', 'TotalLabaKotor', 'LabaKotor', 'biaya']);
@@ -599,7 +650,6 @@
                     if (npmVal === 0 && r > 0) npmVal = (ni / r) * 100; else if (npmVal > 0 && npmVal < 1) npmVal = npmVal * 100;
                     
                     totalRevenue += r; totalBiaya += b; totalPengembalian += p; totalNetIncome += ni;
-                    
                     return { Bulan: d.Bulan || d.bulan || '-', Revenue: r, Biaya: b, Pengembalian: p, Net_Income: ni, Net_Profit_Margin: npmVal.toFixed(1) + '%' };
                 });
                 
@@ -612,230 +662,7 @@
                 
                 if (arr.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData); else buildTable('table-sva', ['Keterangan'], []);
                 renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
-            
-            } else if (currentView === 'asset-master') {
-                let arr = data['asset-master'] || [];
-                
-                let tableData = arr.map(d => {
-                    return {
-                        'User': extractStringValue(d, ['User', 'Pengguna', 'Nama']),
-                        'Merek': extractStringValue(d, ['Merek', 'Merk']),
-                        'Tipe_Unit': extractStringValue(d, ['Tipe', 'Type', 'Spesifikasi', 'Kolom_C']), 
-                        'NOP': extractStringValue(d, ['NOP', 'No Polisi', 'Nomor Polisi']),
-                        'Jenis': extractStringValue(d, ['Jenis']),
-                        'Kondisi_Unit': extractStringValue(d, ['Kondisi Unit', 'Kondisi']),
-                        'Status_Pemakaian': extractStringValue(d, ['Status Pemakaian', 'Terpakai/Tidak Terpakai', 'Terpakai', 'Status']) 
-                    };
-                });
-
-                tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Jenis !== '-');
-
-                updateDropdownOptions('filter-asset-master-nop', tableData, 'NOP', 'Semua NOP');
-                updateDropdownOptions('filter-asset-master-kondisi', tableData, 'Kondisi_Unit', 'Semua Kondisi');
-                updateDropdownOptions('filter-asset-master-status', tableData, 'Status_Pemakaian', 'Semua Status');
-
-                const filterNop = document.getElementById('filter-asset-master-nop').value;
-                const filterKondisi = document.getElementById('filter-asset-master-kondisi').value;
-                const filterStatus = document.getElementById('filter-asset-master-status').value;
-
-                let filteredData = tableData.filter(d => {
-                    const matchNop = (filterNop === 'ALL' || d.NOP === filterNop);
-                    const matchKondisi = (filterKondisi === 'ALL' || d.Kondisi_Unit === filterKondisi);
-                    const matchStatus = (filterStatus === 'ALL' || d.Status_Pemakaian === filterStatus);
-                    return matchNop && matchKondisi && matchStatus;
-                });
-
-                if (filteredData.length > 0) {
-                    buildTable('table-asset-master', ['User', 'Merek', 'Tipe_Unit', 'NOP', 'Jenis', 'Kondisi_Unit', 'Status_Pemakaian'], filteredData);
-                } else {
-                    buildTable('table-asset-master', ['Keterangan'], []);
-                }
-
-                renderAssetMasterCharts(filteredData);
-
-            // LOGIKA UNTUK DATA MASTER GENSET
-            } else if (currentView === 'asset-genset') {
-                let arr = data['asset-genset'] || [];
-                
-                let tableData = arr.map(d => {
-                    return {
-                        'NOP': extractStringValue(d, ['NOP']),
-                        'Cluster': extractStringValue(d, ['Cluster']),
-                        'Aset_Sewa': extractStringValue(d, ['Aset/Sewa', 'Aset / Sewa', 'Aset_Sewa']),
-                        'Status_Kepemilikan': extractStringValue(d, ['Status Kepemilikan']),
-                        'No_Asset': extractStringValue(d, ['No Asset', 'No_Asset']),
-                        'Kondisi': extractStringValue(d, ['Kondisi']),
-                        'Status_Aktif': extractStringValue(d, ['Aktif/Non Aktif', 'Aktif/Non-Aktif', 'Status Aktif']),
-                        'Validasi_NOP': extractStringValue(d, ['Validasi NOP']),
-                        'Remark': extractStringValue(d, ['Remark', 'Remark Remark Service', 'Remark Service']),
-                        'Peruntukan': extractStringValue(d, ['Peruntukan', 'Peuntukan'])
-                    };
-                });
-
-                tableData = tableData.filter(d => d.NOP !== '-');
-
-                updateDropdownOptions('filter-asset-genset-nop', tableData, 'NOP', 'Semua NOP');
-                updateDropdownOptions('filter-asset-genset-sewa', tableData, 'Aset_Sewa', 'Semua Aset/Sewa');
-                updateDropdownOptions('filter-asset-genset-kondisi', tableData, 'Kondisi', 'Semua Kondisi');
-
-                const filterNop = document.getElementById('filter-asset-genset-nop').value;
-                const filterSewa = document.getElementById('filter-asset-genset-sewa').value;
-                const filterKondisi = document.getElementById('filter-asset-genset-kondisi').value;
-
-                let filteredData = tableData.filter(d => {
-                    return (filterNop === 'ALL' || d.NOP === filterNop) &&
-                           (filterSewa === 'ALL' || d.Aset_Sewa === filterSewa) &&
-                           (filterKondisi === 'ALL' || d.Kondisi === filterKondisi);
-                });
-
-                if (filteredData.length > 0) {
-                    buildTable('table-asset-genset', ['NOP', 'Cluster', 'Aset_Sewa', 'Status_Kepemilikan', 'No_Asset', 'Kondisi', 'Status_Aktif', 'Validasi_NOP', 'Remark', 'Peruntukan'], filteredData);
-                } else {
-                    buildTable('table-asset-genset', ['Keterangan'], []);
-                }
-
-                // Render Chart Genset dengan Plugin DataLabels & Fitur Klik
-                renderAssetGensetCharts(filteredData);
-
-            } else if (['kpi', 'operational', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
-                let targetKey = currentView.includes('aging') ? 'pjb-aging' : currentView;
-                let arr = data[targetKey] || [];
-                
-                if(currentView === 'aging-sva') arr = arr.filter(d => String(d.Kategori || d.Kategori_UM).toLowerCase().includes('sva'));
-                if(currentView === 'aging-ops') arr = arr.filter(d => String(d.Kategori || d.Kategori_UM).toLowerCase().includes('ops'));
-                if(currentView === 'aging-lainnya') arr = arr.filter(d => !String(d.Kategori || d.Kategori_UM).toLowerCase().includes('sva') && !String(d.Kategori || d.Kategori_UM).toLowerCase().includes('ops'));
-
-                if(arr.length > 0) buildTable(`table-${currentView}`, Object.keys(arr[0]), arr); else buildTable(`table-${currentView}`, ['Keterangan'], []);
-            
-            } else if (currentView === 'pm-target') {
-                const filterVal = document.getElementById('filter-pm-target-bulan').value;
-                let arr = data['pm-target'] || [];
-                if(filterVal !== 'ALL') arr = arr.filter(d => d.Bulan === filterVal);
-                let t = arr.reduce((acc, c) => acc + (c.Target_WO || 0), 0);
-                let r = arr.reduce((acc, c) => acc + (c.Realisasi_WO || 0), 0);
-                document.getElementById('pmt-kpi-1').innerText = t + ' WO'; document.getElementById('pmt-kpi-2').innerText = r + ' WO';
-                document.getElementById('pmt-kpi-3').innerText = (t - r) + ' WO'; document.getElementById('pmt-kpi-4').innerText = (t > 0 ? (r/t*100).toFixed(1) : 0) + '%';
-                buildTable('table-pm-target', ['Bulan', 'Target_WO', 'Realisasi_WO'], arr);
             }
-        }
-
-        function renderAssetMasterCharts(tableData) {
-            const countFrequencies = (key) => {
-                return tableData.reduce((acc, row) => {
-                    let val = row[key];
-                    if (val !== '-') acc[val] = (acc[val] || 0) + 1;
-                    return acc;
-                }, {});
-            };
-
-            const merekCounts = countFrequencies('Merek');
-            const jenisCounts = countFrequencies('Jenis');
-            const kondisiCounts = countFrequencies('Kondisi_Unit');
-            const bgColors = ['#4f46e5', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#0ea5e9', '#06b6d4', '#64748b'];
-
-            if (charts['asset_merek']) charts['asset_merek'].destroy();
-            const ctxMerek = document.getElementById('chart-asset-merek');
-            if (ctxMerek) {
-                charts['asset_merek'] = new Chart(ctxMerek.getContext('2d'), {
-                    type: 'doughnut',
-                    data: { labels: Object.keys(merekCounts), datasets: [{ data: Object.values(merekCounts), backgroundColor: bgColors }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
-                });
-            }
-
-            if (charts['asset_jenis']) charts['asset_jenis'].destroy();
-            const ctxJenis = document.getElementById('chart-asset-jenis');
-            if (ctxJenis) {
-                charts['asset_jenis'] = new Chart(ctxJenis.getContext('2d'), {
-                    type: 'pie',
-                    data: { labels: Object.keys(jenisCounts), datasets: [{ data: Object.values(jenisCounts), backgroundColor: bgColors.slice().reverse() }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
-                });
-            }
-
-            if (charts['asset_kondisi']) charts['asset_kondisi'].destroy();
-            const ctxKondisi = document.getElementById('chart-asset-kondisi');
-            if (ctxKondisi) {
-                charts['asset_kondisi'] = new Chart(ctxKondisi.getContext('2d'), {
-                    type: 'doughnut',
-                    data: { labels: Object.keys(kondisiCounts), datasets: [{ data: Object.values(kondisiCounts), backgroundColor: ['#10b981', '#f43f5e', '#f59e0b', '#64748b'] }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
-                });
-            }
-        }
-
-        // FUNGSI RENDER CHART GENSET - DILENGKAPI DATALABELS & INTERAKSI KLIK
-        function renderAssetGensetCharts(tableData) {
-            const countAsetSewa = tableData.reduce((acc, row) => {
-                let val = row['Aset_Sewa'];
-                if (val && val !== '-') acc[val] = (acc[val] || 0) + 1;
-                return acc;
-            }, {});
-
-            if (charts['asset_genset_sewa']) charts['asset_genset_sewa'].destroy();
-            const ctxSewa = document.getElementById('chart-asset-genset-sewa');
-            
-            if (ctxSewa) {
-                charts['asset_genset_sewa'] = new Chart(ctxSewa.getContext('2d'), {
-                    type: 'doughnut',
-                    data: { 
-                        labels: Object.keys(countAsetSewa), 
-                        datasets: [{ data: Object.values(countAsetSewa), backgroundColor: ['#4f46e5', '#f59e0b', '#10b981', '#f43f5e'] }] 
-                    },
-                    plugins: [ChartDataLabels], // Menambahkan plugin ke dalam grafik
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        plugins: { 
-                            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } },
-                            // Konfigurasi Tulisan (Total & Persen)
-                            datalabels: {
-                                color: '#ffffff',
-                                font: { weight: 'bold', size: 12 },
-                                formatter: (value, ctx) => {
-                                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                    let percentage = (value * 100 / sum).toFixed(1) + "%";
-                                    return value + " (" + percentage + ")"; // Format Tampilan: Total (Persen)
-                                }
-                            }
-                        },
-                        // Fungsi Saat Grafik di Klik
-                        onClick: (event, elements, chart) => {
-                            const filterEl = document.getElementById('filter-asset-genset-sewa');
-                            if (!filterEl) return;
-
-                            if (elements.length > 0) {
-                                const label = chart.data.labels[elements[0].index];
-                                // Fitur Toggle: Jika diklik grafik yang sama, matikan filter (kembali ke ALL)
-                                if (filterEl.value === label) {
-                                    filterEl.value = 'ALL';
-                                } else {
-                                    filterEl.value = label;
-                                }
-                            } else {
-                                filterEl.value = 'ALL'; // Klik di luar grafik mereset filter
-                            }
-                            applyFilters(); // Memanggil ulang tabel
-                        },
-                        // Merubah cursor jadi tangan saat di-hover
-                        onHover: (event, elements) => {
-                            event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
-                        }
-                    }
-                });
-            }
-
-            // Menghitung Ringkasan KPI
-            const total = tableData.length;
-            const aktif = tableData.filter(d => {
-                let st = String(d.Status_Aktif).toLowerCase();
-                return st.includes('aktif') && !st.includes('non');
-            }).length;
-            
-            const totalEl = document.getElementById('genset-total');
-            const aktifEl = document.getElementById('genset-aktif');
-            if(totalEl) totalEl.innerText = total;
-            if(aktifEl) aktifEl.innerText = aktif;
         }
 
         function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
@@ -863,6 +690,7 @@
             }
         }
 
+        // --- EXCEL DROP ZONE (Analisa Excel Umum) ---
         function setupExcelDropZone() {
             const dropZone = document.getElementById('drop-zone');
             const fileInput = document.getElementById('excel-file-input');
@@ -871,8 +699,7 @@
             dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500', 'bg-indigo-50/20'); });
             dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20'));
             dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20');
+                e.preventDefault(); dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20');
                 if(e.dataTransfer.files.length) handleDroppedExcel(e.dataTransfer.files[0]);
             });
             fileInput.addEventListener('change', (e) => {
@@ -883,14 +710,11 @@
         function handleDroppedExcel(file) {
             document.getElementById('file-info-zone').classList.remove('hidden');
             document.getElementById('file-info-zone').innerText = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
-            
             const reader = new FileReader();
             reader.onload = function(e) {
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: 'array' });
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const rows = XLSX.utils.sheet_to_json(worksheet);
+                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
                 processExcelData(rows);
             };
             reader.readAsArrayBuffer(file);
@@ -900,32 +724,21 @@
             if(rows.length === 0) return;
             let keys = Object.keys(rows[0]);
             let labelKey = keys.find(k => k.toLowerCase().includes('bulan') || k.toLowerCase().includes('tanggal') || k.toLowerCase().includes('nama')) || keys[0];
-            let revenueKey = keys.find(k => k.toLowerCase().includes('revenue') || k.toLowerCase().includes('pendapatan') || k.toLowerCase().includes('omset')) || keys[1];
+            let revenueKey = keys.find(k => k.toLowerCase().includes('revenue') || k.toLowerCase().includes('pendapatan')) || keys[1];
             let expenseKey = keys.find(k => k.toLowerCase().includes('expense') || k.toLowerCase().includes('pengeluaran') || k.toLowerCase().includes('biaya')) || keys[2];
 
             let labels = [], revenues = [], expenses = [];
             rows.forEach(row => {
-                labels.push(row[labelKey] || '');
-                revenues.push(parseFloat(row[revenueKey]) || 0);
-                expenses.push(parseFloat(row[expenseKey]) || 0);
+                labels.push(row[labelKey] || ''); revenues.push(parseFloat(row[revenueKey]) || 0); expenses.push(parseFloat(row[expenseKey]) || 0);
             });
 
-            const emptyState = document.getElementById('chart-empty-state');
-            if(emptyState) emptyState.classList.add('hidden');
             if(charts['excel_comparison']) charts['excel_comparison'].destroy();
-            
             charts['excel_comparison'] = new Chart(document.getElementById('chart-excel-comparison').getContext('2d'), {
                 type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        { label: 'Pendapatan', data: revenues, backgroundColor: '#4f46e5', borderRadius: 6 },
-                        { label: 'Pengeluaran', data: expenses, backgroundColor: '#ef4444', borderRadius: 6 }
-                    ]
-                },
+                data: { labels: labels, datasets: [ { label: 'Pendapatan', data: revenues, backgroundColor: '#4f46e5', borderRadius: 6 }, { label: 'Pengeluaran', data: expenses, backgroundColor: '#ef4444', borderRadius: 6 } ] },
                 options: { responsive: true, maintainAspectRatio: false }
             });
-            document.getElementById('excel-analysis-text').innerHTML = `<p class="text-slate-700 font-semibold text-xs">Analisa berhasil dirender dari file excel secara otomatis dengan struktur visualisasi grafik komparasi disamping.</p>`;
+            document.getElementById('excel-analysis-text').innerHTML = `<p class="text-slate-700 font-semibold text-xs">Analisa berhasil dirender dari file excel secara otomatis.</p>`;
         }
     </script>
 </body>
