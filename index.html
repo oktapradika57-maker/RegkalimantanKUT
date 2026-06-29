@@ -922,58 +922,96 @@
             if(aktifEl) aktifEl.innerText = aktif;
         }
 
-        // CHARTS: SVA (KOMBINASI BAR & LINE CHART)
-        function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
-            if (charts['sva_line']) charts['sva_line'].destroy();
-            const ctxLine = document.getElementById('chart-sva-finance-line');
-            if (ctxLine) {
-                charts['sva_line'] = new Chart(ctxLine.getContext('2d'), {
-                    type: 'bar', // Menggunakan basis bar chart
-                    data: { 
-                        labels: tableData.map(t => t.Bulan), 
-                        datasets: [
-                            { 
-                                type: 'bar', // Revenue menggunakan diagram batang
-                                label: 'Revenue', 
-                                data: tableData.map(t => t.Revenue), 
-                                backgroundColor: '#4f46e5', 
-                                borderRadius: 4 
-                            },
-                            { 
-                                type: 'line', // Biaya tetap menggunakan garis
-                                label: 'Biaya', 
-                                data: tableData.map(t => t.Biaya), 
-                                borderColor: '#f43f5e', 
-                                tension: 0.2, 
-                                fill: false 
-                            },
-                            { 
-                                type: 'line', // Net Income tetap menggunakan garis
-                                label: 'Net Income', 
-                                data: tableData.map(t => t.Net_Income), 
-                                borderColor: '#10b981', 
-                                tension: 0.2, 
-                                fill: false 
-                            }
-                        ]
-                    }, 
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false 
-                    }
-                });
-            }
-
-            if (charts['sva_pie']) charts['sva_pie'].destroy();
-            const ctxPie = document.getElementById('chart-sva-finance-pie');
-            if (ctxPie) {
-                charts['sva_pie'] = new Chart(ctxPie.getContext('2d'), {
-                    type: 'doughnut',
-                    data: { labels: ['Biaya', 'Pengembalian', 'Net Income'], datasets: [{ data: [totalBiaya, totalPengembalian, totalNetIncome], backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'] }] },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
+       // CHARTS: SVA (KOMBINASI BAR & LINE CHART)
+function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
+    
+    // 1. KELOMPOKKAN DATA PER BULAN AGAR GRAFIK BATANG TERLIHAT RAPI & LEBAR
+    let monthlyData = {};
+    
+    tableData.forEach(t => {
+        let bln = (t.Bulan && t.Bulan !== '-') ? t.Bulan : 'Lainnya';
+        if (!monthlyData[bln]) {
+            monthlyData[bln] = { Revenue: 0, Biaya: 0, Net_Income: 0 };
         }
+        monthlyData[bln].Revenue += (t.Revenue || 0);
+        monthlyData[bln].Biaya += (t.Biaya || 0);
+        monthlyData[bln].Net_Income += (t.Net_Income || 0);
+    });
+
+    // Ekstrak data yang sudah dikelompokkan untuk dimasukkan ke Chart
+    let labelsBulan = Object.keys(monthlyData);
+    let dataRevenue = labelsBulan.map(b => monthlyData[b].Revenue);
+    let dataBiaya = labelsBulan.map(b => monthlyData[b].Biaya);
+    let dataNetIncome = labelsBulan.map(b => monthlyData[b].Net_Income);
+
+    // 2. RENDER GRAFIK UTAMA SVA
+    if (charts['sva_line']) charts['sva_line'].destroy();
+    const ctxLine = document.getElementById('chart-sva-finance-line');
+    
+    if (ctxLine) {
+        charts['sva_line'] = new Chart(ctxLine.getContext('2d'), {
+            type: 'bar', // Tipe dasar grafik disetel ke Batang (Bar)
+            data: { 
+                labels: labelsBulan, 
+                datasets: [
+                    { 
+                        type: 'bar', // REVENUE DISETTING SEBAGAI BATANG
+                        label: 'Total Revenue', 
+                        data: dataRevenue, 
+                        backgroundColor: '#4f46e5', 
+                        borderRadius: 4 
+                    },
+                    { 
+                        type: 'line', // BIAYA DISETTING SEBAGAI GARIS
+                        label: 'Total Biaya', 
+                        data: dataBiaya, 
+                        borderColor: '#f43f5e', 
+                        backgroundColor: '#f43f5e',
+                        tension: 0.3, 
+                        fill: false,
+                        borderWidth: 3
+                    },
+                    { 
+                        type: 'line', // NET INCOME DISETTING SEBAGAI GARIS
+                        label: 'Net Income', 
+                        data: dataNetIncome, 
+                        borderColor: '#10b981', 
+                        backgroundColor: '#10b981',
+                        tension: 0.3, 
+                        fill: false,
+                        borderWidth: 3
+                    }
+                ]
+            }, 
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true // Memastikan batang dimulai dari angka 0
+                    }
+                }
+            }
+        });
+    }
+
+    // 3. RENDER GRAFIK DONAT (PIE CHART)
+    if (charts['sva_pie']) charts['sva_pie'].destroy();
+    const ctxPie = document.getElementById('chart-sva-finance-pie');
+    if (ctxPie) {
+        charts['sva_pie'] = new Chart(ctxPie.getContext('2d'), {
+            type: 'doughnut',
+            data: { 
+                labels: ['Biaya', 'Pengembalian', 'Net Income'], 
+                datasets: [{ 
+                    data: [totalBiaya, totalPengembalian, totalNetIncome], 
+                    backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'] 
+                }] 
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+}
 
         // EXCEL ANALYZER
         function setupExcelDropZone() {
