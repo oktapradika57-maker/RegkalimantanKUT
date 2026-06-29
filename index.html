@@ -58,7 +58,6 @@
 </head>
 <body class="bg-[#f8fafc] text-slate-800 overflow-hidden h-screen flex">
 
-    <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
         <div class="text-center space-y-6 max-w-md px-6">
             <div class="logo-glow bg-white p-6 rounded-2xl inline-block shadow-[0_20px_50px_rgba(79,70,229,0.3)] border border-slate-800">
@@ -80,7 +79,6 @@
     
     <style>@keyframes loadingBar { 0% { left: -100%; right: 100%; } 50% { left: 0%; right: 0%; } 100% { left: 100%; right: -100%; } }</style>
 
-    <!-- Sidebar -->
     <aside id="sidebar" class="w-72 bg-slate-950 text-slate-400 flex flex-col h-full flex-shrink-0 shadow-[4px_0_25px_rgba(0,0,0,0.15)] z-20 border-r border-slate-900 transition-all duration-300 overflow-hidden">
         <div class="p-6 flex items-center space-x-3.5 border-b border-slate-900 bg-slate-950 whitespace-nowrap">
             <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl text-white shadow-[0_4px_12px_rgba(79,70,229,0.5)]">
@@ -111,8 +109,6 @@
                 <a href="#operational" id="btn-operational" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
                     <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gears text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Operational</span></div>
                 </a>
-                
-                <!-- MENU DATA SDM BARU -->
                 <a href="#sdm" id="btn-sdm" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
                     <div class="flex items-center space-x-3.5"><i class="fa-solid fa-users-gear text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data SDM & Tools</span></div>
                 </a>
@@ -222,12 +218,11 @@
                 </div>
             </section>
 
-            <!-- SECTION SVA (UPDATED 4 FILTER) -->
             <section id="view-sva" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white flex-wrap gap-4">
                     <div class="flex items-center space-x-2 text-indigo-600">
                         <i class="fa-solid fa-filter text-sm"></i>
-                        <span class="text-xs font-bold uppercase tracking-wider">Filter Analisa SVA</span>
+                        <span class="text-xs font-bold uppercase tracking-wider">Filter Analisa Keuangan</span>
                     </div>
                     <div class="flex gap-2 flex-wrap">
                         <select id="filter-sva-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua NOP</option></select>
@@ -254,8 +249,7 @@
                     <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-sva"></table></div>
                 </div>
             </section>
-
-            <!-- SECTION BARU: DATA SDM & TOOLS -->
+            
             <section id="view-sdm" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -268,7 +262,6 @@
                 </div>
             </section>
 
-            <!-- SECTION ASSET MASTER MOBIL -->
             <section id="view-asset-master" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
                     <div>
@@ -277,9 +270,15 @@
                     </div>
                     
                     <div class="flex items-center gap-2 flex-wrap justify-end">
-                        <select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="ALL">✨ Semua NOP</option></select>
-                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="ALL">✨ Semua Kondisi</option></select>
-                        <select id="filter-asset-master-status" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="ALL">✨ Semua Status</option></select>
+                        <select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua NOP</option>
+                        </select>
+                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua Kondisi</option>
+                        </select>
+                        <select id="filter-asset-master-status" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua Status</option>
+                        </select>
                     </div>
                 </div>
 
@@ -303,7 +302,6 @@
                 </div>
             </section>
 
-            <!-- SECTION DATA MASTER GENSET -->
             <section id="view-asset-genset" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
                     <div>
@@ -311,15 +309,21 @@
                         <p class="text-xs text-slate-500 mt-1">Daftar rincian aset genset, kepemilikan, dan status operasional.</p>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap justify-end">
-                        <select id="filter-asset-genset-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="ALL">✨ Semua NOP</option></select>
-                        <select id="filter-asset-genset-sewa" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="ALL">✨ Aset/Sewa</option></select>
-                        <select id="filter-asset-genset-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="ALL">✨ Kondisi</option></select>
+                        <select id="filter-asset-genset-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua NOP</option>
+                        </select>
+                        <select id="filter-asset-genset-sewa" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Aset/Sewa</option>
+                        </select>
+                        <select id="filter-asset-genset-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Kondisi</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="premium-card p-6 rounded-2xl flex flex-col">
-                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-handshake mr-1 text-indigo-400"></i> Proporsi Aset / Sewa (Klik Grafik Untuk Filter)</h4>
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-handshake mr-1 text-indigo-400"></i> Proporsi Aset / Sewa (Klik Area Grafik Untuk Filter)</h4>
                         <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-genset-sewa"></canvas></div>
                     </div>
                     <div class="premium-card p-6 rounded-2xl flex flex-col justify-center items-center">
@@ -336,19 +340,18 @@
                 </div>
             </section>
 
-            <!-- SECTION LAINNYA -->
-            <section id="view-kpi" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data KPI</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left whitespace-nowrap text-xs" id="table-kpi"></table></div></div></section>
-            <section id="view-operational" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Operational</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left whitespace-nowrap text-xs" id="table-operational"></table></div></div></section>
-            <section id="view-aging-sva" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM SVA</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left whitespace-nowrap text-xs" id="table-aging-sva"></table></div></div></section>
-            <section id="view-aging-ops" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM OPS</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left whitespace-nowrap text-xs" id="table-aging-ops"></table></div></div></section>
-            <section id="view-aging-lainnya" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM Lainnya</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left whitespace-nowrap text-xs" id="table-aging-lainnya"></table></div></div></section>
-            <section id="view-project" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Project</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left whitespace-nowrap text-xs" id="table-project"></table></div></div></section>
+            <section id="view-kpi" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data KPI</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-kpi"></table></div></div></section>
+            <section id="view-operational" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Operational</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-operational"></table></div></div></section>
+            <section id="view-aging-sva" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM SVA</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-sva"></table></div></div></section>
+            <section id="view-aging-ops" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM OPS</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-ops"></table></div></div></section>
+            <section id="view-aging-lainnya" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM Lainnya</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-lainnya"></table></div></div></section>
+            <section id="view-project" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Project</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-project"></table></div></div></section>
 
             <section id="view-pm-target" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Bulanan Target WO</span></div><select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6"><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Target Bulanan</p><h3 id="pmt-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 WO</h3></div><div class="bg-blue-50 p-3.5 rounded-xl text-blue-600 shadow-md"><i class="fa-solid fa-bullseye text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Pencapaian Realisasi</p><h3 id="pmt-kpi-2" class="text-2xl font-extrabold text-emerald-600 mt-2">0 WO</h3></div><div class="bg-emerald-50 p-3.5 rounded-xl text-emerald-600 shadow-md"><i class="fa-solid fa-circle-check text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sisa Deviasi Sifat</p><h3 id="pmt-kpi-3" class="text-2xl font-extrabold text-rose-600 mt-2">0 WO</h3></div><div class="bg-rose-50 p-3.5 rounded-xl text-rose-600 shadow-md"><i class="fa-solid fa-triangle-exclamation text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">% Pencapaian</p><h3 id="pmt-kpi-4" class="text-2xl font-extrabold text-indigo-600 mt-2">0%</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600 shadow-md"><i class="fa-solid fa-chart-line text-xl"></i></div></div></div>
                 <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Visualisasi Matriks Komparatif PM Target</h4><div class="w-full h-80"><canvas id="chart-pm-target"></canvas></div></div>
-                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse whitespace-nowrap text-xs" id="table-pm-target"></table></div></div>
+                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-pm-target"></table></div></div>
             </section>
             
             <section id="view-pm-curvas" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Skala Minggu Progress</span></div><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-area mr-2 text-emerald-500"></i>S-Curve Kumulatif Progress Proyek Pemeliharaan</h4><div class="w-full h-[420px]"><canvas id="chart-pm-curvas"></canvas></div></div></section>
@@ -357,12 +360,12 @@
                 <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Unit Genset</span></div><select id="filter-mbp-rh-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Running Hours</p><h3 id="mbprh-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 Jam</h3></div><div class="bg-slate-100 p-3.5 rounded-xl text-slate-700"><i class="fa-solid fa-hourglass-high text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Rata-Rata Delta</p><h3 id="mbprh-kpi-2" class="text-2xl font-extrabold text-indigo-600 mt-2">0 Jam</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600"><i class="fa-solid fa-bolt text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Durasi Kerja</p><h3 id="mbprh-kpi-3" class="text-2xl font-extrabold text-teal-600 mt-2">0 Jam</h3></div><div class="bg-teal-50 p-3.5 rounded-xl text-teal-600"><i class="fa-solid fa-clock text-xl"></i></div></div></div>
                 <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Grafik Log Jam Kerja Genset (Running Hours)</h4><div class="w-full h-80"><canvas id="chart-mbp-rh"></canvas></div></div>
-                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse whitespace-nowrap text-xs" id="table-mbp-rh"></table></div></div>
+                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-rh"></table></div></div>
             </section>
             
-            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi BBM per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse whitespace-nowrap text-xs" id="table-mbp-bbm"></table></div></div></section>
-            <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Perawatan</span></div><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse whitespace-nowrap text-xs" id="table-asset-service"></table></div></div></section>
-            <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse whitespace-nowrap text-xs" id="table-asset-depresiasi"></table></div></div></section>
+            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi BBM per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-bbm"></table></div></div></section>
+            <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Perawatan</span></div><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-service"></table></div></div></section>
+            <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-depresiasi"></table></div></div></section>
             <section id="view-asset-sewa" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white"><h3 class="text-sm font-bold text-slate-800">Pembiayaan Unit Sewa Vendor</h3></div></section>
         </div>
     </main>
@@ -376,7 +379,7 @@
         const titleLabels = {
             'excel-analyzer': 'Analisa File Excel > Komparasi Pendapatan & Pengeluaran',
             'sva': 'Monitoring SVA (Analisa Kompetitif Pendapatan)',
-            'sdm': 'Data SDM & Tools > Total Kalkulasi',
+            'sdm': 'Data SDM & Tools > Total Kalkulasi Tools',
             'kpi': 'Data KPI > Key Performance Indicators',
             'operational': 'Data Operational > Manajemen Operasional Terintegrasi',
             'aging-sva': 'Data PJB Aging > Aging UM SVA',
@@ -436,12 +439,11 @@
             if(icon) icon.classList.add('animate-spin');
 
             try {
-                // Sisi Kiri = Key (hash URL), Sisi Kanan = Nama Sheet persis di Google Sheet
                 const sheetMapping = {
-                    'sva': 'data SVA', 'kpi': 'data KPI', 'operational': 'data Operational', 'project': 'data project',
-                    'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP',
+                    'sva': 'data SVA', 'sdm': 'SDM', 'kpi': 'data KPI', 'operational': 'data Operational', 
+                    'project': 'data project', 'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP',
                     'asset-master': 'data Asset', 'asset-kut': 'asset-kut', 'pjb-aging': 'pjb-aging',
-                    'asset-genset': 'data Genset', 'sdm': 'SDM'
+                    'asset-genset': 'data Genset'   
                 };
 
                 const keys = Object.keys(sheetMapping);
@@ -479,6 +481,9 @@
 
         async function fetchFromSpreadsheet(sheetName) {
             let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            
+            // KUNCI SOLUSI SVA ERROR: Kita harus meluaskan range ke A:AZ agar kolom baru yang ditambahkan user tidak terpotong
+            if (sheetName === 'data SVA') url += '&range=A:AZ';
 
             const response = await fetch(url);
             if (!response.ok) throw new Error('Fail');
@@ -504,12 +509,27 @@
             selectEl.innerHTML = html;
         }
 
-        // Helper Dropdown untuk mencegah reset saat klik atau perubahan filter
-        function updateDropdownOptions(selectId, dataArray, key, defaultLabel) {
+        // FUNGSI BARU SUPER-KEBAL ERROR UNTUK EXTRACT STRING DATA
+        function extractStringValue(row, structuralNames) {
+            for (let key in row) {
+                let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
+                for (let name of structuralNames) {
+                    if (normalizedKey === name.toLowerCase().replace(/[\s_\/]/g, '')) {
+                        return row[key] !== null && row[key] !== undefined && String(row[key]).trim() !== '' ? String(row[key]) : '-';
+                    }
+                }
+            }
+            return '-';
+        }
+
+        // FUNGSI UPDATE DROPDOWN KEBAL ERROR (MENERIMA ARRAY MULTIPLE KEY OPTIONS)
+        function updateDropdownOptions(selectId, dataArray, possibleKeys, defaultLabel) {
             const select = document.getElementById(selectId);
             if (!select) return;
             const currentVal = select.value;
-            const uniqueVals = [...new Set(dataArray.map(item => item[key]).filter(v => v && v !== '-'))].sort();
+            if (!Array.isArray(possibleKeys)) possibleKeys = [possibleKeys];
+            
+            const uniqueVals = [...new Set(dataArray.map(item => extractStringValue(item, possibleKeys)).filter(v => v !== '-'))].sort();
             
             let html = `<option value="ALL">✨ ${defaultLabel}</option>`;
             uniqueVals.forEach(v => { html += `<option value="${v}">${v}</option>`; });
@@ -583,51 +603,46 @@
             return 0;
         }
 
-        function extractStringValue(row, structuralNames) {
-            for (let key in row) {
-                let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
-                for (let name of structuralNames) {
-                    if (normalizedKey === name.toLowerCase().replace(/[\s_\/]/g, '')) {
-                        return row[key] !== null && row[key] !== undefined && String(row[key]).trim() !== '' ? String(row[key]) : '-';
-                    }
-                }
-            }
-            return '-';
-        }
-
         function renderActiveView(data) {
             const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
             
-            // 1. SVA LOGIC (DENGAN 4 FILTER BARU)
+            // 1. SVA LOGIC (DENGAN 4 FILTER BARU DAN ANTI ERROR)
             if (currentView === 'sva') {
                 let arr = data['sva'] || [];
                 
-                // Set Dropdown Dinamis Berdasarkan Data Yang Ada
-                updateDropdownOptions('filter-sva-nop', arr, 'NOP', 'Semua NOP');
-                updateDropdownOptions('filter-sva-tgl', arr, 'Tanggal', 'Semua Tanggal');
-                updateDropdownOptions('filter-sva-bln', arr, 'Bulan', 'Semua Bulan');
-                updateDropdownOptions('filter-sva-stts', arr, 'Status_Tiket', 'Status Tiket');
+                let keysNOP = ['NOP', 'nopolisi', 'nopol'];
+                let keysTgl = ['Tanggal', 'tgl', 'date'];
+                let keysBln = ['Bulan', 'month', 'periode'];
+                let keysStts = ['Status_Tiket', 'statustiket', 'status'];
 
-                // Ambil Pilihan Pengguna
+                updateDropdownOptions('filter-sva-nop', arr, keysNOP, 'Semua NOP');
+                updateDropdownOptions('filter-sva-tgl', arr, keysTgl, 'Semua Tanggal');
+                updateDropdownOptions('filter-sva-bln', arr, keysBln, 'Semua Bulan');
+                updateDropdownOptions('filter-sva-stts', arr, keysStts, 'Semua Status');
+
                 const fN = document.getElementById('filter-sva-nop').value;
                 const fT = document.getElementById('filter-sva-tgl').value;
                 const fB = document.getElementById('filter-sva-bln').value;
                 const fS = document.getElementById('filter-sva-stts').value;
+                
+                let filteredArr = arr.filter(d => {
+                    let nop = extractStringValue(d, keysNOP);
+                    let tgl = extractStringValue(d, keysTgl);
+                    let bln = extractStringValue(d, keysBln);
+                    let stts = extractStringValue(d, keysStts);
 
-                // Proses Filter Kombinasi
-                let filteredArr = arr.filter(d => 
-                    (fN === 'ALL' || d.NOP == fN) &&
-                    (fT === 'ALL' || d.Tanggal == fT) &&
-                    (fB === 'ALL' || d.Bulan == fB) &&
-                    (fS === 'ALL' || d.Status_Tiket == fS)
-                );
+                    return (fN === 'ALL' || nop === fN) &&
+                           (fT === 'ALL' || tgl === fT) &&
+                           (fB === 'ALL' || bln === fB) &&
+                           (fS === 'ALL' || stts === fS);
+                });
                 
                 let totalRevenue = 0, totalBiaya = 0, totalPengembalian = 0, totalNetIncome = 0;
                 
                 let tableData = filteredArr.map(d => {
-                    let r = extractValue(d, ['Revenue', 'TotalGrossRevenue', 'GrossRevenue']);
-                    let b = extractValue(d, ['Biaya', 'TotalLabaKotor', 'LabaKotor', 'biaya']);
-                    let p = extractValue(d, ['Pengembalian', 'TotalLabaBersih', 'LabaBersih', 'pengembalian']);
+                    let r = extractValue(d, ['Revenue', 'TotalGrossRevenue', 'GrossRevenue', 'totalrevenue']);
+                    let b = extractValue(d, ['Biaya', 'TotalLabaKotor', 'LabaKotor', 'biaya', 'totalbiaya']);
+                    let p = extractValue(d, ['Pengembalian', 'TotalLabaBersih', 'LabaBersih', 'pengembalian', 'totallababersih']);
                     let ni = extractValue(d, ['NetIncome', 'Net_Income', 'Laba_Bersih']);
                     let npmVal = extractValue(d, ['NetProfitMargin', 'Net_Profit_Margin', 'NPM']);
                     
@@ -636,15 +651,15 @@
                     
                     totalRevenue += r; totalBiaya += b; totalPengembalian += p; totalNetIncome += ni;
                     
-                    // Struktur yang akan ditampilkan di tabel
                     return { 
-                        NOP: d.NOP || '-', Tanggal: d.Tanggal || '-', Bulan: d.Bulan || d.bulan || '-', 
-                        Status_Tiket: d.Status_Tiket || '-',
+                        NOP: extractStringValue(d, keysNOP), 
+                        Tanggal: extractStringValue(d, keysTgl), 
+                        Bulan: extractStringValue(d, keysBln), 
+                        Status_Tiket: extractStringValue(d, keysStts),
                         Revenue: r, Biaya: b, Pengembalian: p, Net_Income: ni, Net_Profit_Margin: npmVal.toFixed(1) + '%' 
                     };
                 });
                 
-                // Update Kotak KPI
                 document.getElementById('sva-kpi-1').innerText = formatIDR(totalRevenue);
                 document.getElementById('sva-kpi-2').innerText = formatIDR(totalBiaya);
                 document.getElementById('sva-kpi-3').innerText = formatIDR(totalPengembalian);
@@ -652,23 +667,22 @@
                 let finalNpm = totalRevenue > 0 ? (totalNetIncome / totalRevenue) * 100 : 0;
                 document.getElementById('sva-kpi-5').innerText = finalNpm.toFixed(1) + '%';
                 
-                // Render Tabel dan Chart
                 if (filteredArr.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData); 
                 else buildTable('table-sva', ['Keterangan'], []);
                 
                 renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
             } 
             
-            // 2. SDM LOGIC (PERHITUNGAN TOOLS KOLOM AB-DL)
+            // 2. SDM LOGIC (PERHITUNGAN TOOLS KOLOM AB-DL / INDEX 27-115)
             else if (currentView === 'sdm') {
                 let arr = data['sdm'] || [];
                 let summary = arr.reduce((acc, row) => {
-                    let kep = row['Kepemilikan'] || 'Tanpa Pemilik';
+                    let kep = extractStringValue(row, ['Kepemilikan', 'pemilik', 'nama', 'user']);
+                    if (kep === '-') kep = 'Tanpa Pemilik';
                     if (!acc[kep]) acc[kep] = 0;
                     
                     let keys = Object.keys(row);
-                    // Indeks 27 (AB) sampai 115 (DL)
-                    for(let i=27; i<=115; i++) {
+                    for(let i = 27; i <= 115; i++) {
                         if(keys[i]) acc[kep] += (parseFloat(row[keys[i]]) || 0);
                     }
                     return acc;
@@ -698,9 +712,9 @@
 
                 tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Jenis !== '-');
 
-                updateDropdownOptions('filter-asset-master-nop', tableData, 'NOP', 'Semua NOP');
-                updateDropdownOptions('filter-asset-master-kondisi', tableData, 'Kondisi_Unit', 'Semua Kondisi');
-                updateDropdownOptions('filter-asset-master-status', tableData, 'Status_Pemakaian', 'Semua Status');
+                updateDropdownOptions('filter-asset-master-nop', tableData, ['NOP'], 'Semua NOP');
+                updateDropdownOptions('filter-asset-master-kondisi', tableData, ['Kondisi_Unit'], 'Semua Kondisi');
+                updateDropdownOptions('filter-asset-master-status', tableData, ['Status_Pemakaian'], 'Semua Status');
 
                 const filterNop = document.getElementById('filter-asset-master-nop').value;
                 const filterKondisi = document.getElementById('filter-asset-master-kondisi').value;
@@ -719,7 +733,7 @@
                 renderAssetMasterCharts(filteredData);
             } 
             
-            // 4. ASSET GENSET LOGIC (DENGAN CLICK-TO-FILTER CHART)
+            // 4. ASSET GENSET LOGIC
             else if (currentView === 'asset-genset') {
                 let arr = data['asset-genset'] || [];
                 
@@ -740,9 +754,9 @@
 
                 tableData = tableData.filter(d => d.NOP !== '-');
 
-                updateDropdownOptions('filter-asset-genset-nop', tableData, 'NOP', 'Semua NOP');
-                updateDropdownOptions('filter-asset-genset-sewa', tableData, 'Aset_Sewa', 'Semua Aset/Sewa');
-                updateDropdownOptions('filter-asset-genset-kondisi', tableData, 'Kondisi', 'Semua Kondisi');
+                updateDropdownOptions('filter-asset-genset-nop', tableData, ['NOP'], 'Semua NOP');
+                updateDropdownOptions('filter-asset-genset-sewa', tableData, ['Aset_Sewa'], 'Aset/Sewa');
+                updateDropdownOptions('filter-asset-genset-kondisi', tableData, ['Kondisi'], 'Semua Kondisi');
 
                 const filterNop = document.getElementById('filter-asset-genset-nop').value;
                 const filterSewa = document.getElementById('filter-asset-genset-sewa').value;
@@ -830,7 +844,7 @@
             }
         }
 
-        // CHARTS: ASSET GENSET (DATA LABELS + CLICK TO FILTER)
+        // CHARTS: ASSET GENSET
         function renderAssetGensetCharts(tableData) {
             const countAsetSewa = tableData.reduce((acc, row) => {
                 let val = row['Aset_Sewa'];
@@ -867,7 +881,6 @@
                         onClick: (event, elements, chart) => {
                             const filterEl = document.getElementById('filter-asset-genset-sewa');
                             if (!filterEl) return;
-
                             if (elements.length > 0) {
                                 const label = chart.data.labels[elements[0].index];
                                 if (filterEl.value === label) filterEl.value = 'ALL';
