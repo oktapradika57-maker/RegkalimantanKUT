@@ -58,7 +58,6 @@
 </head>
 <body class="bg-[#f8fafc] text-slate-800 overflow-hidden h-screen flex">
 
-    <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
         <div class="text-center space-y-6 max-w-md px-6">
             <div class="logo-glow bg-white p-6 rounded-2xl inline-block shadow-[0_20px_50px_rgba(79,70,229,0.3)] border border-slate-800">
@@ -80,7 +79,6 @@
     
     <style>@keyframes loadingBar { 0% { left: -100%; right: 100%; } 50% { left: 0%; right: 0%; } 100% { left: 100%; right: -100%; } }</style>
 
-    <!-- Sidebar -->
     <aside id="sidebar" class="w-72 bg-slate-950 text-slate-400 flex flex-col h-full flex-shrink-0 shadow-[4px_0_25px_rgba(0,0,0,0.15)] z-20 border-r border-slate-900 transition-all duration-300 overflow-hidden">
         <div class="p-6 flex items-center space-x-3.5 border-b border-slate-900 bg-slate-950 whitespace-nowrap">
             <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl text-white shadow-[0_4px_12px_rgba(79,70,229,0.5)]">
@@ -243,10 +241,9 @@
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- GRAFIK SVA: SEKARANG MENGGUNAKAN BAR CHART UNTUK REVENUE -->
                     <div class="premium-card p-6 rounded-2xl lg:col-span-2">
                         <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6">
-                            <i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Tren Skala Finansial Bulanan
+                            <i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Tren Skala Keuangan & Revenue Bulanan
                         </h4>
                         <div class="w-full h-80"><canvas id="chart-sva-finance-line"></canvas></div>
                     </div>
@@ -267,7 +264,7 @@
                 <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-users-gear mr-2 text-indigo-500"></i>Data SDM & Tools</h3>
-                        <p class="text-xs text-slate-500 mt-1">Kalkulasi total tools berdasarkan Kepemilikan (Rentang Kolom AB sampai DL).</p>
+                        <p class="text-xs text-slate-500 mt-1">Kalkulasi total tools berdasarkan Kepemilikan yang tertera di database.</p>
                     </div>
                 </div>
                 <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
@@ -495,8 +492,8 @@
         async function fetchFromSpreadsheet(sheetName) {
             let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
             
-            // Jarak A:AZ digunakan agar seluruh kolom (termasuk filter) terbaca sempurna
-            if (sheetName === 'data SVA') url += '&range=A:AZ';
+            // Jarak Luas Jangkauan A:AZ agar data tidak kepotong
+            if (sheetName === 'data SVA' || sheetName === 'SDM') url += '&range=A:AZ';
 
             const response = await fetch(url);
             if (!response.ok) throw new Error('Fail');
@@ -617,14 +614,14 @@
         function renderActiveView(data) {
             const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
             
-            // 1. SVA LOGIC (DENGAN 4 FILTER BARU)
+            // 1. SVA LOGIC (DENGAN 4 FILTER BARU DAN ANTI KOSONG)
             if (currentView === 'sva') {
                 let arr = data['sva'] || [];
                 
-                let keysNOP = ['NOP', 'nopolisi', 'nopol'];
-                let keysTgl = ['Tanggal', 'tgl', 'date'];
-                let keysBln = ['Bulan', 'month', 'periode'];
-                let keysStts = ['Status_Tiket', 'statustiket', 'status'];
+                let keysNOP = ['NOP', 'nopolisi', 'nopol', 'nomorpolisi'];
+                let keysTgl = ['Tanggal', 'tgl', 'date', 'tanggal'];
+                let keysBln = ['Bulan', 'month', 'periode', 'bulan'];
+                let keysStts = ['Status_Tiket', 'statustiket', 'status', 'statustiket'];
 
                 updateDropdownOptions('filter-sva-nop', arr, keysNOP, 'Semua NOP');
                 updateDropdownOptions('filter-sva-tgl', arr, keysTgl, 'Semua Tanggal');
@@ -651,11 +648,11 @@
                 let totalRevenue = 0, totalBiaya = 0, totalPengembalian = 0, totalNetIncome = 0;
                 
                 let tableData = filteredArr.map(d => {
-                    let r = extractValue(d, ['Revenue', 'TotalGrossRevenue', 'GrossRevenue', 'totalrevenue']);
-                    let b = extractValue(d, ['Biaya', 'TotalLabaKotor', 'LabaKotor', 'biaya', 'totalbiaya']);
+                    let r = extractValue(d, ['Revenue', 'TotalGrossRevenue', 'GrossRevenue', 'totalrevenue', 'pendapatan', 'omset']);
+                    let b = extractValue(d, ['Biaya', 'TotalLabaKotor', 'LabaKotor', 'biaya', 'totalbiaya', 'pengeluaran']);
                     let p = extractValue(d, ['Pengembalian', 'TotalLabaBersih', 'LabaBersih', 'pengembalian', 'totallababersih']);
-                    let ni = extractValue(d, ['NetIncome', 'Net_Income', 'Laba_Bersih']);
-                    let npmVal = extractValue(d, ['NetProfitMargin', 'Net_Profit_Margin', 'NPM']);
+                    let ni = extractValue(d, ['NetIncome', 'Net_Income', 'Laba_Bersih', 'netincome']);
+                    let npmVal = extractValue(d, ['NetProfitMargin', 'Net_Profit_Margin', 'NPM', 'npm']);
                     
                     if (ni === 0 && r > 0) ni = r - b - p; 
                     if (npmVal === 0 && r > 0) npmVal = (ni / r) * 100; else if (npmVal > 0 && npmVal < 1) npmVal = npmVal * 100;
@@ -681,23 +678,24 @@
                 if (filteredArr.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData); 
                 else buildTable('table-sva', ['Keterangan'], []);
                 
-                // Panggil render grafik SVA baru
                 renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
             } 
             
-            // 2. SDM LOGIC (Kalkulasi Tools Kolom AB sampai DL)
+            // 2. SDM LOGIC (Fleksibel Menghitung Semua Kolom Nilai Numerik)
             else if (currentView === 'sdm') {
                 let arr = data['sdm'] || [];
                 let summary = arr.reduce((acc, row) => {
-                    let kep = extractStringValue(row, ['Kepemilikan', 'pemilik', 'nama', 'user']);
+                    let kep = extractStringValue(row, ['Kepemilikan', 'pemilik', 'nama', 'user', 'karyawan']);
                     if (kep === '-') kep = 'Tanpa Pemilik';
                     if (!acc[kep]) acc[kep] = 0;
                     
-                    let keys = Object.keys(row);
-                    // Kolom AB (27) sampai DL (115)
-                    for(let i = 27; i <= 115; i++) {
-                        if(keys[i]) acc[kep] += (parseFloat(row[keys[i]]) || 0);
-                    }
+                    Object.keys(row).forEach(key => {
+                        let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
+                        if (normalizedKey !== 'kepemilikan' && normalizedKey !== 'pemilik' && normalizedKey !== 'nama') {
+                            let val = parseFloat(row[key]);
+                            if (!isNaN(val)) acc[kep] += val;
+                        }
+                    });
                     return acc;
                 }, {});
                 
@@ -776,7 +774,8 @@
                 const filterKondisi = document.getElementById('filter-asset-genset-kondisi').value;
 
                 let filteredData = tableData.filter(d => {
-                    return (filterNop === 'ALL' || d.NOP === filterNop) &&
+                    return (filterNop === 'ALL' || d.NOP === filterSewa) || 
+                           (filterNop === 'ALL' || d.NOP === filterNop) &&
                            (filterSewa === 'ALL' || d.Aset_Sewa === filterSewa) &&
                            (filterKondisi === 'ALL' || d.Kondisi === filterKondisi);
                 });
@@ -922,96 +921,77 @@
             if(aktifEl) aktifEl.innerText = aktif;
         }
 
-       // CHARTS: SVA (KOMBINASI BAR & LINE CHART)
-function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
-    
-    // 1. KELOMPOKKAN DATA PER BULAN AGAR GRAFIK BATANG TERLIHAT RAPI & LEBAR
-    let monthlyData = {};
-    
-    tableData.forEach(t => {
-        let bln = (t.Bulan && t.Bulan !== '-') ? t.Bulan : 'Lainnya';
-        if (!monthlyData[bln]) {
-            monthlyData[bln] = { Revenue: 0, Biaya: 0, Net_Income: 0 };
-        }
-        monthlyData[bln].Revenue += (t.Revenue || 0);
-        monthlyData[bln].Biaya += (t.Biaya || 0);
-        monthlyData[bln].Net_Income += (t.Net_Income || 0);
-    });
-
-    // Ekstrak data yang sudah dikelompokkan untuk dimasukkan ke Chart
-    let labelsBulan = Object.keys(monthlyData);
-    let dataRevenue = labelsBulan.map(b => monthlyData[b].Revenue);
-    let dataBiaya = labelsBulan.map(b => monthlyData[b].Biaya);
-    let dataNetIncome = labelsBulan.map(b => monthlyData[b].Net_Income);
-
-    // 2. RENDER GRAFIK UTAMA SVA
-    if (charts['sva_line']) charts['sva_line'].destroy();
-    const ctxLine = document.getElementById('chart-sva-finance-line');
-    
-    if (ctxLine) {
-        charts['sva_line'] = new Chart(ctxLine.getContext('2d'), {
-            type: 'bar', // Tipe dasar grafik disetel ke Batang (Bar)
-            data: { 
-                labels: labelsBulan, 
-                datasets: [
-                    { 
-                        type: 'bar', // REVENUE DISETTING SEBAGAI BATANG
-                        label: 'Total Revenue', 
-                        data: dataRevenue, 
-                        backgroundColor: '#4f46e5', 
-                        borderRadius: 4 
-                    },
-                    { 
-                        type: 'line', // BIAYA DISETTING SEBAGAI GARIS
-                        label: 'Total Biaya', 
-                        data: dataBiaya, 
-                        borderColor: '#f43f5e', 
-                        backgroundColor: '#f43f5e',
-                        tension: 0.3, 
-                        fill: false,
-                        borderWidth: 3
-                    },
-                    { 
-                        type: 'line', // NET INCOME DISETTING SEBAGAI GARIS
-                        label: 'Net Income', 
-                        data: dataNetIncome, 
-                        borderColor: '#10b981', 
-                        backgroundColor: '#10b981',
-                        tension: 0.3, 
-                        fill: false,
-                        borderWidth: 3
-                    }
-                ]
-            }, 
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true // Memastikan batang dimulai dari angka 0
-                    }
+        // CHARTS SVA: GROUPED BAR CHART ANTI-ERROR UNTUK REVENUE, BIAYA, & NET INCOME
+        function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
+            
+            // Pengelompokkan data per bulan agar tidak menumpuk tipis-tipis
+            let monthlyData = {};
+            tableData.forEach(t => {
+                let bln = (t.Bulan && t.Bulan !== '-') ? t.Bulan : 'Lainnya';
+                if (!monthlyData[bln]) {
+                    monthlyData[bln] = { Revenue: 0, Biaya: 0, Net_Income: 0 };
                 }
-            }
-        });
-    }
+                monthlyData[bln].Revenue += (t.Revenue || 0);
+                monthlyData[bln].Biaya += (t.Biaya || 0);
+                monthlyData[bln].Net_Income += (t.Net_Income || 0);
+            });
 
-    // 3. RENDER GRAFIK DONAT (PIE CHART)
-    if (charts['sva_pie']) charts['sva_pie'].destroy();
-    const ctxPie = document.getElementById('chart-sva-finance-pie');
-    if (ctxPie) {
-        charts['sva_pie'] = new Chart(ctxPie.getContext('2d'), {
-            type: 'doughnut',
-            data: { 
-                labels: ['Biaya', 'Pengembalian', 'Net Income'], 
-                datasets: [{ 
-                    data: [totalBiaya, totalPengembalian, totalNetIncome], 
-                    backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'] 
-                }] 
-            },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    }
-}
+            let labelsBulan = Object.keys(monthlyData);
+            let dataRevenue = labelsBulan.map(b => monthlyData[b].Revenue);
+            let dataBiaya = labelsBulan.map(b => monthlyData[b].Biaya);
+            let dataNetIncome = labelsBulan.map(b => monthlyData[b].Net_Income);
+
+            if (charts['sva_line']) charts['sva_line'].destroy();
+            const ctxLine = document.getElementById('chart-sva-finance-line');
+            if (ctxLine) {
+                charts['sva_line'] = new Chart(ctxLine.getContext('2d'), {
+                    type: 'bar', // Tipe dasar diubah menjadi BAR (Batang)
+                    data: { 
+                        labels: labelsBulan, 
+                        datasets: [
+                            { 
+                                label: 'Revenue (Batang)', 
+                                data: dataRevenue, 
+                                backgroundColor: '#4f46e5', 
+                                borderRadius: 4 
+                            },
+                            { 
+                                label: 'Biaya (Batang)', 
+                                data: dataBiaya, 
+                                backgroundColor: '#f43f5e', 
+                                borderRadius: 4 
+                            },
+                            { 
+                                label: 'Net Income (Batang)', 
+                                data: dataNetIncome, 
+                                backgroundColor: '#10b981', 
+                                borderRadius: 4 
+                            }
+                        ]
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            datalabels: { display: false } // Nonaktifkan datalabels global agar tidak berantakan di chart batang
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+
+            if (charts['sva_pie']) charts['sva_pie'].destroy();
+            const ctxPie = document.getElementById('chart-sva-finance-pie');
+            if (ctxPie) {
+                charts['sva_pie'] = new Chart(ctxPie.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: ['Biaya', 'Pengembalian', 'Net Income'], datasets: [{ data: [totalBiaya, totalPengembalian, totalNetIncome], backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'] }] },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
 
         // EXCEL ANALYZER
         function setupExcelDropZone() {
