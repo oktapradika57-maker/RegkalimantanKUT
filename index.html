@@ -3,164 +3,950 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT KUT - Enterprise Full Dashboard</title>
+    <title>PT Kinarya Utama Teknik - Regional Kalimantan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Plugin tambahan untuk memunculkan teks label (Total & Persen) di dalam grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        .view-pane { animation: fadeIn 0.3s forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .hidden { display: none; }
-        .active-menu { background: #312e81; color: white; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .premium-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .premium-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.15), 0 1px 5px rgba(0, 0, 0, 0.03);
+        }
+        .active-menu-3d {
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%) !important;
+            color: white !important;
+            box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transform: translateX(6px);
+        }
+        .filter-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1em;
+        }
+
+        .view-pane { animation: fadeInPage 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-glow { animation: logoPulse 2s infinite ease-in-out; }
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.3)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.6)); }
+        }
     </style>
 </head>
-<body class="bg-slate-50 flex h-screen">
+<body class="bg-[#f8fafc] text-slate-800 overflow-hidden h-screen flex">
 
-    <!-- Splash Screen -->
-    <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-[100] flex items-center justify-center text-white">
-        <div class="text-center"><i class="fa-solid fa-spinner animate-spin text-4xl mb-4 text-indigo-500"></i><p>Memuat Sistem...</p></div>
+    <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
+        <div class="text-center space-y-6 max-w-md px-6">
+            <div class="logo-glow bg-white p-6 rounded-2xl inline-block shadow-[0_20px_50px_rgba(79,70,229,0.3)] border border-slate-800">
+                <div class="flex flex-col items-center justify-center">
+                    <i class="fa-solid fa-network-wired text-5xl text-indigo-600 mb-2"></i>
+                    <span class="text-xl font-black text-slate-900 tracking-tight">KUT SYSTEM</span>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <h2 class="text-white text-xl font-extrabold tracking-wide">PT KINARYA UTAMA TEKNIK</h2>
+                <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest">Regional Kalimantan Dashboard</p>
+            </div>
+            <div class="w-48 h-1.5 bg-slate-900 rounded-full mx-auto overflow-hidden relative">
+                <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 w-full rounded-full absolute -translateX-full animate-[loadingBar_2s_infinite_ease-in-out]"></div>
+            </div>
+            <p class="text-slate-500 text-[11px] font-medium tracking-wider">Menghubungkan ke Database Live Spreadsheet...</p>
+        </div>
     </div>
+    
+    <style>@keyframes loadingBar { 0% { left: -100%; right: 100%; } 50% { left: 0%; right: 0%; } 100% { left: 100%; right: -100%; } }</style>
 
-    <!-- Sidebar -->
-    <aside class="w-72 bg-slate-950 text-slate-300 overflow-y-auto">
-        <div class="p-6 font-bold text-white text-lg">KUT DASHBOARD</div>
-        <nav class="space-y-1 px-2 text-sm">
-            <a href="#sva" onclick="nav('sva')" class="nav-link block p-3 rounded hover:bg-slate-800">Monitoring SVA (Profit)</a>
-            <a href="#kpi" onclick="nav('kpi')" class="nav-link block p-3 rounded hover:bg-slate-800">Data KPI</a>
-            <a href="#operational" onclick="nav('operational')" class="nav-link block p-3 rounded hover:bg-slate-800">Data Operational</a>
-            <a href="#sdm" onclick="nav('sdm')" class="nav-link block p-3 rounded hover:bg-slate-800">Data SDM & Tools</a>
-            <a href="#project" onclick="nav('project')" class="nav-link block p-3 rounded hover:bg-slate-800">Data Project</a>
-            <a href="#pm-target" onclick="nav('pm-target')" class="nav-link block p-3 rounded hover:bg-slate-800">Monitoring PM</a>
-            <a href="#mbp-rh" onclick="nav('mbp-rh')" class="nav-link block p-3 rounded hover:bg-slate-800">Monitoring MBP</a>
-            <a href="#asset-genset" onclick="nav('asset-genset')" class="nav-link block p-3 rounded hover:bg-slate-800">Master Genset</a>
-            <a href="#asset-master" onclick="nav('asset-master')" class="nav-link block p-3 rounded hover:bg-slate-800">Master Mobil</a>
+    <aside id="sidebar" class="w-72 bg-slate-950 text-slate-400 flex flex-col h-full flex-shrink-0 shadow-[4px_0_25px_rgba(0,0,0,0.15)] z-20 border-r border-slate-900 transition-all duration-300 overflow-hidden">
+        <div class="p-6 flex items-center space-x-3.5 border-b border-slate-900 bg-slate-950 whitespace-nowrap">
+            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl text-white shadow-[0_4px_12px_rgba(79,70,229,0.5)]">
+                <i class="fa-solid fa-chart-pie text-xl w-6 text-center"></i>
+            </div>
+            <div>
+                <h1 class="text-white font-extrabold text-sm tracking-wider leading-tight">REGIONAL KAL</h1>
+                <p class="text-[11px] text-indigo-400 font-bold uppercase tracking-widest">PT KUT Enterprise Base</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2.5 text-sm whitespace-nowrap">
+            <button onclick="toggleSection('main-analyzer-container', 'arrow-main-analyzer')" class="w-full flex items-center justify-between px-3 py-2 text-[10px] font-bold text-slate-500 hover:text-indigo-400 uppercase tracking-widest transition-colors duration-200 group focus:outline-none">
+                <div class="flex items-center space-x-2"><i class="fa-solid fa-layer-group text-slate-600 group-hover:text-indigo-400"></i><span>Main Analyzer</span></div>
+                <i id="arrow-main-analyzer" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+            </button>
+
+            <!-- Tambahkan ini di sidebar Anda -->
+<a href="#sdm" id="btn-sdm" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300">
+    <i class="fa-solid fa-users mr-2 text-[10px] text-slate-600"></i>Data SDM & Tools
+</a>
+            <div id="main-analyzer-container" class="space-y-2.5 transition-all duration-300">
+                <a href="#excel-analyzer" id="btn-excel-analyzer" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-file-excel text-lg w-5 text-center text-slate-500 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300"></i><span>Analisa Drop Excel</span></div>
+                </a>
+                <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-wallet text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring SVA (Profit)</span></div>
+
+<!-- Tambahkan div filter ini tepat di bawah Judul Monitoring SVA -->
+<div class="flex gap-2 bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-4">
+    <select id="f-sva-nop" onchange="applyFilters()" class="border p-2 rounded text-xs w-32"><option value="ALL">Semua NOP</option></select>
+    <select id="f-sva-tgl" onchange="applyFilters()" class="border p-2 rounded text-xs w-32"><option value="ALL">Semua Tgl</option></select>
+    <select id="f-sva-bln" onchange="applyFilters()" class="border p-2 rounded text-xs w-32"><option value="ALL">Semua Bulan</option></select>
+    <select id="f-sva-stts" onchange="applyFilters()" class="border p-2 rounded text-xs w-32"><option value="ALL">Status Tiket</option></select>
+</div>
+                </a>
+                <a href="#kpi" id="btn-kpi" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gauge-high text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data KPI</span></div>
+                </a>
+                <a href="#operational" id="btn-operational" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gears text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Operational</span></div>
+                </a>
+
+                <div class="space-y-1">
+                    <button onclick="toggleSubmenu('submenu-pjb-aging')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-clock-history text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data PJB Aging</span></div>
+                        <i id="arrow-submenu-pjb-aging" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                    </button>
+                    <div id="submenu-pjb-aging" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
+                        <a href="#aging-sva" id="btn-aging-sva" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-money-check-dollar mr-2 text-[10px] text-slate-600"></i>Aging UM SVA</a>
+                        <a href="#aging-ops" id="btn-aging-ops" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-briefcase mr-2 text-[10px] text-slate-600"></i>Aging UM OPS</a>
+                        <a href="#aging-lainnya" id="btn-aging-lainnya" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-ellipsis mr-2 text-[10px] text-slate-600"></i>Aging UM Lainnya</a>
+                    </div>
+                </div>
+
+                <a href="#project" id="btn-project" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-diagram-project text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Project</span></div>
+                </a>
+
+                <div class="space-y-1">
+                    <button onclick="toggleSubmenu('submenu-pm')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-screwdriver-wrench text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring PM</span></div>
+                        <i id="arrow-submenu-pm" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                    </button>
+                    <div id="submenu-pm" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
+                        <a href="#pm-target" id="btn-pm-target" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-bullseye mr-2 text-[10px] text-slate-600"></i>Target & Pencapaian</a>
+                        <a href="#pm-curvas" id="btn-pm-curvas" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-chart-line mr-2 text-[10px] text-slate-600"></i>Curva S Progress</a>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <button onclick="toggleSubmenu('submenu-mbp')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gas-pump text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring MBP</span></div>
+                        <i id="arrow-submenu-mbp" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                    </button>
+                    <div id="submenu-mbp" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
+                        <a href="#mbp-rh" id="btn-mbp-rh" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-hourglass-half mr-2 text-[10px] text-slate-600"></i>Perhitungan Total RH</a>
+                        <a href="#mbp-bbm" id="btn-mbp-bbm" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-droplet mr-2 text-[10px] text-slate-600"></i>Analisa Konsumsi BBM</a>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <button onclick="toggleSubmenu('submenu-asset')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-car text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring Asset</span></div>
+                        <i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                    </button>
+                    <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
+                        <a href="#asset-master" id="btn-asset-master" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-database mr-2 text-[10px] text-slate-600"></i>Data Master Mobil</a>
+                        <a href="#asset-genset" id="btn-asset-genset" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-server mr-2 text-[10px] text-slate-600"></i>Data Master Genset</a>
+                        <a href="#asset-service" id="btn-asset-service" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-wrench mr-2 text-[10px] text-slate-600"></i>Biaya Perawatan Service</a>
+                        <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-arrow-down-line mr-2 text-[10px] text-slate-600"></i>Depresiasi Nilai Buku</a>
+                        <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-handshake mr-2 text-[10px] text-slate-600"></i>Biaya Sewa Vendor</a>
+                    </div>
+                </div>
+            </div>
         </nav>
+
+        <div class="p-4 border-t border-slate-900 bg-slate-950 text-xs flex items-center justify-between whitespace-nowrap">
+            <span class="text-slate-500 font-medium">Data State:</span>
+            <span id="data-status-badge" class="px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-amber-500/20 shadow-md">Syncing</span>
+        </div>
     </aside>
 
-    <main class="flex-1 p-8 overflow-y-auto">
-        <div id="dashboard-content">
+    <main class="flex-1 flex flex-col h-full overflow-hidden">
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-8 flex items-center justify-between flex-shrink-0 z-10 shadow-[0_2px_15px_rgba(0,0,0,0.02)]">
+            <div class="flex items-center space-x-2.5">
+                <button onclick="toggleSidebar()" class="mr-2 text-slate-600 hover:text-indigo-600 p-2 rounded-xl hover:bg-slate-100 transition-all focus:outline-none"><i id="sidebar-toggle-icon" class="fa-solid fa-bars text-lg"></i></button>
+                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">PT KUT Portal</span>
+                <span class="text-slate-300 text-sm">/</span>
+                <span id="breadcrumb-current" class="text-slate-900 font-bold text-base tracking-tight">Monitoring SVA</span>
+            </div>
             
-            <!-- SVA Section -->
-            <section id="view-sva" class="view-pane hidden">
-                <h2 class="text-xl font-bold mb-4">Monitoring SVA (Profit)</h2>
-                <div class="grid grid-cols-4 gap-4 mb-6 bg-white p-4 rounded shadow">
-                    <select id="f-sva-nop" onchange="renderActiveView()" class="border p-2 rounded text-sm"><option value="ALL">Semua NOP</option></select>
-                    <select id="f-sva-tgl" onchange="renderActiveView()" class="border p-2 rounded text-sm"><option value="ALL">Semua Tanggal</option></select>
-                    <select id="f-sva-bln" onchange="renderActiveView()" class="border p-2 rounded text-sm"><option value="ALL">Semua Bulan</option></select>
-                    <select id="f-sva-stts" onchange="renderActiveView()" class="border p-2 rounded text-sm"><option value="ALL">Status Tiket</option></select>
+            <div class="flex items-center space-x-5">
+                <button onclick="reloadData()" class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl flex items-center space-x-2 transition-all shadow-[0_4px_10px_rgba(79,70,229,0.06)] active:scale-95"><i id="sync-icon" class="fa-solid fa-arrows-rotate"></i><span>Sinkronisasi Live Data</span></button>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="flex items-center space-x-3">
+                    <div class="text-right">
+                        <p class="text-xs font-bold text-slate-800 leading-tight">Financial Operator</p>
+                        <p class="text-[10px] text-indigo-500 font-bold uppercase tracking-wider">Kalimantan Center</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-200 to-slate-300 flex items-center justify-between p-2.5 text-slate-600 font-bold shadow-inner"><i class="fa-solid fa-user-tie text-lg"></i></div>
                 </div>
-                <div id="table-sva" class="bg-white p-4 rounded shadow overflow-x-auto"></div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 space-y-8" id="dashboard-content">
+            
+            <section id="view-excel-analyzer" class="view-pane space-y-8 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="space-y-6 flex flex-col">
+                        <div id="drop-zone" class="premium-card p-10 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-500 bg-white text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-4">
+                            <div class="bg-emerald-50 text-emerald-600 p-4 rounded-full"><i class="fa-solid fa-cloud-arrow-up text-3xl"></i></div>
+                            <div><p class="text-sm font-bold text-slate-800">Tarik & Lepas File Excel Anda Di Sini</p><p class="text-xs text-slate-400 mt-1">Mendukung format berkas .xlsx, .xls, atau .csv</p></div>
+                            <input type="file" id="excel-file-input" class="hidden" accept=".xlsx, .xls, .csv">
+                            <div id="file-info-zone" class="hidden text-xs bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-1.5 rounded-xl font-semibold"></div>
+                        </div>
+                        <div class="premium-card p-6 rounded-2xl bg-white flex-1 flex flex-col">
+                            <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-brain mr-2 text-indigo-500"></i>Kalkulasi & Kesimpulan</h4>
+                            <div id="excel-analysis-text" class="text-xs text-slate-500 space-y-3 leading-relaxed flex-1 flex items-center justify-center text-center italic">Silakan jatuhkan berkas Excel Anda di atas.</div>
+                        </div>
+                    </div>
+                    <div class="premium-card p-6 rounded-2xl bg-white flex flex-col min-h-[480px]">
+                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Visualisasi Komparasi Pengeluaran vs Pendapatan</h4>
+                        <div class="w-full flex-1 relative flex items-center justify-center"><canvas id="chart-excel-comparison"></canvas></div>
+                    </div>
+                </div>
             </section>
 
-            <!-- SDM Section -->
-            <section id="view-sdm" class="view-pane hidden">
-                <h2 class="text-xl font-bold mb-4">Data SDM & Kalkulasi Tools (Kolom AB - DL)</h2>
-                <div id="table-sdm" class="bg-white p-4 rounded shadow overflow-x-auto"></div>
+            <section id="view-sva" class="view-pane space-y-8 hidden">
+                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white">
+
+<!-- Tambahkan section ini bersama section lainnya -->
+<section id="view-sdm" class="view-pane space-y-8 hidden">
+    <h2 class="text-lg font-bold">Data SDM & Kalkulasi Tools (AB - DL)</h2>
+    <div class="premium-card p-6 rounded-2xl overflow-hidden">
+        <table class="w-full text-xs" id="table-sdm"></table>
+    </div>
+</section>
+                    <div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Analisa Keuangan</span></div>
+                    <select id="filter-sva-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Revenue (H)</p><h3 id="sva-kpi-1" class="text-xl font-extrabold text-slate-900 mt-2">Rp 0</h3></div><div class="bg-blue-50 p-3 rounded-xl text-blue-600"><i class="fa-solid fa-money-bill-trend-up text-lg"></i></div></div>
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Biaya (I)</p><h3 id="sva-kpi-2" class="text-xl font-extrabold text-rose-600 mt-2">Rp 0</h3></div><div class="bg-rose-50 p-3 rounded-xl text-rose-600"><i class="fa-solid fa-wallet text-lg"></i></div></div>
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Pengembalian (J)</p><h3 id="sva-kpi-3" class="text-xl font-extrabold text-amber-600 mt-2">Rp 0</h3></div><div class="bg-amber-50 p-3 rounded-xl text-amber-600"><i class="fa-solid fa-sack-dollar text-lg"></i></div></div>
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Net Income (K)</p><h3 id="sva-kpi-4" class="text-xl font-extrabold text-emerald-600 mt-2">Rp 0</h3></div><div class="bg-emerald-50 p-3 rounded-xl text-emerald-600"><i class="fa-solid fa-building-columns text-lg"></i></div></div>
+                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Net Profit Margin (L)</p><h3 id="sva-kpi-5" class="text-xl font-extrabold text-indigo-600 mt-2">0%</h3></div><div class="bg-indigo-50 p-3 rounded-xl text-indigo-600"><i class="fa-solid fa-percent text-lg"></i></div></div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="premium-card p-6 rounded-2xl lg:col-span-2"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Tren Skala Finansial Bulanan</h4><div class="w-full h-80"><canvas id="chart-sva-finance-line"></canvas></div></div>
+                    <div class="premium-card p-6 rounded-2xl lg:col-span-1"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i>Proporsi Struktur Alokasi</h4><div class="relative w-full h-72 flex items-center justify-center"><canvas id="chart-sva-finance-pie"></canvas></div></div>
+                </div>
+                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
+                    <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50"><h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Laporan Neraca Analisa SVA</h4></div>
+                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-sva"></table></div>
+                </div>
             </section>
 
-            <!-- Lainnya (KPI, Ops, dll) -->
-            <section id="view-kpi" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Data KPI</h2><div id="table-kpi" class="bg-white p-4 rounded shadow"></div></section>
-            <section id="view-operational" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Data Operational</h2><div id="table-operational" class="bg-white p-4 rounded shadow"></div></section>
-            <section id="view-project" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Data Project</h2><div id="table-project" class="bg-white p-4 rounded shadow"></div></section>
-            <section id="view-pm-target" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Monitoring PM</h2><div id="table-pm-target" class="bg-white p-4 rounded shadow"></div></section>
-            <section id="view-mbp-rh" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Monitoring MBP</h2><div id="table-mbp-rh" class="bg-white p-4 rounded shadow"></div></section>
-            <section id="view-asset-genset" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Master Genset</h2><div id="table-asset-genset" class="bg-white p-4 rounded shadow"></div></section>
-            <section id="view-asset-master" class="view-pane hidden"><h2 class="text-xl font-bold mb-4">Master Mobil</h2><div id="table-asset-master" class="bg-white p-4 rounded shadow"></div></section>
+            <section id="view-asset-master" class="view-pane space-y-8 hidden">
+                <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-database mr-2 text-indigo-500"></i>Data Master Mobil</h3>
+                        <p class="text-xs text-slate-500 mt-1">Daftar rincian aset, status kepemilikan, dan kondisi operasional unit.</p>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 flex-wrap justify-end">
+                        <select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua NOP</option>
+                        </select>
+                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua Kondisi</option>
+                        </select>
+                        <select id="filter-asset-master-status" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua Status</option>
+                        </select>
+                    </div>
+                </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="premium-card p-6 rounded-2xl flex flex-col">
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-tags mr-1 text-indigo-400"></i> Proporsi Merek Mobil</h4>
+                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-merek"></canvas></div>
+                    </div>
+                    <div class="premium-card p-6 rounded-2xl flex flex-col">
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-layer-group mr-1 text-emerald-400"></i> Distribusi Jenis Unit</h4>
+                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-jenis"></canvas></div>
+                    </div>
+                    <div class="premium-card p-6 rounded-2xl flex flex-col">
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-heart-pulse mr-1 text-rose-400"></i> Status Kondisi Unit</h4>
+                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-kondisi"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
+                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-master"></table></div>
+                </div>
+            </section>
+
+            <!-- SECTION BARU: DATA MASTER GENSET -->
+            <section id="view-asset-genset" class="view-pane space-y-8 hidden">
+                <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-server mr-2 text-indigo-500"></i>Data Master Genset</h3>
+                        <p class="text-xs text-slate-500 mt-1">Daftar rincian aset genset, kepemilikan, dan status operasional.</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap justify-end">
+                        <select id="filter-asset-genset-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Semua NOP</option>
+                        </select>
+                        <select id="filter-asset-genset-sewa" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Aset/Sewa</option>
+                        </select>
+                        <select id="filter-asset-genset-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">✨ Kondisi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="premium-card p-6 rounded-2xl flex flex-col">
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-4 text-center"><i class="fa-solid fa-handshake mr-1 text-indigo-400"></i> Proporsi Aset / Sewa (Klik Area Grafik Untuk Filter)</h4>
+                        <div class="relative w-full flex-1 min-h-[220px] flex items-center justify-center"><canvas id="chart-asset-genset-sewa"></canvas></div>
+                    </div>
+                    <div class="premium-card p-6 rounded-2xl flex flex-col justify-center items-center">
+                        <h4 class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-6 text-center">Ringkasan Unit Genset Aktif</h4>
+                        <div class="grid grid-cols-2 gap-6 w-full max-w-md">
+                             <div class="bg-indigo-50 p-6 rounded-xl text-center border border-indigo-100 shadow-sm"><h3 id="genset-total" class="text-4xl font-black text-indigo-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Total Unit</p></div>
+                             <div class="bg-emerald-50 p-6 rounded-xl text-center border border-emerald-100 shadow-sm"><h3 id="genset-aktif" class="text-4xl font-black text-emerald-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Unit Aktif</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
+                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-genset"></table></div>
+                </div>
+            </section>
+            <!-- END SECTION BARU -->
+
+            <section id="view-kpi" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data KPI</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-kpi"></table></div></div></section>
+            <section id="view-operational" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Operational</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-operational"></table></div></div></section>
+            <section id="view-aging-sva" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM SVA</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-sva"></table></div></div></section>
+            <section id="view-aging-ops" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM OPS</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-ops"></table></div></div></section>
+            <section id="view-aging-lainnya" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Aging UM Lainnya</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-aging-lainnya"></table></div></div></section>
+            <section id="view-project" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white shadow-md"><h3 class="text-lg font-bold">Data Project</h3></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs" id="table-project"></table></div></div></section>
+
+            <section id="view-pm-target" class="view-pane space-y-8 hidden">
+                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Bulanan Target WO</span></div><select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6"><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Target Bulanan</p><h3 id="pmt-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 WO</h3></div><div class="bg-blue-50 p-3.5 rounded-xl text-blue-600 shadow-md"><i class="fa-solid fa-bullseye text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Pencapaian Realisasi</p><h3 id="pmt-kpi-2" class="text-2xl font-extrabold text-emerald-600 mt-2">0 WO</h3></div><div class="bg-emerald-50 p-3.5 rounded-xl text-emerald-600 shadow-md"><i class="fa-solid fa-circle-check text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sisa Deviasi Sifat</p><h3 id="pmt-kpi-3" class="text-2xl font-extrabold text-rose-600 mt-2">0 WO</h3></div><div class="bg-rose-50 p-3.5 rounded-xl text-rose-600 shadow-md"><i class="fa-solid fa-triangle-exclamation text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">% Pencapaian</p><h3 id="pmt-kpi-4" class="text-2xl font-extrabold text-indigo-600 mt-2">0%</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600 shadow-md"><i class="fa-solid fa-chart-line text-xl"></i></div></div></div>
+                <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Visualisasi Matriks Komparatif PM Target</h4><div class="w-full h-80"><canvas id="chart-pm-target"></canvas></div></div>
+                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-pm-target"></table></div></div>
+            </section>
+            
+            <section id="view-pm-curvas" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Skala Minggu Progress</span></div><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-area mr-2 text-emerald-500"></i>S-Curve Kumulatif Progress Proyek Pemeliharaan</h4><div class="w-full h-[420px]"><canvas id="chart-pm-curvas"></canvas></div></div></section>
+            
+            <section id="view-mbp-rh" class="view-pane space-y-8 hidden">
+                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Unit Genset</span></div><select id="filter-mbp-rh-unit" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Running Hours</p><h3 id="mbprh-kpi-1" class="text-2xl font-extrabold text-slate-800 mt-2">0 Jam</h3></div><div class="bg-slate-100 p-3.5 rounded-xl text-slate-700"><i class="fa-solid fa-hourglass-high text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Rata-Rata Delta</p><h3 id="mbprh-kpi-2" class="text-2xl font-extrabold text-indigo-600 mt-2">0 Jam</h3></div><div class="bg-indigo-50 p-3.5 rounded-xl text-indigo-600"><i class="fa-solid fa-bolt text-xl"></i></div></div><div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Durasi Kerja</p><h3 id="mbprh-kpi-3" class="text-2xl font-extrabold text-teal-600 mt-2">0 Jam</h3></div><div class="bg-teal-50 p-3.5 rounded-xl text-teal-600"><i class="fa-solid fa-clock text-xl"></i></div></div></div>
+                <div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Grafik Log Jam Kerja Genset (Running Hours)</h4><div class="w-full h-80"><canvas id="chart-mbp-rh"></canvas></div></div>
+                <div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-mbp-rh"></table></div></div>
+            </section>
+            
+            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi BBM per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-mbp-bbm"></table></div></div></section>
+            <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Perawatan</span></div><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-service"></table></div></div></section>
+            <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs" id="table-asset-depresiasi"></table></div></div></section>
+            <section id="view-asset-sewa" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white"><h3 class="text-sm font-bold text-slate-800">Pembiayaan Unit Sewa Vendor</h3></div></section>
         </div>
     </main>
 
     <script>
         const SPREADSHEET_ID = '1hIeT51_SVdNrz62s93zpZNyqepBMdNCa-mDRH-wVOIw';
         let globalDataset = {};
+        let charts = {};
+        let currentView = 'sva';
 
-        async function init() {
-            const sheets = { 
-                'sva': 'data SVA', 'sdm': 'SDM', 'kpi': 'data KPI', 'operational': 'data Operational', 
-                'project': 'data project', 'pm-target': 'data PM', 'mbp-rh': 'data MBP', 
-                'asset-genset': 'data Genset', 'asset-master': 'data Asset' 
-            };
-            const results = await Promise.allSettled(Object.values(sheets).map(s => fetchSheet(s)));
-            Object.keys(sheets).forEach((k, i) => globalDataset[k] = results[i].status === 'fulfilled' ? results[i].value : []);
+        const titleLabels = {
+            'excel-analyzer': 'Analisa File Excel > Komparasi Pendapatan & Pengeluaran',
+            'sva': 'Monitoring SVA (Analisa Kompetitif Pendapatan)',
+            'kpi': 'Data KPI > Key Performance Indicators',
+            'operational': 'Data Operational > Manajemen Operasional Terintegrasi',
+            'aging-sva': 'Data PJB Aging > Aging UM SVA',
+            'aging-ops': 'Data PJB Aging > Aging UM OPS',
+            'aging-lainnya': 'Data PJB Aging > Aging UM Lainnya',
+            'project': 'Data Project > Monitoring Proyek Terpadu',
+            'pm-target': 'Monitoring PM > Analisa Target Kerja',
+            'pm-curvas': 'Monitoring PM > S-Curve Progress',
+            'mbp-rh': 'Monitoring MBP > Log Perhitungan Running Hours',
+            'mbp-bbm': 'Monitoring MBP > Log Analisa Konsumsi BBM',
+            'asset-master': 'Asset KUT System > Data Master Mobil',
+            'asset-service': 'Asset KUT System > Log Biaya Service',
+            'asset-depresiasi': 'Asset KUT System > Penyusutan Nilai Buku',
+            'asset-sewa': 'Asset KUT System > Pembiayaan Unit Sewa',
+            'asset-genset': 'Asset KUT System > Data Master Genset'
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            window.addEventListener('hashchange', evaluateRoute);
+            setupExcelDropZone();
+            reloadData();
+        });
+
+        function evaluateRoute() {
+            let hash = window.location.hash.replace('#', '') || 'sva';
+            currentView = hash;
             
-            document.getElementById('splash-screen').style.display = 'none';
-            renderActiveView();
+            document.querySelectorAll('.view-pane').forEach(el => el.classList.add('hidden'));
+            const paneEl = document.getElementById(`view-${currentView}`);
+            if(paneEl) paneEl.classList.remove('hidden');
+
+            document.querySelectorAll('.menu-btn').forEach(el => el.classList.remove('active-menu-3d'));
+            const activeBtn = document.getElementById(`btn-${currentView}`);
+            if(activeBtn) {
+                activeBtn.classList.add('active-menu-3d');
+                const parentSubmenu = activeBtn.closest('[id^="submenu-"]');
+                if (parentSubmenu) {
+                    parentSubmenu.classList.remove('hidden');
+                    const arrow = document.getElementById(`arrow-${parentSubmenu.id}`);
+                    if (arrow) arrow.classList.add('rotate-180');
+                }
+            }
+
+            document.getElementById('breadcrumb-current').innerText = titleLabels[currentView] || 'Portal';
+            if(Object.keys(globalDataset).length > 0) { renderActiveView(globalDataset); }
         }
 
-        async function fetchSheet(name) {
-            const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(name)}`;
-            const res = await fetch(url);
-            const text = await res.text();
-            const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
-            const cols = json.table.cols.map(c => c.label);
-            return json.table.rows.map(r => { let o = {}; r.c.forEach((c, i) => o[cols[i]] = c ? c.v : null); return o; });
-        }
-
-        function renderActiveView() {
-            const view = window.location.hash.replace('#', '') || 'sva';
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.getElementById('view-' + view)?.classList.remove('hidden');
+        async function reloadData() {
+            const badge = document.getElementById('data-status-badge');
+            const icon = document.getElementById('sync-icon');
+            const splash = document.getElementById('splash-screen');
             
-            // Logic SVA Filter
-            if (view === 'sva') {
-                let data = globalDataset['sva'] || [];
-                updateDropdown('f-sva-nop', data, 'NOP');
-                updateDropdown('f-sva-tgl', data, 'Tanggal');
-                updateDropdown('f-sva-bln', data, 'Bulan');
-                updateDropdown('f-sva-stts', data, 'Status_Tiket');
+            if(badge) { 
+                badge.className = 'px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-amber-500/20 shadow-md'; 
+                badge.innerText = 'Syncing'; 
+            }
+            if(icon) icon.classList.add('animate-spin');
 
-                const fN = document.getElementById('f-sva-nop').value;
-                const fT = document.getElementById('f-sva-tgl').value;
-                const fB = document.getElementById('f-sva-bln').value;
-                const fS = document.getElementById('f-sva-stts').value;
+            try {
+                const sheetMapping = {
+                    'sva': 'data SVA', 'kpi': 'data KPI', 'operational': 'data Operational', 'project': 'data project',
+                    'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP',
+                    'asset-master': 'data Asset', 'asset-kut': 'asset-kut', 'pjb-aging': 'pjb-aging',
+                    'asset-genset': 'data Genset'   
+                };
 
-                let filtered = data.filter(d => 
-                    (fN === 'ALL' || d.NOP == fN) && (fT === 'ALL' || d.Tanggal == fT) && 
-                    (fB === 'ALL' || d.Bulan == fB) && (fS === 'ALL' || d.Status_Tiket == fS)
-                );
-                buildTable('table-sva', filtered);
-            } 
-            // Logic SDM & Tools AB-DL
-            else if (view === 'sdm') {
-                let data = globalDataset['sdm'] || [];
-                let summary = data.reduce((acc, row) => {
-                    let kep = row['Kepemilikan'] || 'Tanpa Pemilik';
-                    if (!acc[kep]) acc[kep] = 0;
-                    // Ambil keys, AB adalah index 27, DL adalah index 115
-                    let keys = Object.keys(row);
-                    for(let i=27; i<=115; i++) {
-                        if(keys[i]) acc[kep] += (parseFloat(row[keys[i]]) || 0);
+                const keys = Object.keys(sheetMapping);
+                const results = await Promise.allSettled(keys.map(k => fetchFromSpreadsheet(sheetMapping[k])));
+                
+                keys.forEach((key, idx) => { 
+                    if (results[idx].status === 'fulfilled') {
+                        globalDataset[key] = results[idx].value;
+                    } else {
+                        globalDataset[key] = []; 
                     }
+                });
+
+                if(badge) { badge.className = 'px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-emerald-500/20 shadow-md'; badge.innerText = 'Connected'; }
+                
+                buildFilterOptions('filter-sva-bulan', globalDataset['sva'], 'Bulan', 'Semua Bulan');
+                buildFilterOptions('filter-pm-target-bulan', globalDataset['pm-target'], 'Bulan', 'Semua Bulan');
+                buildFilterOptions('filter-pm-curvas-minggu', globalDataset['pm-curvas'], 'Minggu', 'Semua Minggu');
+                buildFilterOptions('filter-mbp-rh-unit', globalDataset['mbp-rh'], 'Unit_Genset', 'Semua Unit Genset');
+                buildFilterOptions('filter-asset-service-lokasi', globalDataset['asset-kut'], 'Lokasi', 'Semua Wilayah');
+                buildFilterOptions('filter-asset-depresiasi-kat', globalDataset['asset-kut'], 'Kategori', 'Semua Kategori');
+
+            } catch (err) {
+                if(badge) { badge.className = 'px-2.5 py-1 bg-rose-500/10 text-rose-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-rose-500/20 shadow-md'; badge.innerText = 'Offline Error'; }
+            } finally {
+                if(splash) { 
+                    splash.classList.add('opacity-0'); 
+                    setTimeout(() => splash.remove(), 700); 
+                }
+                if(icon) icon.classList.remove('animate-spin');
+                
+                if(!window.location.hash) window.location.hash = '#sva'; 
+                else evaluateRoute();
+            }
+        }
+
+        async function fetchFromSpreadsheet(sheetName) {
+            let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            if (sheetName === 'data SVA') url += '&range=A:M';
+
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Fail');
+            const text = await response.text();
+            const startIdx = text.indexOf('{');
+            const endIdx = text.lastIndexOf('}') + 1;
+            const json = JSON.parse(text.substring(startIdx, endIdx));
+            
+            const cols = json.table.cols.map(c => c.label || c.id);
+            return json.table.rows.map(r => {
+                let obj = {};
+                r.c.forEach((cell, i) => { if(cols[i]) obj[cols[i]] = cell ? cell.v : null; });
+                return obj;
+            });
+        }
+
+        function buildFilterOptions(selectId, dataArray, objectKey, defaultLabel) {
+            const selectEl = document.getElementById(selectId);
+            if(!selectEl || !dataArray) return;
+            const uniqueValues = [...new Set(dataArray.map(item => item[objectKey]).filter(Boolean))];
+            let html = `<option value="ALL">✨ ${defaultLabel}</option>`;
+            uniqueValues.forEach(val => { html += `<option value="${val}">${val}</option>`; });
+            selectEl.innerHTML = html;
+        }
+
+        // Helper Dropdown
+        function updateDropdownOptions(selectId, dataArray, key, defaultLabel) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            const currentVal = select.value;
+            const uniqueVals = [...new Set(dataArray.map(item => item[key]).filter(v => v && v !== '-'))].sort();
+            
+            let html = `<option value="ALL">✨ ${defaultLabel}</option>`;
+            uniqueVals.forEach(v => { html += `<option value="${v}">${v}</option>`; });
+            select.innerHTML = html;
+            
+            if (uniqueVals.includes(currentVal)) { select.value = currentVal; } 
+            else { select.value = 'ALL'; }
+        }
+
+        function applyFilters() { renderActiveView(globalDataset); }
+        
+        function toggleSection(containerId, arrowId) {
+            const c = document.getElementById(containerId); const a = document.getElementById(arrowId);
+            if(c) c.classList.toggle('hidden'); if(a) a.classList.toggle('rotate-180');
+        }
+        function toggleSubmenu(id) { toggleSection(id, `arrow-${id}`); }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar'); const icon = document.getElementById('sidebar-toggle-icon');
+            if (sidebar.classList.contains('w-72')) {
+                sidebar.classList.remove('w-72'); sidebar.classList.add('w-0', 'border-r-0'); icon.className = 'fa-solid fa-outdent text-lg';
+            } else {
+                sidebar.classList.remove('w-0', 'border-r-0'); sidebar.classList.add('w-72'); icon.className = 'fa-solid fa-bars text-lg';
+            }
+        }
+
+        function buildTable(tableId, headers, rowsList) {
+            const table = document.getElementById(tableId);
+            if(!table) return;
+            let html = `<thead class="bg-slate-50 border-b border-slate-200/60 uppercase tracking-wider text-slate-500 font-bold text-[10px]"><tr>`;
+            headers.forEach(h => { html += `<th class="px-6 py-4 whitespace-nowrap">${h.replace(/_/g, ' ')}</th>`; });
+            html += `</tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
+            if(rowsList.length === 0) {
+                html += `<tr><td colspan="${headers.length}" class="px-6 py-8 text-center text-slate-400 font-medium">Tidak ada data saat ini.</td></tr>`;
+            } else {
+                rowsList.forEach(row => {
+                    html += `<tr class="hover:bg-slate-50/80 transition-colors">`;
+                    headers.forEach(h => {
+                        let val = row[h] !== null && row[h] !== undefined ? row[h] : '-';
+                        if (typeof val === 'number' && (h.toLowerCase().includes('revenue') || h.toLowerCase().includes('income') || h.toLowerCase().includes('laba') || h.toLowerCase().includes('biaya') || h.toLowerCase().includes('pengembalian'))) {
+                            val = 'Rp ' + val.toLocaleString('id-ID');
+                        }
+                        html += `<td class="px-6 py-4 font-semibold whitespace-nowrap">${val}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+            }
+            html += `</tbody>`;
+            table.innerHTML = html;
+        }
+
+        function parseFlexibleNumber(rawVal) {
+            if (rawVal === null || rawVal === undefined) return 0;
+            if (typeof rawVal === 'number') return rawVal;
+            let str = String(rawVal).trim();
+            if (str === '-' || str === '' || str === 'null') return 0;
+            str = str.replace(/Rp/g, '').replace(/%/g, '').replace(/\s/g, '');
+            if (str.includes('.') && str.includes(',')) { str = str.replace(/\./g, '').replace(',', '.'); } 
+            else if (str.includes('.') && !str.includes(',')) { const parts = str.split('.'); if (parts[parts.length - 1].length === 3) { str = str.replace(/\./g, ''); } } 
+            else if (str.includes(',')) { const parts = str.split(','); if (parts[parts.length - 1].length === 3) { str = str.replace(/,/g, ''); } else { str = str.replace(/,/g, '.'); } }
+            let num = parseFloat(str); return isNaN(num) ? 0 : num;
+        }
+
+        function extractValue(row, structuralNames) {
+            for (let key in row) {
+                let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
+                for (let name of structuralNames) {
+                    if (normalizedKey === name.toLowerCase().replace(/[\s_\/]/g, '')) return parseFlexibleNumber(row[key]);
+                }
+            }
+            return 0;
+        }
+
+        function extractStringValue(row, structuralNames) {
+            for (let key in row) {
+                let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
+                for (let name of structuralNames) {
+                    if (normalizedKey === name.toLowerCase().replace(/[\s_\/]/g, '')) {
+                        return row[key] !== null && row[key] !== undefined && String(row[key]).trim() !== '' ? String(row[key]) : '-';
+                    }
+                }
+            }
+            return '-';
+        }
+
+        function renderActiveView(data) {
+            const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
+            
+            if (currentView === 'sva') {
+                const filterVal = document.getElementById('filter-sva-bulan').value;
+                let arr = data['sva'] || [];
+                if(filterVal !== 'ALL') arr = arr.filter(d => d.Bulan === filterVal);
+                
+                let totalRevenue = 0, totalBiaya = 0, totalPengembalian = 0, totalNetIncome = 0;
+                
+                let tableData = arr.map(d => {
+                    let r = extractValue(d, ['Revenue', 'TotalGrossRevenue', 'GrossRevenue']);
+                    let b = extractValue(d, ['Biaya', 'TotalLabaKotor', 'LabaKotor', 'biaya']);
+                    let p = extractValue(d, ['Pengembalian', 'TotalLabaBersih', 'LabaBersih', 'pengembalian']);
+                    let ni = extractValue(d, ['NetIncome', 'Net_Income', 'Laba_Bersih']);
+                    let npmVal = extractValue(d, ['NetProfitMargin', 'Net_Profit_Margin', 'NPM']);
+                    
+                    if (ni === 0 && r > 0) ni = r - b - p; 
+                    if (npmVal === 0 && r > 0) npmVal = (ni / r) * 100; else if (npmVal > 0 && npmVal < 1) npmVal = npmVal * 100;
+                    
+                    totalRevenue += r; totalBiaya += b; totalPengembalian += p; totalNetIncome += ni;
+                    
+                    return { Bulan: d.Bulan || d.bulan || '-', Revenue: r, Biaya: b, Pengembalian: p, Net_Income: ni, Net_Profit_Margin: npmVal.toFixed(1) + '%' };
+                });
+                
+                document.getElementById('sva-kpi-1').innerText = formatIDR(totalRevenue);
+                document.getElementById('sva-kpi-2').innerText = formatIDR(totalBiaya);
+                document.getElementById('sva-kpi-3').innerText = formatIDR(totalPengembalian);
+                document.getElementById('sva-kpi-4').innerText = formatIDR(totalNetIncome);
+                let finalNpm = totalRevenue > 0 ? (totalNetIncome / totalRevenue) * 100 : 0;
+                document.getElementById('sva-kpi-5').innerText = finalNpm.toFixed(1) + '%';
+                
+                if (arr.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData); else buildTable('table-sva', ['Keterangan'], []);
+                renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
+            
+            } else if (currentView === 'asset-master') {
+                let arr = data['asset-master'] || [];
+                
+                let tableData = arr.map(d => {
+                    return {
+                        'User': extractStringValue(d, ['User', 'Pengguna', 'Nama']),
+                        'Merek': extractStringValue(d, ['Merek', 'Merk']),
+                        'Tipe_Unit': extractStringValue(d, ['Tipe', 'Type', 'Spesifikasi', 'Kolom_C']), 
+                        'NOP': extractStringValue(d, ['NOP', 'No Polisi', 'Nomor Polisi']),
+                        'Jenis': extractStringValue(d, ['Jenis']),
+                        'Kondisi_Unit': extractStringValue(d, ['Kondisi Unit', 'Kondisi']),
+                        'Status_Pemakaian': extractStringValue(d, ['Status Pemakaian', 'Terpakai/Tidak Terpakai', 'Terpakai', 'Status']) 
+                    };
+                });
+
+                tableData = tableData.filter(d => d.User !== '-' || d.Merek !== '-' || d.Jenis !== '-');
+
+                updateDropdownOptions('filter-asset-master-nop', tableData, 'NOP', 'Semua NOP');
+                updateDropdownOptions('filter-asset-master-kondisi', tableData, 'Kondisi_Unit', 'Semua Kondisi');
+                updateDropdownOptions('filter-asset-master-status', tableData, 'Status_Pemakaian', 'Semua Status');
+
+                const filterNop = document.getElementById('filter-asset-master-nop').value;
+                const filterKondisi = document.getElementById('filter-asset-master-kondisi').value;
+                const filterStatus = document.getElementById('filter-asset-master-status').value;
+
+                let filteredData = tableData.filter(d => {
+                    const matchNop = (filterNop === 'ALL' || d.NOP === filterNop);
+                    const matchKondisi = (filterKondisi === 'ALL' || d.Kondisi_Unit === filterKondisi);
+                    const matchStatus = (filterStatus === 'ALL' || d.Status_Pemakaian === filterStatus);
+                    return matchNop && matchKondisi && matchStatus;
+                });
+
+                if (filteredData.length > 0) {
+                    buildTable('table-asset-master', ['User', 'Merek', 'Tipe_Unit', 'NOP', 'Jenis', 'Kondisi_Unit', 'Status_Pemakaian'], filteredData);
+                } else {
+                    buildTable('table-asset-master', ['Keterangan'], []);
+                }
+
+                renderAssetMasterCharts(filteredData);
+
+            // LOGIKA UNTUK DATA MASTER GENSET
+            } else if (currentView === 'asset-genset') {
+                let arr = data['asset-genset'] || [];
+                
+                let tableData = arr.map(d => {
+                    return {
+                        'NOP': extractStringValue(d, ['NOP']),
+                        'Cluster': extractStringValue(d, ['Cluster']),
+                        'Aset_Sewa': extractStringValue(d, ['Aset/Sewa', 'Aset / Sewa', 'Aset_Sewa']),
+                        'Status_Kepemilikan': extractStringValue(d, ['Status Kepemilikan']),
+                        'No_Asset': extractStringValue(d, ['No Asset', 'No_Asset']),
+                        'Kondisi': extractStringValue(d, ['Kondisi']),
+                        'Status_Aktif': extractStringValue(d, ['Aktif/Non Aktif', 'Aktif/Non-Aktif', 'Status Aktif']),
+                        'Validasi_NOP': extractStringValue(d, ['Validasi NOP']),
+                        'Remark': extractStringValue(d, ['Remark', 'Remark Remark Service', 'Remark Service']),
+                        'Peruntukan': extractStringValue(d, ['Peruntukan', 'Peuntukan'])
+                    };
+                });
+
+                tableData = tableData.filter(d => d.NOP !== '-');
+
+                updateDropdownOptions('filter-asset-genset-nop', tableData, 'NOP', 'Semua NOP');
+                updateDropdownOptions('filter-asset-genset-sewa', tableData, 'Aset_Sewa', 'Semua Aset/Sewa');
+                updateDropdownOptions('filter-asset-genset-kondisi', tableData, 'Kondisi', 'Semua Kondisi');
+
+                const filterNop = document.getElementById('filter-asset-genset-nop').value;
+                const filterSewa = document.getElementById('filter-asset-genset-sewa').value;
+                const filterKondisi = document.getElementById('filter-asset-genset-kondisi').value;
+
+                let filteredData = tableData.filter(d => {
+                    return (filterNop === 'ALL' || d.NOP === filterNop) &&
+                           (filterSewa === 'ALL' || d.Aset_Sewa === filterSewa) &&
+                           (filterKondisi === 'ALL' || d.Kondisi === filterKondisi);
+                });
+
+                if (filteredData.length > 0) {
+                    buildTable('table-asset-genset', ['NOP', 'Cluster', 'Aset_Sewa', 'Status_Kepemilikan', 'No_Asset', 'Kondisi', 'Status_Aktif', 'Validasi_NOP', 'Remark', 'Peruntukan'], filteredData);
+                } else {
+                    buildTable('table-asset-genset', ['Keterangan'], []);
+                }
+
+                // Render Chart Genset dengan Plugin DataLabels & Fitur Klik
+                renderAssetGensetCharts(filteredData);
+
+            } else if (['kpi', 'operational', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
+                let targetKey = currentView.includes('aging') ? 'pjb-aging' : currentView;
+                let arr = data[targetKey] || [];
+                
+                if(currentView === 'aging-sva') arr = arr.filter(d => String(d.Kategori || d.Kategori_UM).toLowerCase().includes('sva'));
+                if(currentView === 'aging-ops') arr = arr.filter(d => String(d.Kategori || d.Kategori_UM).toLowerCase().includes('ops'));
+                if(currentView === 'aging-lainnya') arr = arr.filter(d => !String(d.Kategori || d.Kategori_UM).toLowerCase().includes('sva') && !String(d.Kategori || d.Kategori_UM).toLowerCase().includes('ops'));
+
+                if(arr.length > 0) buildTable(`table-${currentView}`, Object.keys(arr[0]), arr); else buildTable(`table-${currentView}`, ['Keterangan'], []);
+            
+            } else if (currentView === 'pm-target') {
+                const filterVal = document.getElementById('filter-pm-target-bulan').value;
+                let arr = data['pm-target'] || [];
+                if(filterVal !== 'ALL') arr = arr.filter(d => d.Bulan === filterVal);
+                let t = arr.reduce((acc, c) => acc + (c.Target_WO || 0), 0);
+                let r = arr.reduce((acc, c) => acc + (c.Realisasi_WO || 0), 0);
+                document.getElementById('pmt-kpi-1').innerText = t + ' WO'; document.getElementById('pmt-kpi-2').innerText = r + ' WO';
+                document.getElementById('pmt-kpi-3').innerText = (t - r) + ' WO'; document.getElementById('pmt-kpi-4').innerText = (t > 0 ? (r/t*100).toFixed(1) : 0) + '%';
+                buildTable('table-pm-target', ['Bulan', 'Target_WO', 'Realisasi_WO'], arr);
+            }
+        }
+
+        function renderAssetMasterCharts(tableData) {
+            const countFrequencies = (key) => {
+                return tableData.reduce((acc, row) => {
+                    let val = row[key];
+                    if (val !== '-') acc[val] = (acc[val] || 0) + 1;
                     return acc;
                 }, {});
-                buildTable('table-sdm', Object.keys(summary).map(k => ({ 'Kepemilikan': k, 'Total_Tools': summary[k] })));
+            };
+
+            const merekCounts = countFrequencies('Merek');
+            const jenisCounts = countFrequencies('Jenis');
+            const kondisiCounts = countFrequencies('Kondisi_Unit');
+            const bgColors = ['#4f46e5', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#0ea5e9', '#06b6d4', '#64748b'];
+
+            if (charts['asset_merek']) charts['asset_merek'].destroy();
+            const ctxMerek = document.getElementById('chart-asset-merek');
+            if (ctxMerek) {
+                charts['asset_merek'] = new Chart(ctxMerek.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: Object.keys(merekCounts), datasets: [{ data: Object.values(merekCounts), backgroundColor: bgColors }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
+                });
             }
-            // Default Table Loader
-            else {
-                buildTable('table-' + view, globalDataset[view] || []);
+
+            if (charts['asset_jenis']) charts['asset_jenis'].destroy();
+            const ctxJenis = document.getElementById('chart-asset-jenis');
+            if (ctxJenis) {
+                charts['asset_jenis'] = new Chart(ctxJenis.getContext('2d'), {
+                    type: 'pie',
+                    data: { labels: Object.keys(jenisCounts), datasets: [{ data: Object.values(jenisCounts), backgroundColor: bgColors.slice().reverse() }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
+                });
+            }
+
+            if (charts['asset_kondisi']) charts['asset_kondisi'].destroy();
+            const ctxKondisi = document.getElementById('chart-asset-kondisi');
+            if (ctxKondisi) {
+                charts['asset_kondisi'] = new Chart(ctxKondisi.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: Object.keys(kondisiCounts), datasets: [{ data: Object.values(kondisiCounts), backgroundColor: ['#10b981', '#f43f5e', '#f59e0b', '#64748b'] }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
+                });
             }
         }
 
-        function nav(id) { window.location.hash = '#' + id; setTimeout(renderActiveView, 100); }
-        
-        function updateDropdown(id, data, key) {
-            const el = document.getElementById(id);
-            const vals = [...new Set(data.map(i => i[key]).filter(v => v))];
-            const current = el.value;
-            el.innerHTML = `<option value="ALL">Semua ${key}</option>` + vals.map(v => `<option value="${v}" ${v==current?'selected':''}>${v}</option>`).join('');
+        // FUNGSI RENDER CHART GENSET - DILENGKAPI DATALABELS & INTERAKSI KLIK
+        function renderAssetGensetCharts(tableData) {
+            const countAsetSewa = tableData.reduce((acc, row) => {
+                let val = row['Aset_Sewa'];
+                if (val && val !== '-') acc[val] = (acc[val] || 0) + 1;
+                return acc;
+            }, {});
+
+            if (charts['asset_genset_sewa']) charts['asset_genset_sewa'].destroy();
+            const ctxSewa = document.getElementById('chart-asset-genset-sewa');
+            
+            if (ctxSewa) {
+                charts['asset_genset_sewa'] = new Chart(ctxSewa.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { 
+                        labels: Object.keys(countAsetSewa), 
+                        datasets: [{ data: Object.values(countAsetSewa), backgroundColor: ['#4f46e5', '#f59e0b', '#10b981', '#f43f5e'] }] 
+                    },
+                    plugins: [ChartDataLabels], // Menambahkan plugin ke dalam grafik
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { 
+                            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } },
+                            // Konfigurasi Tulisan (Total & Persen)
+                            datalabels: {
+                                color: '#ffffff',
+                                font: { weight: 'bold', size: 12 },
+                                formatter: (value, ctx) => {
+                                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    let percentage = (value * 100 / sum).toFixed(1) + "%";
+                                    return value + " (" + percentage + ")"; // Format Tampilan: Total (Persen)
+                                }
+                            }
+                        },
+                        // Fungsi Saat Grafik di Klik
+                        onClick: (event, elements, chart) => {
+                            const filterEl = document.getElementById('filter-asset-genset-sewa');
+                            if (!filterEl) return;
+
+                            if (elements.length > 0) {
+                                const label = chart.data.labels[elements[0].index];
+                                // Fitur Toggle: Jika diklik grafik yang sama, matikan filter (kembali ke ALL)
+                                if (filterEl.value === label) {
+                                    filterEl.value = 'ALL';
+                                } else {
+                                    filterEl.value = label;
+                                }
+                            } else {
+                                filterEl.value = 'ALL'; // Klik di luar grafik mereset filter
+                            }
+                            applyFilters(); // Memanggil ulang tabel
+                        },
+                        // Merubah cursor jadi tangan saat di-hover
+                        onHover: (event, elements) => {
+                            event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                        }
+                    }
+                });
+            }
+
+            // Menghitung Ringkasan KPI
+            const total = tableData.length;
+            const aktif = tableData.filter(d => {
+                let st = String(d.Status_Aktif).toLowerCase();
+                return st.includes('aktif') && !st.includes('non');
+            }).length;
+            
+            const totalEl = document.getElementById('genset-total');
+            const aktifEl = document.getElementById('genset-aktif');
+            if(totalEl) totalEl.innerText = total;
+            if(aktifEl) aktifEl.innerText = aktif;
         }
 
-        function buildTable(id, data) {
-            const el = document.getElementById(id);
-            if(!data.length) { el.innerHTML = "Data kosong."; return; }
-            const keys = Object.keys(data[0]);
-            let html = `<table class="w-full text-sm"><thead><tr class="border-b bg-slate-100">${keys.map(k=>`<th class="p-3 text-left">${k}</th>`).join('')}</tr></thead>`;
-            html += `<tbody>${data.map(r=>`<tr class="border-b">${keys.map(k=>`<td class="p-3">${r[k]||'-'}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
-            el.innerHTML = html;
+        function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
+            if (charts['sva_line']) charts['sva_line'].destroy();
+            const ctxLine = document.getElementById('chart-sva-finance-line');
+            if (ctxLine) {
+                charts['sva_line'] = new Chart(ctxLine.getContext('2d'), {
+                    type: 'line',
+                    data: { labels: tableData.map(t => t.Bulan), datasets: [
+                        { label: 'Revenue', data: tableData.map(t => t.Revenue), borderColor: '#4f46e5', tension: 0.2, fill: false },
+                        { label: 'Biaya', data: tableData.map(t => t.Biaya), borderColor: '#f43f5e', tension: 0.2, fill: false },
+                        { label: 'Net Income', data: tableData.map(t => t.Net_Income), borderColor: '#10b981', tension: 0.2, fill: false }
+                    ]}, options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            if (charts['sva_pie']) charts['sva_pie'].destroy();
+            const ctxPie = document.getElementById('chart-sva-finance-pie');
+            if (ctxPie) {
+                charts['sva_pie'] = new Chart(ctxPie.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: ['Biaya', 'Pengembalian', 'Net Income'], datasets: [{ data: [totalBiaya, totalPengembalian, totalNetIncome], backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'] }] },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
         }
 
-        init();
+        function setupExcelDropZone() {
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('excel-file-input');
+            if(!dropZone || !fileInput) return;
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500', 'bg-indigo-50/20'); });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20'));
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/20');
+                if(e.dataTransfer.files.length) handleDroppedExcel(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', (e) => {
+                if(fileInput.files.length) handleDroppedExcel(fileInput.files[0]);
+            });
+        }
+
+        function handleDroppedExcel(file) {
+            document.getElementById('file-info-zone').classList.remove('hidden');
+            document.getElementById('file-info-zone').innerText = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const rows = XLSX.utils.sheet_to_json(worksheet);
+                processExcelData(rows);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function processExcelData(rows) {
+            if(rows.length === 0) return;
+            let keys = Object.keys(rows[0]);
+            let labelKey = keys.find(k => k.toLowerCase().includes('bulan') || k.toLowerCase().includes('tanggal') || k.toLowerCase().includes('nama')) || keys[0];
+            let revenueKey = keys.find(k => k.toLowerCase().includes('revenue') || k.toLowerCase().includes('pendapatan') || k.toLowerCase().includes('omset')) || keys[1];
+            let expenseKey = keys.find(k => k.toLowerCase().includes('expense') || k.toLowerCase().includes('pengeluaran') || k.toLowerCase().includes('biaya')) || keys[2];
+
+            let labels = [], revenues = [], expenses = [];
+            rows.forEach(row => {
+                labels.push(row[labelKey] || '');
+                revenues.push(parseFloat(row[revenueKey]) || 0);
+                expenses.push(parseFloat(row[expenseKey]) || 0);
+            });
+
+            const emptyState = document.getElementById('chart-empty-state');
+            if(emptyState) emptyState.classList.add('hidden');
+            if(charts['excel_comparison']) charts['excel_comparison'].destroy();
+            
+            charts['excel_comparison'] = new Chart(document.getElementById('chart-excel-comparison').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Pendapatan', data: revenues, backgroundColor: '#4f46e5', borderRadius: 6 },
+                        { label: 'Pengeluaran', data: expenses, backgroundColor: '#ef4444', borderRadius: 6 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+            document.getElementById('excel-analysis-text').innerHTML = `<p class="text-slate-700 font-semibold text-xs">Analisa berhasil dirender dari file excel secara otomatis dengan struktur visualisasi grafik komparasi disamping.</p>`;
+        }
     </script>
 </body>
 </html>
