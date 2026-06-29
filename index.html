@@ -58,6 +58,7 @@
 </head>
 <body class="bg-[#f8fafc] text-slate-800 overflow-hidden h-screen flex">
 
+    <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
         <div class="text-center space-y-6 max-w-md px-6">
             <div class="logo-glow bg-white p-6 rounded-2xl inline-block shadow-[0_20px_50px_rgba(79,70,229,0.3)] border border-slate-800">
@@ -79,6 +80,7 @@
     
     <style>@keyframes loadingBar { 0% { left: -100%; right: 100%; } 50% { left: 0%; right: 0%; } 100% { left: 100%; right: -100%; } }</style>
 
+    <!-- Sidebar -->
     <aside id="sidebar" class="w-72 bg-slate-950 text-slate-400 flex flex-col h-full flex-shrink-0 shadow-[4px_0_25px_rgba(0,0,0,0.15)] z-20 border-r border-slate-900 transition-all duration-300 overflow-hidden">
         <div class="p-6 flex items-center space-x-3.5 border-b border-slate-900 bg-slate-950 whitespace-nowrap">
             <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl text-white shadow-[0_4px_12px_rgba(79,70,229,0.5)]">
@@ -241,8 +243,19 @@
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="premium-card p-6 rounded-2xl lg:col-span-2"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Tren Skala Finansial Bulanan</h4><div class="w-full h-80"><canvas id="chart-sva-finance-line"></canvas></div></div>
-                    <div class="premium-card p-6 rounded-2xl lg:col-span-1"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i>Proporsi Struktur Alokasi</h4><div class="relative w-full h-72 flex items-center justify-center"><canvas id="chart-sva-finance-pie"></canvas></div></div>
+                    <!-- GRAFIK SVA: SEKARANG MENGGUNAKAN BAR CHART UNTUK REVENUE -->
+                    <div class="premium-card p-6 rounded-2xl lg:col-span-2">
+                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6">
+                            <i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Tren Skala Finansial Bulanan
+                        </h4>
+                        <div class="w-full h-80"><canvas id="chart-sva-finance-line"></canvas></div>
+                    </div>
+                    <div class="premium-card p-6 rounded-2xl lg:col-span-1">
+                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4">
+                            <i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i>Proporsi Struktur Alokasi
+                        </h4>
+                        <div class="relative w-full h-72 flex items-center justify-center"><canvas id="chart-sva-finance-pie"></canvas></div>
+                    </div>
                 </div>
                 <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
                     <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50"><h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Laporan Neraca Analisa SVA</h4></div>
@@ -482,7 +495,7 @@
         async function fetchFromSpreadsheet(sheetName) {
             let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
             
-            // KUNCI SOLUSI SVA ERROR: Kita harus meluaskan range ke A:AZ agar kolom baru yang ditambahkan user tidak terpotong
+            // Jarak A:AZ digunakan agar seluruh kolom (termasuk filter) terbaca sempurna
             if (sheetName === 'data SVA') url += '&range=A:AZ';
 
             const response = await fetch(url);
@@ -509,7 +522,6 @@
             selectEl.innerHTML = html;
         }
 
-        // FUNGSI BARU SUPER-KEBAL ERROR UNTUK EXTRACT STRING DATA
         function extractStringValue(row, structuralNames) {
             for (let key in row) {
                 let normalizedKey = key.toLowerCase().replace(/[\s_\/]/g, '');
@@ -522,7 +534,6 @@
             return '-';
         }
 
-        // FUNGSI UPDATE DROPDOWN KEBAL ERROR (MENERIMA ARRAY MULTIPLE KEY OPTIONS)
         function updateDropdownOptions(selectId, dataArray, possibleKeys, defaultLabel) {
             const select = document.getElementById(selectId);
             if (!select) return;
@@ -606,7 +617,7 @@
         function renderActiveView(data) {
             const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
             
-            // 1. SVA LOGIC (DENGAN 4 FILTER BARU DAN ANTI ERROR)
+            // 1. SVA LOGIC (DENGAN 4 FILTER BARU)
             if (currentView === 'sva') {
                 let arr = data['sva'] || [];
                 
@@ -670,10 +681,11 @@
                 if (filteredArr.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData); 
                 else buildTable('table-sva', ['Keterangan'], []);
                 
+                // Panggil render grafik SVA baru
                 renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
             } 
             
-            // 2. SDM LOGIC (PERHITUNGAN TOOLS KOLOM AB-DL / INDEX 27-115)
+            // 2. SDM LOGIC (Kalkulasi Tools Kolom AB sampai DL)
             else if (currentView === 'sdm') {
                 let arr = data['sdm'] || [];
                 let summary = arr.reduce((acc, row) => {
@@ -682,6 +694,7 @@
                     if (!acc[kep]) acc[kep] = 0;
                     
                     let keys = Object.keys(row);
+                    // Kolom AB (27) sampai DL (115)
                     for(let i = 27; i <= 115; i++) {
                         if(keys[i]) acc[kep] += (parseFloat(row[keys[i]]) || 0);
                     }
@@ -909,18 +922,45 @@
             if(aktifEl) aktifEl.innerText = aktif;
         }
 
-        // CHARTS: SVA
+        // CHARTS: SVA (KOMBINASI BAR & LINE CHART)
         function renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome) {
             if (charts['sva_line']) charts['sva_line'].destroy();
             const ctxLine = document.getElementById('chart-sva-finance-line');
             if (ctxLine) {
                 charts['sva_line'] = new Chart(ctxLine.getContext('2d'), {
-                    type: 'line',
-                    data: { labels: tableData.map(t => t.Bulan), datasets: [
-                        { label: 'Revenue', data: tableData.map(t => t.Revenue), borderColor: '#4f46e5', tension: 0.2, fill: false },
-                        { label: 'Biaya', data: tableData.map(t => t.Biaya), borderColor: '#f43f5e', tension: 0.2, fill: false },
-                        { label: 'Net Income', data: tableData.map(t => t.Net_Income), borderColor: '#10b981', tension: 0.2, fill: false }
-                    ]}, options: { responsive: true, maintainAspectRatio: false }
+                    type: 'bar', // Menggunakan basis bar chart
+                    data: { 
+                        labels: tableData.map(t => t.Bulan), 
+                        datasets: [
+                            { 
+                                type: 'bar', // Revenue menggunakan diagram batang
+                                label: 'Revenue', 
+                                data: tableData.map(t => t.Revenue), 
+                                backgroundColor: '#4f46e5', 
+                                borderRadius: 4 
+                            },
+                            { 
+                                type: 'line', // Biaya tetap menggunakan garis
+                                label: 'Biaya', 
+                                data: tableData.map(t => t.Biaya), 
+                                borderColor: '#f43f5e', 
+                                tension: 0.2, 
+                                fill: false 
+                            },
+                            { 
+                                type: 'line', // Net Income tetap menggunakan garis
+                                label: 'Net Income', 
+                                data: tableData.map(t => t.Net_Income), 
+                                borderColor: '#10b981', 
+                                tension: 0.2, 
+                                fill: false 
+                            }
+                        ]
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false 
+                    }
                 });
             }
 
