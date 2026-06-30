@@ -23,7 +23,7 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
-            transition: transform 0.2s, box-shadow 0.2s; /* Dioptimalkan */
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .premium-card:hover {
             transform: translateY(-2px);
@@ -73,7 +73,7 @@
             <div class="w-48 h-1.5 bg-slate-900 rounded-full mx-auto overflow-hidden relative">
                 <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 w-full rounded-full absolute -translateX-full animate-[loadingBar_2s_infinite_ease-in-out]"></div>
             </div>
-            <p class="text-slate-500 text-[11px] font-medium tracking-wider">Memuat Database (Mode Cepat)...</p>
+            <p class="text-slate-500 text-[11px] font-medium tracking-wider">Memuat Analisa Terintegrasi...</p>
         </div>
     </div>
     
@@ -280,7 +280,7 @@
                     </div>
                     <div class="flex gap-2 flex-wrap">
                         <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua Periode</option></select>
-                        <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua NOP</option></select>
+                        <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua NOP (Kolom E)</option></select>
                     </div>
                 </div>
 
@@ -295,18 +295,18 @@
                     </div>
                 </div>
 
-                <div class="premium-card p-6 rounded-2xl bg-white shadow-md">
-                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500"></i> Rincian Analisa Kewajaran Delta</h4>
-                    <p class="text-xs text-slate-500 mb-4">*Jika terdeteksi selisih (Delta Hour - Delta RH) &ge; 1 maka berstatus <span class="text-rose-600 font-bold">Anomali</span>. Jika &lt; 1 berstatus <span class="text-emerald-600 font-bold">Terverifikasi</span>.</p>
-                    <div id="mbp-analysis-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto p-2 border border-slate-100 rounded-xl bg-slate-50/50">
-                        </div>
-                </div>
-
                 <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
-                    <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50"><h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Tabel Master MBP</h4></div>
+                    <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50"><h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Tabel Master Ringkasan MBP (Per NOP)</h4></div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-rh-new"></table>
                     </div>
+                </div>
+
+                <div class="premium-card p-6 rounded-2xl bg-white shadow-md">
+                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500"></i> Rincian Analisa Kewajaran Per Tiket</h4>
+                    <p class="text-xs text-slate-500 mb-4">*Jika terdeteksi selisih (Delta Hour - Delta RH) &ge; 1 maka berstatus <span class="text-rose-600 font-bold">Anomali</span>. Jika &lt; 1 berstatus <span class="text-emerald-600 font-bold">Terverifikasi</span>.</p>
+                    <div id="mbp-analysis-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[500px] overflow-y-auto p-2 border border-slate-100 rounded-xl bg-slate-50/50">
+                        </div>
                 </div>
             </section>
             
@@ -405,7 +405,6 @@
             </section>
             
             <section id="view-pm-curvas" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Skala Minggu Progress</span></div><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-area mr-2 text-emerald-500"></i>S-Curve Kumulatif Progress Proyek Pemeliharaan</h4><div class="w-full h-[420px]"><canvas id="chart-pm-curvas"></canvas></div></div></section>
-            
             <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Perawatan</span></div><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-service"></table></div></div></section>
             <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-depresiasi"></table></div></div></section>
             <section id="view-asset-sewa" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white"><h3 class="text-sm font-bold text-slate-800">Pembiayaan Unit Sewa Vendor</h3></div></section>
@@ -522,8 +521,6 @@
 
         async function fetchFromSpreadsheet(sheetName) {
             let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-            
-            // Perluasan Range agar tidak terpotong saat filter ditambahkan
             if (sheetName === 'data SVA' || sheetName === 'SDM' || sheetName === 'data MBP') url += '&range=A:AZ';
 
             const response = await fetch(url);
@@ -536,7 +533,10 @@
             const cols = json.table.cols.map(c => c.label || c.id);
             return json.table.rows.map(r => {
                 let obj = {};
-                r.c.forEach((cell, i) => { if(cols[i]) obj[cols[i]] = cell ? cell.v : null; });
+                r.c.forEach((cell, i) => { 
+                    if(cols[i]) obj[cols[i]] = cell ? cell.v : null; 
+                    if(i === 4) obj['KolomE_NOP'] = cell ? cell.v : null; // Otomatis kunci Kolom E sebagai NOP Filter Utama
+                });
                 return obj;
             });
         }
@@ -736,15 +736,16 @@
                 else buildTable('table-sdm', ['Keterangan'], []);
             }
 
-            // 3. MBP (MONITORING DATA DELTA & REVENUE TERBARU)
+            // 3. MBP ANALISA DELTA REVENUE (DIUPDATE TOTAL NOP & KARTU DETAIL TIKET)
             else if (currentView === 'mbp-rh') {
                 let arr = data['mbp-rh'] || [];
 
                 let keysPeriode = ['Periode', 'bulan', 'tanggal', 'date'];
-                let keysNOP = ['NOP', 'nopolisi', 'nopol', 'unit', 'unitgenset'];
-                // Tambahan Key untuk Site ID dan No Tiket
-                let keysSite = ['SiteID', 'Site_ID', 'ID_Site', 'Site'];
-                let keysTiket = ['NomorTiket', 'NoTiket', 'Tiket', 'Ticket'];
+                // Prioritas ambil dari KolomE_NOP yang sudah di-lock pada fungsi fetch data
+                let keysNOP = ['KolomE_NOP', 'NOP', 'nopolisi', 'nopol', 'unit', 'unitgenset'];
+                let keysSite = ['SiteID', 'Site_ID', 'ID_Site', 'Site', 'siteid', 'site_id', 'site'];
+                let keysTiket = ['NomorTiket', 'NoTiket', 'Tiket', 'Ticket', 'ticketnumberswfm', 'ticketnumber', 'notiket', 'nomortiket'];
+                let keysPic = ['PICTakeOverTicket', 'pictakeoverticket', 'pic', 'pic_take_over_ticket', 'pictakeover'];
 
                 updateDropdownOptions('filter-mbp-periode', arr, keysPeriode, 'Semua Periode');
                 updateDropdownOptions('filter-mbp-nop', arr, keysNOP, 'Semua NOP');
@@ -758,17 +759,17 @@
                     return (fP === 'ALL' || p === fP) && (fN === 'ALL' || n === fN);
                 });
 
-                // Mapping Extractor
                 let tableData = filteredArr.map(d => {
                     let nop = extractStringValue(d, keysNOP);
                     let site = extractStringValue(d, keysSite);
                     let tiket = extractStringValue(d, keysTiket);
+                    let pic = extractStringValue(d, keysPic);
                     let periode = extractStringValue(d, keysPeriode);
-                    let dHour = extractValue(d, ['DeltaHour', 'Delta_Hour', 'DH', 'Hour']);
-                    let dRH = extractValue(d, ['DeltaRH', 'Delta_RH', 'DRH', 'RH']);
-                    let dFinal = extractValue(d, ['DeltaFinal', 'Delta_Final', 'DF', 'Final']);
-                    let liter = extractValue(d, ['Liter', 'Konsumsi', 'BBM']);
-                    let rev = extractValue(d, ['Revenue', 'Pendapatan', 'Omset']);
+                    let dHour = extractValue(d, ['DeltaHour', 'Delta_Hour', 'DH', 'Hour', 'delta_hour']);
+                    let dRH = extractValue(d, ['DeltaRH', 'Delta_RH', 'DRH', 'RH', 'delta_rh']);
+                    let dFinal = extractValue(d, ['DeltaFinal', 'Delta_Final', 'DF', 'Final', 'delta_final']);
+                    let liter = extractValue(d, ['Liter', 'Konsumsi', 'BBM', 'liter']);
+                    let rev = extractValue(d, ['Revenue', 'Pendapatan', 'Omset', 'revenue']);
 
                     let selisih = Math.abs(dHour - dRH);
                     let statusText = selisih >= 1 ? 'Anomali' : 'Terverifikasi';
@@ -777,6 +778,7 @@
                         NOP: nop,
                         Site_ID: site,
                         Nomor_Tiket: tiket,
+                        PIC: pic,
                         Periode: periode,
                         Delta_Hour: dHour,
                         Delta_RH: dRH,
@@ -897,7 +899,7 @@
             }
         }
 
-        // FUNGSI RENDER TABEL & ANALISA CARD MBP (DIOPTIMALKAN AGAR TIDAK LEMOT)
+        // FUNGSI UTAMA: RENDER TABEL AGGREGAT NOP & KARTU DETAIL TIKET (KUT MBP)
         function renderMbpTableAndAnalysis(tableData) {
             const tbody = document.getElementById('table-mbp-rh-new');
             const analysisContainer = document.getElementById('mbp-analysis-container');
@@ -905,62 +907,71 @@
             if (!tbody || !analysisContainer) return;
 
             if (tableData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="11" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>`;
                 analysisContainer.innerHTML = `<div class="text-slate-400 text-sm font-semibold p-4 w-full text-center">Data tidak ditemukan.</div>`;
                 return;
             }
 
-            // Build HTML Table Head (Site ID dan Nomor Tiket ditambahkan)
+            // 1. Akumulasi (Grouping) Berdasarkan NOP Saja Agar Dashboard Ringan & Cepat
+            let agg = {};
+            tableData.forEach(r => {
+                let nop = r.NOP || '-';
+                if (!agg[nop]) {
+                    agg[nop] = { Total_Revenue: 0, Total_Anomali: 0, Total_Terverifikasi: 0 };
+                }
+                agg[nop].Total_Revenue += (r.Revenue || 0);
+                if (r.Status === 'Anomali') {
+                    agg[nop].Total_Anomali++;
+                } else {
+                    agg[nop].Total_Terverifikasi++;
+                }
+            });
+
+            // Bangun Tabel Ringkasan Pendapatan & Akumulasi Status Kewajaran
             let th = `<thead class="bg-slate-100/50 border-b border-slate-200">
                 <tr class="text-slate-500 text-[10px] uppercase tracking-wider font-bold text-left">
-                    <th class="p-4">NOP</th>
-                    <th class="p-4">Site ID</th>
-                    <th class="p-4">Nomor Tiket</th>
-                    <th class="p-4">Periode</th>
-                    <th class="p-4">Delta Hour</th>
-                    <th class="p-4">Delta RH</th>
-                    <th class="p-4">Selisih</th>
-                    <th class="p-4">Delta Final</th>
-                    <th class="p-4">Liter</th>
-                    <th class="p-4">Revenue</th>
-                    <th class="p-4">Status</th>
+                    <th class="p-4">NOP Box</th>
+                    <th class="p-4">Total Revenue Akumulasi</th>
+                    <th class="p-4">Total Kasus Anomali</th>
+                    <th class="p-4">Total Kasus Terverifikasi</th>
                 </tr>
             </thead><tbody class="divide-y divide-slate-100">`;
 
-            let analysisHTML = '';
+            Object.keys(agg).forEach(nop => {
+                th += `<tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="p-4 font-bold text-slate-700">${nop}</td>
+                    <td class="p-4 font-bold text-indigo-600">Rp ${agg[nop].Total_Revenue.toLocaleString('id-ID')}</td>
+                    <td class="p-4 text-rose-600 font-extrabold">${agg[nop].Total_Anomali} Tiket</td>
+                    <td class="p-4 text-emerald-600 font-extrabold">${agg[nop].Total_Terverifikasi} Tiket</td>
+                </tr>`;
+            });
+            th += `</tbody>`;
+            tbody.innerHTML = th;
 
+            // 2. Tampilkan Detail Per Tiket Menggunakan Struktur Card Komponen Dinamis
+            let analysisHTML = '';
             tableData.forEach(r => {
                 let isAnomali = r.Status === 'Anomali';
                 let selisihFixed = parseFloat(r.Selisih).toFixed(2);
                 
-                // Menghapus class .animate-pulse, .fa-beat-fade, .fa-bounce agar render Vercel tidak lag
                 let badgeClass = isAnomali ? 'bg-rose-100 text-rose-700 border-rose-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200';
                 let iconClass = isAnomali ? 'fa-triangle-exclamation' : 'fa-circle-check';
                 
                 let statusBadge = `<span class="px-2.5 py-1.5 border rounded-lg text-[10px] font-bold flex items-center justify-center gap-1.5 w-max ${badgeClass}"><i class="fa-solid ${iconClass}"></i> ${r.Status}</span>`;
 
-                // Render Table Row
-                th += `<tr class="hover:bg-slate-50/80 transition-colors">
-                    <td class="p-4 font-bold text-slate-700">${r.NOP}</td>
-                    <td class="p-4 text-slate-600">${r.Site_ID}</td>
-                    <td class="p-4 font-mono text-xs text-indigo-500">${r.Nomor_Tiket}</td>
-                    <td class="p-4 font-medium text-slate-500">${r.Periode}</td>
-                    <td class="p-4">${r.Delta_Hour}</td>
-                    <td class="p-4">${r.Delta_RH}</td>
-                    <td class="p-4 font-extrabold ${isAnomali ? 'text-rose-600' : 'text-emerald-600'}">${selisihFixed}</td>
-                    <td class="p-4 font-medium">${r.Delta_Final}</td>
-                    <td class="p-4 text-slate-600">${r.Liter} L</td>
-                    <td class="p-4 font-bold text-indigo-600">Rp ${r.Revenue.toLocaleString('id-ID')}</td>
-                    <td class="p-4">${statusBadge}</td>
-                </tr>`;
-
-                // Render Analysis Card (Sederhana & Cepat)
                 analysisHTML += `
                 <div class="border rounded-xl p-4 flex flex-col gap-3 shadow-sm ${isAnomali ? 'bg-rose-50 border-rose-200' : 'bg-white border-slate-200'}">
                     <div class="flex justify-between items-start">
-                        <span class="font-extrabold text-xs ${isAnomali ? 'text-rose-900' : 'text-slate-800'}">${r.NOP} <span class="text-slate-400 font-normal">(${r.Site_ID})</span></span>
+                        <span class="font-extrabold text-xs ${isAnomali ? 'text-rose-900' : 'text-slate-800'}">${r.NOP}</span>
                         <span class="text-[10px] font-bold px-2 py-1 bg-slate-100 rounded-md text-slate-500">${r.Periode}</span>
                     </div>
+                    
+                    <div class="text-xs space-y-1.5 text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 font-medium">
+                        <p class="flex justify-between"><span>Ticket Number SWFM:</span><b class="font-mono text-indigo-600">${r.Nomor_Tiket || '-'}</b></p>
+                        <p class="flex justify-between"><span>Site Id:</span><b class="text-slate-800">${r.Site_ID || '-'}</b></p>
+                        <p class="flex justify-between"><span>PIC Take Over Ticket:</span><b class="text-slate-800">${r.PIC || '-'}</b></p>
+                    </div>
+
                     <div class="flex justify-between text-xs mt-1 bg-white p-2 rounded-lg border border-slate-100">
                         <div class="flex flex-col"><span class="text-[9px] uppercase text-slate-400 font-bold">Delta Hour</span><span class="font-bold text-slate-700">${r.Delta_Hour}</span></div>
                         <div class="flex flex-col text-right"><span class="text-[9px] uppercase text-slate-400 font-bold">Delta RH</span><span class="font-bold text-slate-700">${r.Delta_RH}</span></div>
@@ -974,21 +985,27 @@
                     </div>
                 </div>`;
             });
-
-            th += `</tbody>`;
-            tbody.innerHTML = th;
             analysisContainer.innerHTML = analysisHTML;
         }
 
-        // FUNGSI RENDER CHART MBP (HANYA PERIODE DI SUMBU X)
+        // FUNGSI RENDER CHART MBP (DI-AKUMULASI AGAR UTUH DAN BERSIH HANYA PERIODE DI SUMBU X)
         function renderMbpCharts(tableData) {
-            
-            // Perubahan sesuai request: Label bawah grafik hanya Periode
-            let labels = tableData.map(t => t.Periode); 
-            
-            let revenues = tableData.map(t => t.Revenue);
-            let dHours = tableData.map(t => t.Delta_Hour);
-            let dRHs = tableData.map(t => t.Delta_RH);
+            // Pengelompokan data grafik per periode bulan untuk merapikan visualisasi sumbu X
+            let periodData = {};
+            tableData.forEach(t => {
+                let prd = t.Periode || '-';
+                if (!periodData[prd]) {
+                    periodData[prd] = { Revenue: 0, Delta_Hour: 0, Delta_RH: 0 };
+                }
+                periodData[prd].Revenue += (t.Revenue || 0);
+                periodData[prd].Delta_Hour += (t.Delta_Hour || 0);
+                periodData[prd].Delta_RH += (t.Delta_RH || 0);
+            });
+
+            let labelsPeriode = Object.keys(periodData);
+            let dataRevenue = labelsPeriode.map(p => periodData[p].Revenue);
+            let dataDeltaHour = labelsPeriode.map(p => periodData[p].Delta_Hour);
+            let dataDeltaRH = labelsPeriode.map(p => periodData[p].Delta_RH);
 
             // 1. Chart Revenue (Bar Chart Biru)
             if (charts['mbp_rev']) charts['mbp_rev'].destroy();
@@ -997,10 +1014,10 @@
                 charts['mbp_rev'] = new Chart(ctxRev.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: labels,
+                        labels: labelsPeriode,
                         datasets: [{
-                            label: 'Revenue (Rp)',
-                            data: revenues,
+                            label: 'Total Revenue (Rp)',
+                            data: dataRevenue,
                             backgroundColor: '#4f46e5',
                             borderRadius: 6
                         }]
@@ -1020,10 +1037,10 @@
                 charts['mbp_delta'] = new Chart(ctxDelta.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: labels,
+                        labels: labelsPeriode,
                         datasets: [
-                            { label: 'Delta Hour', data: dHours, backgroundColor: '#f59e0b', borderRadius: 4 },
-                            { label: 'Delta RH', data: dRHs, backgroundColor: '#06b6d4', borderRadius: 4 }
+                            { label: 'Total Delta Hour', data: dataDeltaHour, backgroundColor: '#f59e0b', borderRadius: 4 },
+                            { label: 'Total Delta RH', data: dataDeltaRH, backgroundColor: '#06b6d4', borderRadius: 4 }
                         ]
                     },
                     options: { 
@@ -1245,8 +1262,6 @@
                 expenses.push(parseFloat(row[expenseKey]) || 0);
             });
 
-            const emptyState = document.getElementById('chart-empty-state');
-            if(emptyState) emptyState.classList.add('hidden');
             if(charts['excel_comparison']) charts['excel_comparison'].destroy();
             
             charts['excel_comparison'] = new Chart(document.getElementById('chart-excel-comparison').getContext('2d'), {
