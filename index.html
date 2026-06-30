@@ -737,27 +737,25 @@
             }
 
             // 3. MBP (MONITORING DATA DELTA & REVENUE TERBARU)
-            else if (currentView === 'mbp-rh') {
-                let arr = data['mbp-rh'] || [];
+          <div class="bg-white p-6 rounded-xl border">
+    <h3 class="font-bold mb-4">Ringkasan per NOP</h3>
+    <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left" id="table-mbp-agg">
+            <thead>
+                <tr class="bg-slate-100">
+                    <th class="p-2 border">NOP</th>
+                    <th class="p-2 border">Total Revenue</th>
+                    <th class="p-2 border">Anomali</th>
+                    <th class="p-2 border">Terverifikasi</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-mbp-agg"></tbody>
+        </table>
+    </div>
+</div>
 
-                let keysPeriode = ['Periode', 'bulan', 'tanggal', 'date'];
-                let keysNOP = ['NOP', 'nopolisi', 'nopol', 'unit', 'unitgenset'];
-                // Tambahan Key untuk Site ID dan No Tiket
-                let keysSite = ['SiteID', 'Site_ID', 'ID_Site', 'Site'];
-                let keysTiket = ['NomorTiket', 'NoTiket', 'Tiket', 'Ticket'];
-
-                updateDropdownOptions('filter-mbp-periode', arr, keysPeriode, 'Semua Periode');
-                updateDropdownOptions('filter-mbp-nop', arr, keysNOP, 'Semua NOP');
-
-                const fP = document.getElementById('filter-mbp-periode').value;
-                const fN = document.getElementById('filter-mbp-nop').value;
-                
-                let filteredArr = arr.filter(d => {
-                    let p = extractStringValue(d, keysPeriode);
-                    let n = extractStringValue(d, keysNOP);
-                    return (fP === 'ALL' || p === fP) && (fN === 'ALL' || n === fN);
-                });
-
+<h3 class="font-bold mt-6">Rincian Per Tiket</h3>
+<div id="mbp-cards-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2"></div>
                 // Mapping Extractor
                 let tableData = filteredArr.map(d => {
                     let nop = extractStringValue(d, keysNOP);
@@ -898,17 +896,50 @@
         }
 
         // FUNGSI RENDER TABEL & ANALISA CARD MBP (DIOPTIMALKAN AGAR TIDAK LEMOT)
-        function renderMbpTableAndAnalysis(tableData) {
-            const tbody = document.getElementById('table-mbp-rh-new');
-            const analysisContainer = document.getElementById('mbp-analysis-container');
-            
-            if (!tbody || !analysisContainer) return;
+        function renderMBP() {
+    let arr = globalDataset['mbp-rh']; // Sesuaikan nama key dataset Anda
+    const fP = document.getElementById('filter-mbp-periode').value;
+    const fN = document.getElementById('filter-mbp-nop').value;
 
-            if (tableData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="11" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>`;
-                analysisContainer.innerHTML = `<div class="text-slate-400 text-sm font-semibold p-4 w-full text-center">Data tidak ditemukan.</div>`;
-                return;
-            }
+    // Filter data
+    let filtered = arr.filter(d => (fP === 'ALL' || d.Periode == fP) && (fN === 'ALL' || d.NOP == fN));
+
+    // Aggregasi untuk Tabel (Grouping per NOP)
+    let agg = {};
+    filtered.forEach(d => {
+        let nop = d.NOP || 'Unknown';
+        if(!agg[nop]) agg[nop] = { Revenue: 0, Anomali: 0, Verifikasi: 0 };
+        agg[nop].Revenue += (parseFloat(d.Revenue) || 0);
+        
+        let selisih = Math.abs((parseFloat(d.DeltaHour)||0) - (parseFloat(d.DeltaRH)||0));
+        if(selisih >= 1) agg[nop].Anomali += 1; else agg[nop].Verifikasi += 1;
+    });
+
+    // Isi Tabel Ringkasan
+    let tbody = document.getElementById('tbody-mbp-agg');
+    tbody.innerHTML = Object.keys(agg).map(k => `
+        <tr>
+            <td class="p-2 border">${k}</td>
+            <td class="p-2 border">Rp ${agg[k].Revenue.toLocaleString()}</td>
+            <td class="p-2 border">${agg[k].Anomali}</td>
+            <td class="p-2 border">${agg[k].Verifikasi}</td>
+        </tr>
+    `).join('');
+
+    // Isi Kartu Detail
+    let container = document.getElementById('mbp-cards-container');
+    container.innerHTML = filtered.map(d => `
+        <div class="bg-white p-4 rounded-xl border shadow-sm text-xs space-y-1">
+            <p class="font-bold text-indigo-600">${d.NOP || '-'}</p>
+            <p>Site ID: <b>${d.SiteID || '-'}</b></p>
+            <p>Ticket: <b>${d.NomorTiket || '-'}</b></p>
+            <p>PIC: <b>${d.PICTakeOverTicket || '-'}</b></p>
+            <div class="mt-2 pt-2 border-t ${Math.abs((parseFloat(d.DeltaHour)||0) - (parseFloat(d.DeltaRH)||0)) >= 1 ? 'text-red-500' : 'text-green-600'}">
+                Status: ${Math.abs((parseFloat(d.DeltaHour)||0) - (parseFloat(d.DeltaRH)||0)) >= 1 ? 'Anomali' : 'Terverifikasi'}
+            </div>
+        </div>
+    `).join('');
+}
 
             // Build HTML Table Head (Site ID dan Nomor Tiket ditambahkan)
             let th = `<thead class="bg-slate-100/50 border-b border-slate-200">
