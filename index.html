@@ -23,11 +23,11 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.2s, box-shadow 0.2s; /* Dioptimalkan */
         }
         .premium-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.15), 0 1px 5px rgba(0, 0, 0, 0.03);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.1);
         }
         .active-menu-3d {
             background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%) !important;
@@ -43,22 +43,22 @@
             background-size: 1em;
         }
 
-        .view-pane { animation: fadeInPage 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .view-pane { animation: fadeInPage 0.3s ease forwards; }
         @keyframes fadeInPage {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .logo-glow { animation: logoPulse 2s infinite ease-in-out; }
+        .logo-glow { animation: logoPulse 3s infinite ease-in-out; }
         @keyframes logoPulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.3)); }
-            50% { transform: scale(1.03); filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.6)); }
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.2)); }
+            50% { filter: drop-shadow(0 0 25px rgba(99, 102, 241, 0.4)); }
         }
     </style>
 </head>
 <body class="bg-[#f8fafc] text-slate-800 overflow-hidden h-screen flex">
 
-    <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
+    <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-500 ease-in-out">
         <div class="text-center space-y-6 max-w-md px-6">
             <div class="logo-glow bg-white p-6 rounded-2xl inline-block shadow-[0_20px_50px_rgba(79,70,229,0.3)] border border-slate-800">
                 <div class="flex flex-col items-center justify-center">
@@ -73,7 +73,7 @@
             <div class="w-48 h-1.5 bg-slate-900 rounded-full mx-auto overflow-hidden relative">
                 <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 w-full rounded-full absolute -translateX-full animate-[loadingBar_2s_infinite_ease-in-out]"></div>
             </div>
-            <p class="text-slate-500 text-[11px] font-medium tracking-wider">Menghubungkan ke Database Live Spreadsheet...</p>
+            <p class="text-slate-500 text-[11px] font-medium tracking-wider">Memuat Database (Mode Cepat)...</p>
         </div>
     </div>
     
@@ -98,24 +98,24 @@
             
             <div id="main-analyzer-container" class="space-y-2.5 transition-all duration-300">
                 <a href="#excel-analyzer" id="btn-excel-analyzer" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-file-excel text-lg w-5 text-center text-slate-500 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300"></i><span>Analisa Drop Excel</span></div>
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-file-excel text-lg w-5 text-center text-slate-500 group-hover:text-emerald-400 transition-all duration-300"></i><span>Analisa Drop Excel</span></div>
                 </a>
                 <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-wallet text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring SVA (Profit)</span></div>
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-wallet text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Monitoring SVA (Profit)</span></div>
                 </a>
                 <a href="#kpi" id="btn-kpi" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gauge-high text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data KPI</span></div>
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gauge-high text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Data KPI</span></div>
                 </a>
                 <a href="#operational" id="btn-operational" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gears text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Operational</span></div>
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gears text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Data Operational</span></div>
                 </a>
                 <a href="#sdm" id="btn-sdm" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-users-gear text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data SDM & Tools</span></div>
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-users-gear text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Data SDM & Tools</span></div>
                 </a>
 
                 <div class="space-y-1">
                     <button onclick="toggleSubmenu('submenu-pjb-aging')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-clock-history text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data PJB Aging</span></div>
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-clock-history text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Data PJB Aging</span></div>
                         <i id="arrow-submenu-pjb-aging" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-pjb-aging" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
@@ -126,12 +126,12 @@
                 </div>
 
                 <a href="#project" id="btn-project" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-diagram-project text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Project</span></div>
+                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-diagram-project text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Data Project</span></div>
                 </a>
 
                 <div class="space-y-1">
                     <button onclick="toggleSubmenu('submenu-pm')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-screwdriver-wrench text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring PM</span></div>
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-screwdriver-wrench text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Monitoring PM</span></div>
                         <i id="arrow-submenu-pm" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-pm" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
@@ -142,7 +142,7 @@
 
                 <div class="space-y-1">
                     <button onclick="toggleSubmenu('submenu-mbp')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gas-pump text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring MBP</span></div>
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gas-pump text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Monitoring MBP</span></div>
                         <i id="arrow-submenu-mbp" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-mbp" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
@@ -153,7 +153,7 @@
 
                 <div class="space-y-1">
                     <button onclick="toggleSubmenu('submenu-asset')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-car text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Asset KUT System</span></div>
+                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-car text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 transition-all duration-300"></i><span>Asset KUT System</span></div>
                         <i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
@@ -272,6 +272,46 @@
                 </div>
             </section>
 
+            <section id="view-mbp-rh" class="view-pane space-y-8 hidden">
+                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white flex-wrap gap-4">
+                    <div class="flex items-center space-x-2 text-indigo-600">
+                        <i class="fa-solid fa-filter text-sm"></i>
+                        <span class="text-xs font-bold uppercase tracking-wider">Filter Data MBP</span>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                        <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua Periode</option></select>
+                        <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua NOP</option></select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="premium-card p-6 rounded-2xl">
+                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Grafik Bar Chart Revenue MBP</h4>
+                        <div class="w-full h-80"><canvas id="chart-mbp-revenue"></canvas></div>
+                    </div>
+                    <div class="premium-card p-6 rounded-2xl">
+                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-code-compare mr-2 text-amber-500"></i>Perbandingan Delta Hour vs Delta RH</h4>
+                        <div class="w-full h-80"><canvas id="chart-mbp-delta"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="premium-card p-6 rounded-2xl bg-white shadow-md">
+                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500"></i> Rincian Analisa Kewajaran Delta</h4>
+                    <p class="text-xs text-slate-500 mb-4">*Jika terdeteksi selisih (Delta Hour - Delta RH) &ge; 1 maka berstatus <span class="text-rose-600 font-bold">Anomali</span>. Jika &lt; 1 berstatus <span class="text-emerald-600 font-bold">Terverifikasi</span>.</p>
+                    <div id="mbp-analysis-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto p-2 border border-slate-100 rounded-xl bg-slate-50/50">
+                        </div>
+                </div>
+
+                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
+                    <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50"><h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Tabel Master MBP</h4></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-rh-new"></table>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi BBM per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-bbm"></table></div></div></section>
+            
             <section id="view-asset-master" class="view-pane space-y-8 hidden">
                 <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
                     <div>
@@ -366,45 +406,6 @@
             
             <section id="view-pm-curvas" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Skala Minggu Progress</span></div><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select w-48 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-area mr-2 text-emerald-500"></i>S-Curve Kumulatif Progress Proyek Pemeliharaan</h4><div class="w-full h-[420px]"><canvas id="chart-pm-curvas"></canvas></div></div></section>
             
-            <section id="view-mbp-rh" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white flex-wrap gap-4">
-                    <div class="flex items-center space-x-2 text-indigo-600">
-                        <i class="fa-solid fa-filter text-sm"></i>
-                        <span class="text-xs font-bold uppercase tracking-wider">Filter Data MBP</span>
-                    </div>
-                    <div class="flex gap-2 flex-wrap">
-                        <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua Periode</option></select>
-                        <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua NOP</option></select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="premium-card p-6 rounded-2xl">
-                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Grafik Bar Chart Revenue MBP</h4>
-                        <div class="w-full h-80"><canvas id="chart-mbp-revenue"></canvas></div>
-                    </div>
-                    <div class="premium-card p-6 rounded-2xl">
-                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-code-compare mr-2 text-amber-500"></i>Perbandingan Delta Hour vs Delta RH</h4>
-                        <div class="w-full h-80"><canvas id="chart-mbp-delta"></canvas></div>
-                    </div>
-                </div>
-
-                <div class="premium-card p-6 rounded-2xl bg-white shadow-md">
-                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500"></i> Rincian Analisa Kewajaran Delta</h4>
-                    <p class="text-xs text-slate-500 mb-4">*Jika terdeteksi selisih (Delta Hour - Delta RH) &ge; 1 maka berstatus <span class="text-rose-600 font-bold">Anomali</span>. Jika &lt; 1 berstatus <span class="text-emerald-600 font-bold">Terverifikasi</span>.</p>
-                    <div id="mbp-analysis-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto p-2 border border-slate-100 rounded-xl bg-slate-50/50">
-                        </div>
-                </div>
-
-                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
-                    <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50"><h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Tabel Master MBP</h4></div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-rh-new"></table>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi BBM per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-bbm"></table></div></div></section>
             <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Lokasi Perawatan</span></div><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-screwdriver-wrench mr-2 text-pink-500"></i>Grafik Log Alokasi Pendanaan Perawatan</h4><div class="w-full h-80"><canvas id="chart-asset-service"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-service"></table></div></div></section>
             <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white"><div class="flex items-center space-x-2 text-indigo-600"><i class="fa-solid fa-filter text-sm"></i><span class="text-xs font-bold uppercase tracking-wider">Filter Kategori Depresiasi</span></div><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select w-52 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"></select></div><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-calculator mr-2 text-purple-500"></i>Garis Penyusutan Nilai Buku Aset Inventaris</h4><div class="w-full h-80"><canvas id="chart-asset-depresiasi"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-depresiasi"></table></div></div></section>
             <section id="view-asset-sewa" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl bg-white"><h3 class="text-sm font-bold text-slate-800">Pembiayaan Unit Sewa Vendor</h3></div></section>
@@ -429,7 +430,7 @@
             'project': 'Data Project > Monitoring Proyek Terpadu',
             'pm-target': 'Monitoring PM > Analisa Target Kerja',
             'pm-curvas': 'Monitoring PM > S-Curve Progress',
-            'mbp-rh': 'Monitoring MBP > Analisa Delta & Revenue', // DIUBAH
+            'mbp-rh': 'Monitoring MBP > Analisa Delta & Revenue',
             'mbp-bbm': 'Monitoring MBP > Log Analisa Konsumsi BBM',
             'asset-master': 'Asset KUT System > Data Master Mobil',
             'asset-service': 'Asset KUT System > Log Biaya Service',
@@ -510,7 +511,7 @@
             } finally {
                 if(splash) { 
                     splash.classList.add('opacity-0'); 
-                    setTimeout(() => splash.remove(), 700); 
+                    setTimeout(() => splash.remove(), 500); 
                 }
                 if(icon) icon.classList.remove('animate-spin');
                 
@@ -735,12 +736,15 @@
                 else buildTable('table-sdm', ['Keterangan'], []);
             }
 
-            // 3. MBP (MONITORING DATA DELTA & REVENUE BARU)
+            // 3. MBP (MONITORING DATA DELTA & REVENUE TERBARU)
             else if (currentView === 'mbp-rh') {
                 let arr = data['mbp-rh'] || [];
 
                 let keysPeriode = ['Periode', 'bulan', 'tanggal', 'date'];
                 let keysNOP = ['NOP', 'nopolisi', 'nopol', 'unit', 'unitgenset'];
+                // Tambahan Key untuk Site ID dan No Tiket
+                let keysSite = ['SiteID', 'Site_ID', 'ID_Site', 'Site'];
+                let keysTiket = ['NomorTiket', 'NoTiket', 'Tiket', 'Ticket'];
 
                 updateDropdownOptions('filter-mbp-periode', arr, keysPeriode, 'Semua Periode');
                 updateDropdownOptions('filter-mbp-nop', arr, keysNOP, 'Semua NOP');
@@ -757,6 +761,8 @@
                 // Mapping Extractor
                 let tableData = filteredArr.map(d => {
                     let nop = extractStringValue(d, keysNOP);
+                    let site = extractStringValue(d, keysSite);
+                    let tiket = extractStringValue(d, keysTiket);
                     let periode = extractStringValue(d, keysPeriode);
                     let dHour = extractValue(d, ['DeltaHour', 'Delta_Hour', 'DH', 'Hour']);
                     let dRH = extractValue(d, ['DeltaRH', 'Delta_RH', 'DRH', 'RH']);
@@ -764,12 +770,13 @@
                     let liter = extractValue(d, ['Liter', 'Konsumsi', 'BBM']);
                     let rev = extractValue(d, ['Revenue', 'Pendapatan', 'Omset']);
 
-                    // LOGIKA ANALISA SELISIH (ANOMALI / TERVERIFIKASI)
                     let selisih = Math.abs(dHour - dRH);
                     let statusText = selisih >= 1 ? 'Anomali' : 'Terverifikasi';
                     
                     return {
                         NOP: nop,
+                        Site_ID: site,
+                        Nomor_Tiket: tiket,
                         Periode: periode,
                         Delta_Hour: dHour,
                         Delta_RH: dRH,
@@ -890,7 +897,7 @@
             }
         }
 
-        // FUNGSI RENDER TABEL & ANALISA CARD MBP (ANIMASI & IKON)
+        // FUNGSI RENDER TABEL & ANALISA CARD MBP (DIOPTIMALKAN AGAR TIDAK LEMOT)
         function renderMbpTableAndAnalysis(tableData) {
             const tbody = document.getElementById('table-mbp-rh-new');
             const analysisContainer = document.getElementById('mbp-analysis-container');
@@ -898,15 +905,17 @@
             if (!tbody || !analysisContainer) return;
 
             if (tableData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="11" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>`;
                 analysisContainer.innerHTML = `<div class="text-slate-400 text-sm font-semibold p-4 w-full text-center">Data tidak ditemukan.</div>`;
                 return;
             }
 
-            // Build HTML Table Head
+            // Build HTML Table Head (Site ID dan Nomor Tiket ditambahkan)
             let th = `<thead class="bg-slate-100/50 border-b border-slate-200">
                 <tr class="text-slate-500 text-[10px] uppercase tracking-wider font-bold text-left">
                     <th class="p-4">NOP</th>
+                    <th class="p-4">Site ID</th>
+                    <th class="p-4">Nomor Tiket</th>
                     <th class="p-4">Periode</th>
                     <th class="p-4">Delta Hour</th>
                     <th class="p-4">Delta RH</th>
@@ -924,15 +933,17 @@
                 let isAnomali = r.Status === 'Anomali';
                 let selisihFixed = parseFloat(r.Selisih).toFixed(2);
                 
-                // Konfigurasi Badge dan Animasi dari FontAwesome & Tailwind
-                let badgeClass = isAnomali ? 'bg-rose-100 text-rose-700 border-rose-200 shadow-[0_0_10px_rgba(225,29,72,0.3)] animate-pulse' : 'bg-emerald-100 text-emerald-700 border-emerald-200';
-                let iconClass = isAnomali ? 'fa-triangle-exclamation fa-beat-fade' : 'fa-circle-check fa-bounce';
+                // Menghapus class .animate-pulse, .fa-beat-fade, .fa-bounce agar render Vercel tidak lag
+                let badgeClass = isAnomali ? 'bg-rose-100 text-rose-700 border-rose-200' : 'bg-emerald-100 text-emerald-700 border-emerald-200';
+                let iconClass = isAnomali ? 'fa-triangle-exclamation' : 'fa-circle-check';
                 
                 let statusBadge = `<span class="px-2.5 py-1.5 border rounded-lg text-[10px] font-bold flex items-center justify-center gap-1.5 w-max ${badgeClass}"><i class="fa-solid ${iconClass}"></i> ${r.Status}</span>`;
 
                 // Render Table Row
                 th += `<tr class="hover:bg-slate-50/80 transition-colors">
                     <td class="p-4 font-bold text-slate-700">${r.NOP}</td>
+                    <td class="p-4 text-slate-600">${r.Site_ID}</td>
+                    <td class="p-4 font-mono text-xs text-indigo-500">${r.Nomor_Tiket}</td>
                     <td class="p-4 font-medium text-slate-500">${r.Periode}</td>
                     <td class="p-4">${r.Delta_Hour}</td>
                     <td class="p-4">${r.Delta_RH}</td>
@@ -943,11 +954,11 @@
                     <td class="p-4">${statusBadge}</td>
                 </tr>`;
 
-                // Render Analysis Card
+                // Render Analysis Card (Sederhana & Cepat)
                 analysisHTML += `
-                <div class="border rounded-xl p-4 flex flex-col gap-3 transition-transform hover:scale-105 shadow-sm ${isAnomali ? 'bg-rose-50 border-rose-200' : 'bg-white border-slate-200'}">
+                <div class="border rounded-xl p-4 flex flex-col gap-3 shadow-sm ${isAnomali ? 'bg-rose-50 border-rose-200' : 'bg-white border-slate-200'}">
                     <div class="flex justify-between items-start">
-                        <span class="font-extrabold text-xs ${isAnomali ? 'text-rose-900' : 'text-slate-800'}">${r.NOP}</span>
+                        <span class="font-extrabold text-xs ${isAnomali ? 'text-rose-900' : 'text-slate-800'}">${r.NOP} <span class="text-slate-400 font-normal">(${r.Site_ID})</span></span>
                         <span class="text-[10px] font-bold px-2 py-1 bg-slate-100 rounded-md text-slate-500">${r.Periode}</span>
                     </div>
                     <div class="flex justify-between text-xs mt-1 bg-white p-2 rounded-lg border border-slate-100">
@@ -969,10 +980,12 @@
             analysisContainer.innerHTML = analysisHTML;
         }
 
-        // FUNGSI RENDER CHART MBP
+        // FUNGSI RENDER CHART MBP (HANYA PERIODE DI SUMBU X)
         function renderMbpCharts(tableData) {
-            // Kita gabungkan NOP & Periode agar label grafik lebih jelas jika tidak ada filter yg aktif
-            let labels = tableData.map(t => `${t.NOP} (${t.Periode})`);
+            
+            // Perubahan sesuai request: Label bawah grafik hanya Periode
+            let labels = tableData.map(t => t.Periode); 
+            
             let revenues = tableData.map(t => t.Revenue);
             let dHours = tableData.map(t => t.Delta_Hour);
             let dRHs = tableData.map(t => t.Delta_RH);
