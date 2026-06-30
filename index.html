@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT Kinarya Utama Teknik - Regional Kalimantan Enterprise Dashboard</title>
+    <title>PT Kinarya Utama Teknik - Enterprise Dashboard</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -12,51 +13,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
+        /* Desain Card Utama */
         .premium-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
         .premium-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.15), 0 1px 5px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.15);
         }
+        
+        /* Efek Menu Aktif */
         .active-menu-3d {
             background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%) !important;
             color: white !important;
-            box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4);
             transform: translateX(6px);
+            font-weight: 700;
         }
+        
+        /* Dropdown Filter Custom */
         .filter-select {
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 0.75rem center;
             background-size: 1em;
         }
 
-        .view-pane { animation: fadeInPage 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        /* Animasi Transisi Halaman */
+        .view-pane { display: none; }
+        .view-pane.active { 
+            display: block; 
+            animation: fadeInPage 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; 
+        }
+        
         @keyframes fadeInPage {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Animasi Logo Splash Screen */
         .logo-glow { animation: logoPulse 2s infinite ease-in-out; }
         @keyframes logoPulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.3)); }
-            50% { transform: scale(1.03); filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.6)); }
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.2)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.5)); }
+        }
+        @keyframes loadingBar { 
+            0% { left: -100%; right: 100%; } 
+            50% { left: 0%; right: 0%; } 
+            100% { left: 100%; right: -100%; } 
         }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-800 overflow-hidden h-screen flex">
+<body class="text-slate-800 overflow-hidden h-screen flex">
 
     <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
         <div class="text-center space-y-6 max-w-md px-6">
@@ -76,8 +95,6 @@
             <p class="text-slate-500 text-[11px] font-medium tracking-wider">Menghubungkan ke Database Live Spreadsheet...</p>
         </div>
     </div>
-    
-    <style>@keyframes loadingBar { 0% { left: -100%; right: 100%; } 50% { left: 0%; right: 0%; } 100% { left: 100%; right: -100%; } }</style>
 
     <aside id="sidebar" class="w-72 bg-slate-950 text-slate-400 flex flex-col h-full flex-shrink-0 shadow-[4px_0_25px_rgba(0,0,0,0.15)] z-20 border-r border-slate-900 transition-all duration-300 overflow-hidden">
         <div class="p-6 flex items-center space-x-3.5 border-b border-slate-900 bg-slate-950 whitespace-nowrap">
@@ -91,295 +108,281 @@
         </div>
 
         <nav class="flex-1 overflow-y-auto p-4 space-y-2.5 text-sm whitespace-nowrap">
-            <button onclick="toggleSection('main-analyzer-container', 'arrow-main-analyzer')" class="w-full flex items-center justify-between px-3 py-2 text-[10px] font-bold text-slate-500 hover:text-indigo-400 uppercase tracking-widest transition-colors duration-200 group focus:outline-none">
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-layer-group text-slate-600 group-hover:text-indigo-400"></i><span>Main Analyzer</span></div>
+            <button onclick="toggleSection('main-analyzer-container', 'arrow-main-analyzer')" class="w-full flex items-center justify-between px-3 py-2 text-[10px] font-bold text-slate-500 hover:text-indigo-400 uppercase tracking-widest transition-colors duration-200 focus:outline-none">
+                <div class="flex items-center space-x-2"><i class="fa-solid fa-layer-group text-slate-600"></i><span>Main Analyzer</span></div>
                 <i id="arrow-main-analyzer" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
             </button>
             
             <div id="main-analyzer-container" class="space-y-2.5 transition-all duration-300">
-                <a href="#excel-analyzer" id="btn-excel-analyzer" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-file-excel text-lg w-5 text-center text-slate-500 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300"></i><span>Analisa Drop Excel</span></div>
+                <a href="#excel-analyzer" id="btn-excel-analyzer" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white">
+                    <i class="fa-solid fa-file-excel text-lg w-8 text-slate-500"></i><span>Analisa Drop Excel</span>
                 </a>
-                <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-wallet text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring SVA (Profit)</span></div>
+                <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white">
+                    <i class="fa-solid fa-wallet text-lg w-8 text-slate-500"></i><span>Monitoring SVA (Profit)</span>
                 </a>
-                <a href="#kpi" id="btn-kpi" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gauge-high text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data KPI</span></div>
+                <a href="#kpi" id="btn-kpi" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white">
+                    <i class="fa-solid fa-gauge-high text-lg w-8 text-slate-500"></i><span>Data KPI</span>
                 </a>
-                <a href="#operational" id="btn-operational" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gears text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Operational</span></div>
+                <a href="#operational" id="btn-operational" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white">
+                    <i class="fa-solid fa-gears text-lg w-8 text-slate-500"></i><span>Data Operational</span>
                 </a>
-                <a href="#sdm" id="btn-sdm" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-users-gear text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data SDM & Tools</span></div>
+                <a href="#sdm" id="btn-sdm" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white">
+                    <i class="fa-solid fa-users-gear text-lg w-8 text-slate-500"></i><span>Data SDM & Tools</span>
                 </a>
 
                 <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-pjb-aging')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-clock-history text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data PJB Aging</span></div>
+                    <button onclick="toggleSubmenu('submenu-pjb-aging')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white focus:outline-none">
+                        <div class="flex items-center"><i class="fa-solid fa-clock-history text-lg w-8 text-slate-500"></i><span>Data PJB Aging</span></div>
                         <i id="arrow-submenu-pjb-aging" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-pjb-aging" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#aging-sva" id="btn-aging-sva" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-money-check-dollar mr-2 text-[10px] text-slate-600"></i>Aging UM SVA</a>
-                        <a href="#aging-ops" id="btn-aging-ops" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-briefcase mr-2 text-[10px] text-slate-600"></i>Aging UM OPS</a>
-                        <a href="#aging-lainnya" id="btn-aging-lainnya" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-ellipsis mr-2 text-[10px] text-slate-600"></i>Aging UM Lainnya</a>
+                        <a href="#aging-sva" id="btn-aging-sva" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-money-check-dollar mr-2"></i>Aging UM SVA</a>
+                        <a href="#aging-ops" id="btn-aging-ops" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-briefcase mr-2"></i>Aging UM OPS</a>
+                        <a href="#aging-lainnya" id="btn-aging-lainnya" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-ellipsis mr-2"></i>Aging UM Lainnya</a>
                     </div>
                 </div>
 
-                <a href="#project" id="btn-project" class="menu-btn w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                    <div class="flex items-center space-x-3.5"><i class="fa-solid fa-diagram-project text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Data Project</span></div>
+                <a href="#project" id="btn-project" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white">
+                    <i class="fa-solid fa-diagram-project text-lg w-8 text-slate-500"></i><span>Data Project</span>
                 </a>
 
                 <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-pm')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-screwdriver-wrench text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring PM</span></div>
+                    <button onclick="toggleSubmenu('submenu-pm')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white focus:outline-none">
+                        <div class="flex items-center"><i class="fa-solid fa-screwdriver-wrench text-lg w-8 text-slate-500"></i><span>Monitoring PM</span></div>
                         <i id="arrow-submenu-pm" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-pm" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#pm-target" id="btn-pm-target" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-bullseye mr-2 text-[10px] text-slate-600"></i>Target & Pencapaian</a>
-                        <a href="#pm-curvas" id="btn-pm-curvas" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-chart-line mr-2 text-[10px] text-slate-600"></i>Curva S Progress</a>
+                        <a href="#pm-target" id="btn-pm-target" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-bullseye mr-2"></i>Target & Pencapaian</a>
+                        <a href="#pm-curvas" id="btn-pm-curvas" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-chart-line mr-2"></i>Curva S Progress</a>
                     </div>
                 </div>
 
                 <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-mbp')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-gas-pump text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Monitoring MBP</span></div>
+                    <button onclick="toggleSubmenu('submenu-mbp')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white focus:outline-none">
+                        <div class="flex items-center"><i class="fa-solid fa-gas-pump text-lg w-8 text-slate-500"></i><span>Monitoring MBP</span></div>
                         <i id="arrow-submenu-mbp" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-mbp" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#mbp-rh" id="btn-mbp-rh" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-[10px] text-slate-600"></i>Analisa Delta & Revenue</a>
-                        <a href="#mbp-bbm" id="btn-mbp-bbm" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-droplet mr-2 text-[10px] text-slate-600"></i>Analisa Konsumsi BBM</a>
+                        <a href="#mbp-rh" id="btn-mbp-rh" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-magnifying-glass-chart mr-2"></i>Analisa Delta & Revenue</a>
+                        <a href="#mbp-bbm" id="btn-mbp-bbm" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-droplet mr-2"></i>Analisa Konsumsi BBM</a>
                     </div>
                 </div>
 
                 <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-asset')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white group">
-                        <div class="flex items-center space-x-3.5"><i class="fa-solid fa-car text-lg w-5 text-center text-slate-500 group-hover:text-indigo-400 group-hover:scale-110 transition-all duration-300"></i><span>Asset KUT System</span></div>
+                    <button onclick="toggleSubmenu('submenu-asset')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-slate-900 hover:text-white focus:outline-none">
+                        <div class="flex items-center"><i class="fa-solid fa-car text-lg w-8 text-slate-500"></i><span>Asset KUT System</span></div>
                         <i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
                     </button>
                     <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-1.5 rounded-xl border-l-2 border-slate-800 ml-4 hidden transition-all duration-300">
-                        <a href="#asset-master" id="btn-asset-master" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-database mr-2 text-[10px] text-slate-600"></i>Data Master Mobil</a>
-                        <a href="#asset-genset" id="btn-asset-genset" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-server mr-2 text-[10px] text-slate-600"></i>Data Master Genset</a>
-                        <a href="#asset-service" id="btn-asset-service" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-wrench mr-2 text-[10px] text-slate-600"></i>Biaya Perawatan Service</a>
-                        <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-arrow-down-line mr-2 text-[10px] text-slate-600"></i>Depresiasi Nilai Buku</a>
-                        <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn w-full text-left px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white block hover:translate-x-1 transition-all duration-300"><i class="fa-solid fa-handshake mr-2 text-[10px] text-slate-600"></i>Biaya Sewa Vendor</a>
+                        <a href="#asset-master" id="btn-asset-master" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-database mr-2"></i>Data Master Mobil</a>
+                        <a href="#asset-genset" id="btn-asset-genset" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-server mr-2"></i>Data Master Genset</a>
+                        <a href="#asset-service" id="btn-asset-service" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-wrench mr-2"></i>Biaya Perawatan Service</a>
+                        <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-arrow-down-line mr-2"></i>Depresiasi Nilai Buku</a>
+                        <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:translate-x-1 transition-all"><i class="fa-solid fa-handshake mr-2"></i>Biaya Sewa Vendor</a>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <div class="p-4 border-t border-slate-900 bg-slate-950 text-xs flex items-center justify-between whitespace-nowrap">
-            <span class="text-slate-500 font-medium">Data State:</span>
-            <span id="data-status-badge" class="px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg text-[10px] font-bold tracking-wider uppercase border border-amber-500/20 shadow-md">Syncing</span>
+        <div class="p-4 border-t border-slate-900 bg-slate-950 text-xs flex justify-between items-center">
+            <span class="text-slate-500 font-medium">Status Data:</span>
+            <span id="data-status-badge" class="px-2 py-1 rounded bg-amber-500/20 text-amber-400 font-bold tracking-wide border border-amber-500/30">Syncing...</span>
         </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-full overflow-hidden">
-        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-8 flex items-center justify-between flex-shrink-0 z-10 shadow-[0_2px_15px_rgba(0,0,0,0.02)]">
-            <div class="flex items-center space-x-2.5">
-                <button onclick="toggleSidebar()" class="mr-2 text-slate-600 hover:text-indigo-600 p-2 rounded-xl hover:bg-slate-100 transition-all focus:outline-none"><i id="sidebar-toggle-icon" class="fa-solid fa-bars text-lg"></i></button>
-                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">PT KUT Portal</span>
+        <header class="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between flex-shrink-0 z-10 shadow-sm">
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleSidebar()" class="text-slate-500 hover:text-indigo-600 focus:outline-none p-2 rounded-xl hover:bg-slate-100 transition-all"><i id="sidebar-toggle-icon" class="fa-solid fa-bars text-lg"></i></button>
+                <div class="h-6 w-px bg-slate-300"></div>
+                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">KUT Portal</span>
                 <span class="text-slate-300 text-sm">/</span>
-                <span id="breadcrumb-current" class="text-slate-900 font-bold text-base tracking-tight">Monitoring SVA</span>
+                <span id="breadcrumb-current" class="text-slate-800 font-extrabold text-sm uppercase tracking-wide">Dashboard Utama</span>
             </div>
             
-            <div class="flex items-center space-x-5">
-                <button onclick="reloadData()" class="px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white text-xs font-bold rounded-lg transition-all shadow-sm flex items-center gap-2"><i id="sync-icon" class="fa-solid fa-arrows-rotate"></i> Sinkronisasi Live</button>
-                <div class="h-6 w-px bg-slate-200"></div>
+            <div class="flex items-center space-x-6">
+                <button onclick="reloadData()" class="px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white text-xs font-bold rounded-lg transition-all shadow-sm flex items-center gap-2 border border-indigo-100">
+                    <i id="sync-icon" class="fa-solid fa-arrows-rotate"></i> Sinkronisasi Live
+                </button>
                 <div class="flex items-center space-x-3">
                     <div class="text-right">
                         <p class="text-xs font-bold text-slate-800 leading-tight">Financial Operator</p>
                         <p class="text-[10px] text-indigo-500 font-bold uppercase tracking-wider">Kalimantan Center</p>
                     </div>
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-200 to-slate-300 flex items-center justify-between p-2.5 text-slate-600 font-bold shadow-inner"><i class="fa-solid fa-user-tie text-lg"></i></div>
+                    <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 border border-slate-200">
+                        <i class="fa-solid fa-user-tie text-lg"></i>
+                    </div>
                 </div>
             </div>
         </header>
 
         <div class="flex-1 overflow-y-auto p-8 space-y-8" id="dashboard-content">
             
-            <section id="view-excel-analyzer" class="view-pane space-y-8 hidden">
+            <section id="view-excel-analyzer" class="view-pane space-y-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="space-y-6 flex flex-col">
-                        <div id="drop-zone" class="premium-card p-10 text-center cursor-pointer border-dashed border-2 hover:border-indigo-500 bg-slate-50">
-                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-emerald-500 mb-3"></i>
-                            <p class="text-sm font-bold">Tarik & Lepas Excel</p>
+                        <div id="drop-zone" class="premium-card p-10 text-center cursor-pointer border-dashed border-2 hover:border-indigo-500 bg-slate-50 transition-colors">
+                            <i class="fa-solid fa-cloud-arrow-up text-5xl text-emerald-500 mb-4"></i>
+                            <p class="text-sm font-bold text-slate-700">Tarik & Lepas File Excel Di Sini</p>
+                            <p class="text-xs text-slate-400 mt-2">Mendukung format .xlsx, .xls, .csv</p>
                             <input type="file" id="excel-file-input" class="hidden" accept=".xlsx, .xls, .csv">
-                            <div id="file-info-zone" class="hidden text-xs mt-2 text-emerald-700 font-bold bg-emerald-50 py-1.5 rounded"></div>
+                            <div id="file-info-zone" class="hidden text-xs mt-4 text-emerald-700 font-bold bg-emerald-50 py-2 border border-emerald-200 rounded-lg"></div>
                         </div>
-                        <div class="premium-card p-6 rounded-2xl bg-white flex-1 flex flex-col">
+                        <div class="premium-card p-6 flex-1 bg-white">
                             <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-brain mr-2 text-indigo-500"></i>Kalkulasi & Kesimpulan</h4>
-                            <div id="excel-analysis-text" class="text-xs text-slate-500 space-y-3 leading-relaxed flex-1 flex items-center justify-center text-center italic">Silakan jatuhkan berkas Excel Anda di atas.</div>
+                            <div id="excel-analysis-text" class="text-xs text-slate-500 space-y-3 flex-1 flex items-center justify-center text-center italic h-full">Silakan jatuhkan berkas Excel Anda di atas untuk memulai analisa otomatis.</div>
                         </div>
                     </div>
-                    <div class="premium-card p-6 rounded-2xl bg-white flex flex-col min-h-[480px]">
+                    <div class="premium-card p-6 flex flex-col min-h-[400px] bg-white">
                         <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Visualisasi Komparasi Pengeluaran vs Pendapatan</h4>
-                        <div class="w-full flex-1 relative flex items-center justify-center"><canvas id="chart-excel-comparison"></canvas></div>
+                        <div class="w-full flex-1 relative"><canvas id="chart-excel-comparison"></canvas></div>
                     </div>
                 </div>
             </section>
 
-            <section id="view-sva" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white flex-wrap gap-4">
-                    <div class="flex items-center space-x-2 text-indigo-600">
-                        <i class="fa-solid fa-filter text-sm"></i>
-                        <span class="text-xs font-bold uppercase tracking-wider">Filter Analisa Keuangan</span>
-                    </div>
-                    <div class="flex gap-2 flex-wrap">
-                        <select id="filter-sva-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua NOP</option></select>
-                        <select id="filter-sva-tgl" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua Tanggal</option></select>
-                        <select id="filter-sva-bln" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Semua Bulan</option></select>
-                        <select id="filter-sva-stts" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-3 py-2 pr-8 focus:outline-none"><option value="ALL">✨ Status Tiket</option></select>
-                    </div>
+            <section id="view-sva" class="view-pane space-y-8">
+                <div class="premium-card p-5 flex gap-4 flex-wrap items-center bg-white border-l-4 border-l-indigo-500">
+                    <span class="text-xs font-extrabold text-indigo-700 uppercase tracking-widest"><i class="fa-solid fa-filter mr-2"></i>Filter Keuangan</span>
+                    <select id="filter-sva-nop" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-indigo-500"><option value="ALL">Semua NOP</option></select>
+                    <select id="filter-sva-tgl" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-indigo-500"><option value="ALL">Semua Tanggal</option></select>
+                    <select id="filter-sva-bln" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-indigo-500"><option value="ALL">Semua Bulan</option></select>
+                    <select id="filter-sva-stts" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-indigo-500"><option value="ALL">Status Tiket</option></select>
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Revenue (H)</p><h3 id="sva-kpi-1" class="text-xl font-extrabold text-slate-900 mt-2">Rp 0</h3></div><div class="bg-blue-50 p-3 rounded-xl text-blue-600"><i class="fa-solid fa-money-bill-trend-up text-lg"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Biaya (I)</p><h3 id="sva-kpi-2" class="text-xl font-extrabold text-rose-600 mt-2">Rp 0</h3></div><div class="bg-rose-50 p-3 rounded-xl text-rose-600"><i class="fa-solid fa-wallet text-lg"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Pengembalian (J)</p><h3 id="sva-kpi-3" class="text-xl font-extrabold text-amber-600 mt-2">Rp 0</h3></div><div class="bg-amber-50 p-3 rounded-xl text-amber-600"><i class="fa-solid fa-sack-dollar text-lg"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Net Income (K)</p><h3 id="sva-kpi-4" class="text-xl font-extrabold text-emerald-600 mt-2">Rp 0</h3></div><div class="bg-emerald-50 p-3 rounded-xl text-emerald-600"><i class="fa-solid fa-building-columns text-lg"></i></div></div>
-                    <div class="premium-card p-6 rounded-2xl flex items-center justify-between"><div><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Net Profit Margin (L)</p><h3 id="sva-kpi-5" class="text-xl font-extrabold text-indigo-600 mt-2">0%</h3></div><div class="bg-indigo-50 p-3 rounded-xl text-indigo-600"><i class="fa-solid fa-percent text-lg"></i></div></div>
+                    <div class="premium-card p-6 flex items-center justify-between bg-white"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Revenue (H)</p><h3 id="sva-kpi-1" class="text-xl font-black text-slate-800 mt-1">Rp 0</h3></div><div class="bg-indigo-50 text-indigo-600 p-3.5 rounded-xl"><i class="fa-solid fa-money-bill-trend-up text-xl"></i></div></div>
+                    <div class="premium-card p-6 flex items-center justify-between bg-white"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Biaya (I)</p><h3 id="sva-kpi-2" class="text-xl font-black text-rose-600 mt-1">Rp 0</h3></div><div class="bg-rose-50 text-rose-600 p-3.5 rounded-xl"><i class="fa-solid fa-wallet text-xl"></i></div></div>
+                    <div class="premium-card p-6 flex items-center justify-between bg-white"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pengembalian (J)</p><h3 id="sva-kpi-3" class="text-xl font-black text-amber-600 mt-1">Rp 0</h3></div><div class="bg-amber-50 text-amber-600 p-3.5 rounded-xl"><i class="fa-solid fa-sack-dollar text-xl"></i></div></div>
+                    <div class="premium-card p-6 flex items-center justify-between bg-white"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Net Income (K)</p><h3 id="sva-kpi-4" class="text-xl font-black text-emerald-600 mt-1">Rp 0</h3></div><div class="bg-emerald-50 text-emerald-600 p-3.5 rounded-xl"><i class="fa-solid fa-building-columns text-xl"></i></div></div>
+                    <div class="premium-card p-6 flex items-center justify-between bg-white"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Profit Margin (L)</p><h3 id="sva-kpi-5" class="text-xl font-black text-indigo-600 mt-1">0%</h3></div><div class="bg-indigo-50 text-indigo-600 p-3.5 rounded-xl"><i class="fa-solid fa-percent text-xl"></i></div></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="premium-card p-6 rounded-2xl lg:col-span-2">
-                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6">
-                            <i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Tren Skala Keuangan & Revenue Bulanan
-                        </h4>
-                        <div class="w-full h-80"><canvas id="chart-sva-finance-line"></canvas></div>
-                    </div>
-                    <div class="premium-card p-6 rounded-2xl lg:col-span-1">
-                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4">
-                            <i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i>Proporsi Struktur Alokasi
-                        </h4>
-                        <div class="relative w-full h-72 flex items-center justify-center"><canvas id="chart-sva-finance-pie"></canvas></div>
-                    </div>
+                    <div class="premium-card p-6 lg:col-span-2 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Tren Keuangan Bulanan</h4><div class="w-full h-[300px]"><canvas id="chart-sva-finance-line"></canvas></div></div>
+                    <div class="premium-card p-6 lg:col-span-1 h-[400px] flex flex-col items-center bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4 w-full"><i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i>Proporsi Alokasi</h4><div class="w-full flex-1 relative"><canvas id="chart-sva-finance-pie"></canvas></div></div>
                 </div>
-                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
-                    <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50"><h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Laporan Neraca Analisa SVA</h4></div>
-                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-sva"></table></div>
+                
+                <div class="premium-card overflow-hidden bg-white">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Laporan Neraca SVA</h4></div>
+                    <div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-sva"></table></div>
                 </div>
             </section>
             
-            <section id="view-sdm" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-6 rounded-2xl bg-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-users-gear mr-2 text-indigo-500"></i>Data SDM & Tools</h3>
-                        <p class="text-xs text-slate-500 mt-1">Kalkulasi total tools berdasarkan Kepemilikan yang tertera di database.</p>
-                    </div>
-                </div>
-                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
-                    <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-sdm"></table></div>
-                </div>
+            <section id="view-sdm" class="view-pane space-y-8">
+                <div class="premium-card p-6 bg-white"><h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-users-gear mr-2 text-indigo-500"></i>Data SDM & Tools</h3><p class="text-xs text-slate-500 mt-2">Kalkulasi total tools berdasarkan kepemilikan.</p></div>
+                <div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap" id="table-sdm"></table></div>
             </section>
 
-            <section id="view-mbp-rh" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-4 rounded-xl flex items-center justify-between bg-white flex-wrap gap-4 border-l-4 border-l-emerald-500">
-                    <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-widest"><i class="fa-solid fa-bolt mr-1"></i> Mode Cepat (Delta RH > 0.3)</span>
-                    <div class="flex gap-2 flex-wrap">
-                        <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 focus:outline-none"><option value="ALL">✨ Semua Periode</option></select>
-                        <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 focus:outline-none"><option value="ALL">✨ Semua NOP (Kolom E)</option></select>
+            <section id="view-mbp-rh" class="view-pane space-y-8">
+                <div class="premium-card p-5 flex gap-4 flex-wrap items-center bg-white border-l-4 border-l-emerald-500">
+                    <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-widest"><i class="fa-solid fa-bolt mr-2"></i>Mode Cepat (Delta RH > 0.3)</span>
+                    <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-emerald-500"><option value="ALL">Semua Periode</option></select>
+                    <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-emerald-500"><option value="ALL">Semua NOP (Kolom E)</option></select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="premium-card p-6 flex items-center justify-between bg-white border-b-4 border-b-indigo-500">
+                        <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Revenue MBP (Filter)</p><h3 id="mbp-kpi-rev" class="text-2xl font-black text-indigo-700 mt-1">Rp 0</h3></div>
+                        <div class="bg-indigo-50 text-indigo-600 p-4 rounded-full"><i class="fa-solid fa-money-bill-wave text-2xl"></i></div>
+                    </div>
+                    <div class="premium-card p-6 flex items-center justify-between bg-white border-b-4 border-b-amber-500">
+                        <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Konsumsi BBM</p><h3 id="mbp-kpi-liter" class="text-2xl font-black text-amber-600 mt-1">0 Liter</h3></div>
+                        <div class="bg-amber-50 text-amber-600 p-4 rounded-full"><i class="fa-solid fa-droplet text-2xl"></i></div>
+                    </div>
+                    <div class="premium-card p-6 flex items-center justify-between bg-white border-b-4 border-b-rose-500">
+                        <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Tiket Anomali</p><h3 id="mbp-kpi-anomali" class="text-2xl font-black text-rose-600 mt-1">0 Tiket</h3></div>
+                        <div class="bg-rose-50 text-rose-600 p-4 rounded-full"><i class="fa-solid fa-triangle-exclamation text-2xl"></i></div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="premium-card p-6 rounded-2xl">
-                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Grafik Bar Chart Revenue MBP</h4>
-                        <div class="w-full h-80"><canvas id="chart-mbp-revenue"></canvas></div>
-                    </div>
-                    <div class="premium-card p-6 rounded-2xl">
-                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-code-compare mr-2 text-amber-500"></i>Perbandingan Delta Hour vs Delta RH</h4>
-                        <div class="w-full h-80"><canvas id="chart-mbp-delta"></canvas></div>
-                    </div>
+                    <div class="premium-card p-6 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Grafik Revenue Berdasarkan Periode</h4><div class="w-full h-[300px]"><canvas id="chart-mbp-revenue"></canvas></div></div>
+                    <div class="premium-card p-6 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-code-compare mr-2 text-amber-500"></i>Komparasi Delta Hour vs Delta RH</h4><div class="w-full h-[300px]"><canvas id="chart-mbp-delta"></canvas></div></div>
                 </div>
 
-                <div class="premium-card rounded-2xl overflow-hidden border border-slate-200">
-                    <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                        <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Tabel Ringkasan Per NOP & Revenue Total</h4>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-rh-new"></table>
-                    </div>
-                </div>
-
-                <div class="premium-card p-6 bg-white shadow-md">
-                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500"></i> Rincian Detail Tiket (Maksimal 100 Kartu)</h4>
-                    <div id="mbp-analysis-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto p-2 border border-slate-100 rounded-xl bg-slate-50/50">
+                <div class="premium-card p-6 bg-white">
+                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest mb-6 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500"></i> Rincian Per Tiket (Tanpa Animasi, Maksimal 100 Data)</h4>
+                    <div id="mbp-analysis-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 max-h-[500px] overflow-y-auto pr-2 pb-2">
                         </div>
+                </div>
+
+                <div class="premium-card overflow-hidden bg-white">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/80 flex justify-between items-center">
+                        <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest">Tabel Ringkasan Per NOP & Revenue Total</h4>
+                        <span class="text-[10px] text-slate-400 font-medium">Render dibatasi demi performa browser</span>
+                    </div>
+                    <div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-mbp-rh-new"></table></div>
                 </div>
             </section>
             
-            <section id="view-mbp-bbm" class="view-pane space-y-8 hidden"><div class="premium-card p-6 rounded-2xl"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-6"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Rasio Konsumsi BBM per Jam Kerja</h4><div class="w-full h-80"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card rounded-2xl overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-mbp-bbm"></table></div></div></section>
+            <section id="view-mbp-bbm" class="view-pane space-y-8"><div class="premium-card p-6 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Konsumsi BBM</h4><div class="w-full h-[300px]"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap" id="table-mbp-bbm"></table></div></section>
             
-            <section id="view-asset-master" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-6 bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-database mr-2 text-indigo-500"></i>Data Master Mobil</h3>
-                    </div>
-                    <div class="flex items-center gap-2 flex-wrap justify-end">
-                        <select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none"><option value="ALL">✨ Semua NOP</option></select>
-                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none"><option value="ALL">✨ Semua Kondisi</option></select>
-                        <select id="filter-asset-master-status" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none"><option value="ALL">✨ Semua Status</option></select>
+            <section id="view-asset-master" class="view-pane space-y-8">
+                <div class="premium-card p-6 bg-white flex flex-wrap items-center justify-between gap-4 border-l-4 border-l-indigo-500">
+                    <h3 class="text-sm font-extrabold text-slate-800 flex items-center uppercase tracking-widest"><i class="fa-solid fa-car mr-2 text-indigo-500"></i>Data Master Mobil</h3>
+                    <div class="flex gap-2">
+                        <select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"><option value="ALL">Semua NOP</option></select>
+                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"><option value="ALL">Kondisi</option></select>
+                        <select id="filter-asset-master-status" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"><option value="ALL">Status</option></select>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="premium-card p-6 h-64 flex flex-col items-center"><span class="text-[10px] font-bold text-slate-500 uppercase mb-2">Proporsi Merek</span><div class="w-full h-full relative pb-2"><canvas id="chart-asset-merek"></canvas></div></div>
-                    <div class="premium-card p-6 h-64 flex flex-col items-center"><span class="text-[10px] font-bold text-slate-500 uppercase mb-2">Jenis Unit</span><div class="w-full h-full relative pb-2"><canvas id="chart-asset-jenis"></canvas></div></div>
-                    <div class="premium-card p-6 h-64 flex flex-col items-center"><span class="text-[10px] font-bold text-slate-500 uppercase mb-2">Kondisi Unit</span><div class="w-full h-full relative pb-2"><canvas id="chart-asset-kondisi"></canvas></div></div>
+                    <div class="premium-card p-6 h-[300px] flex flex-col items-center bg-white"><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Proporsi Merek</span><div class="w-full flex-1 relative"><canvas id="chart-asset-merek"></canvas></div></div>
+                    <div class="premium-card p-6 h-[300px] flex flex-col items-center bg-white"><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Jenis Unit</span><div class="w-full flex-1 relative"><canvas id="chart-asset-jenis"></canvas></div></div>
+                    <div class="premium-card p-6 h-[300px] flex flex-col items-center bg-white"><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Kondisi Unit</span><div class="w-full flex-1 relative"><canvas id="chart-asset-kondisi"></canvas></div></div>
                 </div>
-                <div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-master"></table></div></div>
+                <div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-asset-master"></table></div></div>
             </section>
 
-            <section id="view-asset-genset" class="view-pane space-y-8 hidden">
-                <div class="premium-card p-6 bg-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-800 flex items-center"><i class="fa-solid fa-server mr-2 text-indigo-500"></i>Data Master Genset</h3>
-                    </div>
-                    <div class="flex items-center gap-2 flex-wrap justify-end">
-                        <select id="filter-asset-genset-nop" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none"><option value="ALL">✨ Semua NOP</option></select>
-                        <select id="filter-asset-genset-sewa" onchange="applyFilters()" class="filter-select w-40 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none"><option value="ALL">✨ Aset/Sewa</option></select>
-                        <select id="filter-asset-genset-kondisi" onchange="applyFilters()" class="filter-select w-36 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2 py-2 pr-6 focus:outline-none"><option value="ALL">✨ Kondisi</option></select>
+            <section id="view-asset-genset" class="view-pane space-y-8">
+                <div class="premium-card p-6 bg-white flex flex-wrap items-center justify-between gap-4 border-l-4 border-l-indigo-500">
+                    <h3 class="text-sm font-extrabold text-slate-800 flex items-center uppercase tracking-widest"><i class="fa-solid fa-server mr-2 text-indigo-500"></i>Data Master Genset</h3>
+                    <div class="flex gap-2">
+                        <select id="filter-asset-genset-nop" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"><option value="ALL">Semua NOP</option></select>
+                        <select id="filter-asset-genset-sewa" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"><option value="ALL">Aset / Sewa</option></select>
+                        <select id="filter-asset-genset-kondisi" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"><option value="ALL">Kondisi</option></select>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="premium-card p-6 h-72 flex flex-col items-center"><span class="text-[10px] font-bold text-slate-500 uppercase mb-2">Proporsi Aset/Sewa</span><div class="w-full h-full relative pb-2"><canvas id="chart-asset-genset-sewa"></canvas></div></div>
-                    <div class="premium-card p-6 flex flex-col justify-center items-center bg-gradient-to-br from-indigo-50 to-white">
-                        <div class="flex gap-12 text-center">
-                            <div><h3 id="genset-total" class="text-5xl font-black text-indigo-700">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Total Unit</p></div>
-                            <div><h3 id="genset-aktif" class="text-5xl font-black text-emerald-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2 uppercase">Unit Aktif</p></div>
+                    <div class="premium-card p-6 h-[300px] flex flex-col items-center bg-white"><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Proporsi Aset vs Sewa</span><div class="w-full flex-1 relative"><canvas id="chart-asset-genset-sewa"></canvas></div></div>
+                    <div class="premium-card p-6 flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 to-indigo-50/30">
+                        <div class="flex gap-16 text-center">
+                            <div><h3 id="genset-total" class="text-6xl font-black text-indigo-700 drop-shadow-sm">0</h3><p class="text-xs text-slate-500 font-bold mt-3 uppercase tracking-widest">Total Unit</p></div>
+                            <div><h3 id="genset-aktif" class="text-6xl font-black text-emerald-600 drop-shadow-sm">0</h3><p class="text-xs text-slate-500 font-bold mt-3 uppercase tracking-widest">Unit Aktif</p></div>
                         </div>
                     </div>
                 </div>
-                <div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs whitespace-nowrap" id="table-asset-genset"></table></div></div>
+                <div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-asset-genset"></table></div></div>
             </section>
 
-            <section id="view-kpi" class="view-pane space-y-8 hidden"><div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-kpi"></table></div></div></section>
-            <section id="view-operational" class="view-pane space-y-8 hidden"><div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-operational"></table></div></div></section>
-            <section id="view-aging-sva" class="view-pane space-y-8 hidden"><div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-sva"></table></div></div></section>
-            <section id="view-aging-ops" class="view-pane space-y-8 hidden"><div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-ops"></table></div></div></section>
-            <section id="view-aging-lainnya" class="view-pane space-y-8 hidden"><div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-lainnya"></table></div></div></section>
-            <section id="view-project" class="view-pane space-y-8 hidden"><div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-project"></table></div></div></section>
+            <section id="view-kpi" class="view-pane space-y-8"><div class="premium-card p-6 bg-white"><h3 class="font-bold text-slate-800">Data KPI</h3></div><div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-kpi"></table></div></div></section>
+            <section id="view-operational" class="view-pane space-y-8"><div class="premium-card p-6 bg-white"><h3 class="font-bold text-slate-800">Data Operational</h3></div><div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-operational"></table></div></div></section>
+            <section id="view-aging-sva" class="view-pane space-y-8"><div class="premium-card p-6 bg-white"><h3 class="font-bold text-slate-800">Aging UM SVA</h3></div><div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-sva"></table></div></div></section>
+            <section id="view-aging-ops" class="view-pane space-y-8"><div class="premium-card p-6 bg-white"><h3 class="font-bold text-slate-800">Aging UM OPS</h3></div><div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-ops"></table></div></div></section>
+            <section id="view-aging-lainnya" class="view-pane space-y-8"><div class="premium-card p-6 bg-white"><h3 class="font-bold text-slate-800">Aging UM Lainnya</h3></div><div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-aging-lainnya"></table></div></div></section>
+            <section id="view-project" class="view-pane space-y-8"><div class="premium-card p-6 bg-white"><h3 class="font-bold text-slate-800">Data Project</h3></div><div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-project"></table></div></div></section>
 
-            <section id="view-pm-target" class="view-pane space-y-8 id-hidden">
-                <div class="premium-card p-5"><select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"></select></div>
-                <div class="grid grid-cols-4 gap-6">
-                    <div class="premium-card p-4 text-center"><p class="text-[10px] text-slate-400 font-bold uppercase">Target</p><h3 id="pmt-kpi-1" class="text-lg font-black mt-1">0</h3></div>
-                    <div class="premium-card p-4 text-center"><p class="text-[10px] text-slate-400 font-bold uppercase">Realisasi</p><h3 id="pmt-kpi-2" class="text-lg font-black text-emerald-600 mt-1">0</h3></div>
-                    <div class="premium-card p-4 text-center"><p class="text-[10px] text-slate-400 font-bold uppercase">Deviasi</p><h3 id="pmt-kpi-3" class="text-lg font-black text-rose-600 mt-1">0</h3></div>
-                    <div class="premium-card p-4 text-center"><p class="text-[10px] text-slate-400 font-bold uppercase">% Capai</p><h3 id="pmt-kpi-4" class="text-lg font-black text-indigo-600 mt-1">0%</h3></div>
+            <section id="view-pm-target" class="view-pane space-y-8">
+                <div class="premium-card p-5 bg-white"><select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"></select></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="premium-card p-6 text-center bg-white"><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Target</p><h3 id="pmt-kpi-1" class="text-2xl font-black text-slate-800 mt-2">0</h3></div>
+                    <div class="premium-card p-6 text-center bg-white"><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Realisasi</p><h3 id="pmt-kpi-2" class="text-2xl font-black text-emerald-600 mt-2">0</h3></div>
+                    <div class="premium-card p-6 text-center bg-white"><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Deviasi</p><h3 id="pmt-kpi-3" class="text-2xl font-black text-rose-600 mt-2">0</h3></div>
+                    <div class="premium-card p-6 text-center bg-white"><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">% Capai</p><h3 id="pmt-kpi-4" class="text-2xl font-black text-indigo-600 mt-2">0%</h3></div>
                 </div>
-                <div class="premium-card p-6 h-80"><canvas id="chart-pm-target"></canvas></div>
-                <div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-pm-target"></table></div></div>
+                <div class="premium-card p-6 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4">Grafik Pencapaian</h4><div class="w-full h-[300px]"><canvas id="chart-pm-target"></canvas></div></div>
+                <div class="premium-card overflow-hidden bg-white"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-pm-target"></table></div></div>
             </section>
             
-            <section id="view-pm-curvas" class="view-pane space-y-8 hidden"><div class="premium-card p-5"><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select bg-slate-50 border text-xs font-bold rounded px-3 py-2"></select></div><div class="premium-card p-6 h-80"><canvas id="chart-pm-curvas"></canvas></div></section>
-            <section id="view-asset-service" class="view-pane space-y-8 hidden"><div class="premium-card p-5"><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select bg-slate-50 border text-xs font-bold rounded px-3 py-2"></select></div><div class="premium-card p-6 h-80"><canvas id="chart-asset-service"></canvas></div><div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-asset-service"></table></div></div></section>
-            <section id="view-asset-depresiasi" class="view-pane space-y-8 hidden"><div class="premium-card p-5"><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select bg-slate-50 border text-xs font-bold rounded px-3 py-2"></select></div><div class="premium-card p-6 h-80"><canvas id="chart-asset-depresiasi"></canvas></div><div class="premium-card overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap" id="table-asset-depresiasi"></table></div></div></section>
-            <section id="view-asset-sewa" class="view-pane space-y-8 hidden"><div class="premium-card p-6 font-bold text-slate-700">Pembiayaan Unit Sewa Vendor</div></section>
+            <section id="view-pm-curvas" class="view-pane space-y-8"><div class="premium-card p-5 bg-white"><select id="filter-pm-curvas-minggu" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"></select></div><div class="premium-card p-6 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4">S-Curve Progress</h4><div class="w-full h-[300px]"><canvas id="chart-pm-curvas"></canvas></div></div></section>
+            <section id="view-asset-service" class="view-pane space-y-8"><div class="premium-card p-5 bg-white"><select id="filter-asset-service-lokasi" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"></select></div><div class="premium-card p-6 h-[400px] bg-white"><canvas id="chart-asset-service"></canvas></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap" id="table-asset-service"></table></div></section>
+            <section id="view-asset-depresiasi" class="view-pane space-y-8"><div class="premium-card p-5 bg-white"><select id="filter-asset-depresiasi-kat" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-2"></select></div><div class="premium-card p-6 h-[400px] bg-white"><canvas id="chart-asset-depresiasi"></canvas></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap" id="table-asset-depresiasi"></table></div></section>
+            <section id="view-asset-sewa" class="view-pane space-y-8"><div class="premium-card p-6 bg-white font-bold text-slate-700">Pembiayaan Unit Sewa Vendor</div></section>
         </div>
     </main>
 
     <script>
-        // IMPLEMENTASI JAVASCRIPT FIXED & ANTI-STUCK
+        const SPREADSHEET_ID = '1hIeT51_SVdNrz62s93zpZNyqepBMdNCa-mDRH-wVOIw';
         let globalDataset = {};
         let charts = {};
         let currentView = 'sva';
@@ -392,45 +395,212 @@
             'asset-service': 'Biaya Service', 'asset-depresiasi': 'Depresiasi', 'asset-sewa': 'Sewa Vendor', 'asset-genset': 'Master Genset'
         };
 
-        function buildFilterOptions(id, arr, key, lbl) {
-            const el = document.getElementById(id); if(!el || !arr) return;
-            const vals = [...new Set(arr.map(i => i[key]).filter(Boolean))];
-            el.innerHTML = `<option value="ALL">Semua ${lbl}</option>` + vals.map(v => `<option value="${v}">${v}</option>`).join('');
-        }
-        function extractStringValue(r, names) {
-            for (let k in r) { let nK = k.toLowerCase().replace(/[^a-z0-9]/g, ''); for (let n of names) { if (nK.includes(n.toLowerCase().replace(/[^a-z0-9]/g, ''))) return r[k] ? String(r[k]) : '-'; } }
-            return '-';
-        }
-        function updateDropdownOptions(id, arr, keys, lbl) {
-            const el = document.getElementById(id); if (!el) return;
-            const cur = el.value; const vals = [...new Set(arr.map(i => extractStringValue(i, Array.isArray(keys)?keys:[keys])).filter(v => v !== '-'))].sort();
-            el.innerHTML = `<option value="ALL">Semua ${lbl}</option>` + vals.map(v => `<option value="${v}">${v}</option>`).join('');
-            el.value = vals.includes(cur) ? cur : 'ALL';
-        }
-        function applyFilters() { renderActiveView(globalDataset); }
-        function toggleSection(cId, aId) { const c = document.getElementById(cId); const a = document.getElementById(aId); if(c) c.classList.toggle('hidden'); if(a) a.classList.toggle('rotate-180'); }
-        function toggleSubmenu(id) { toggleSection(id, `arrow-${id}`); }
-        function toggleSidebar() {
-            const s = document.getElementById('sidebar'); const i = document.getElementById('sidebar-toggle-icon');
-            if (s.classList.contains('w-72')) { s.classList.replace('w-72', 'w-0'); i.className = 'fa-solid fa-outdent'; } 
-            else { s.classList.replace('w-0', 'w-72'); i.className = 'fa-solid fa-bars'; }
+        window.addEventListener('DOMContentLoaded', () => { 
+            window.addEventListener('hashchange', evaluateRoute); 
+            setupExcelDropZone(); 
+            reloadData(); 
+        });
+
+        function evaluateRoute() {
+            let hash = window.location.hash.replace('#', '') || 'sva';
+            currentView = hash;
+            
+            // Sembunyikan semua section
+            document.querySelectorAll('.view-pane').forEach(el => {
+                el.classList.remove('active');
+                el.classList.add('hidden');
+            });
+            
+            // Tampilkan section yang aktif
+            const paneEl = document.getElementById(`view-${currentView}`);
+            if (paneEl) {
+                paneEl.classList.remove('hidden');
+                paneEl.classList.add('active');
+            }
+
+            // Atur gaya menu di Sidebar
+            document.querySelectorAll('.menu-btn').forEach(el => el.classList.remove('active-menu-3d'));
+            const activeBtn = document.getElementById(`btn-${currentView}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active-menu-3d');
+                const parentSubmenu = activeBtn.closest('[id^="submenu-"]');
+                if (parentSubmenu) { 
+                    parentSubmenu.classList.remove('hidden'); 
+                    const arrow = document.getElementById(`arrow-${parentSubmenu.id}`); 
+                    if (arrow) arrow.classList.add('rotate-180'); 
+                }
+            }
+            
+            document.getElementById('breadcrumb-current').innerText = titleLabels[currentView] || 'Portal Utama';
+            
+            // Render ulang data ke tampilan
+            if (Object.keys(globalDataset).length > 0) { 
+                renderActiveView(globalDataset); 
+            }
         }
 
-        function buildTable(id, hds, rws, limit = null) {
-            const t = document.getElementById(id); if(!t) return;
-            let ht = `<thead class="bg-slate-100 border-b border-slate-200 text-slate-500 font-bold text-[10px] uppercase tracking-wider"><tr>` + hds.map(h => `<th class="px-5 py-4">${h.replace(/_/g, ' ')}</th>`).join('') + `</tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
-            const drws = limit ? rws.slice(0, limit) : rws;
-            if(drws.length === 0) ht += `<tr><td colspan="${hds.length}" class="px-5 py-8 text-center text-slate-400 font-medium">Tidak ada data.</td></tr>`;
-            else {
-                drws.forEach(r => {
-                    ht += `<tr class="hover:bg-indigo-50/50 transition-colors">` + hds.map(h => {
-                        let v = r[h] != null ? r[h] : '-';
-                        if (typeof v === 'number' && /(revenue|income|laba|biaya|pengembalian)/i.test(h)) v = 'Rp ' + v.toLocaleString('id-ID');
-                        return `<td class="px-5 py-3 font-medium text-xs whitespace-nowrap">${v}</td>`;
-                    }).join('') + `</tr>`;
+        async function fetchFromSpreadsheet(sheetName) {
+            try {
+                let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+                if (['data SVA', 'SDM', 'data MBP'].includes(sheetName)) {
+                    url += '&range=A:AZ';
+                }
+                
+                const response = await fetch(url);
+                if (!response.ok) return [];
+                
+                const text = await response.text();
+                const startIdx = text.indexOf('{');
+                const endIdx = text.lastIndexOf('}') + 1;
+                
+                if (startIdx === -1 || endIdx === 0) return [];
+                
+                const json = JSON.parse(text.substring(startIdx, endIdx));
+                let cols = json.table.cols.map((c, i) => c.label ? c.label : (c.id || `Col_${i}`));
+                let rows = json.table.rows;
+                
+                // Deteksi Header Dinamis dari Google Sheets (Mencegah Angka Menjadi Rp 0)
+                if (rows && rows.length > 0) {
+                    let firstRowStr = rows[0].c ? rows[0].c.map(c => c ? String(c.v).toLowerCase() : '') : [];
+                    let looksLikeHeader = firstRowStr.some(val => val.includes('revenue') || val.includes('biaya') || val.includes('nop') || val.includes('tanggal') || val.includes('site') || val.includes('tiket'));
+                    if (looksLikeHeader) {
+                        cols = rows[0].c.map((c, i) => c && c.v ? String(c.v) : cols[i]);
+                        rows.shift();
+                    }
+                }
+
+                return rows.map(r => {
+                    let obj = {};
+                    if (r && r.c) {
+                        r.c.forEach((cell, i) => { 
+                            if(cols[i]) obj[cols[i]] = cell ? cell.v : null; 
+                            if(i === 4) obj['KolomE_NOP'] = cell ? cell.v : null; // Simpan NOP kolom E
+                        });
+                    }
+                    return obj;
                 });
+            } catch(e) {
+                console.error("Fetch Error pada sheet " + sheetName + ":", e);
+                return [];
             }
-            t.innerHTML = ht + `</tbody>`;
+        }
+
+        async function reloadData() {
+            const badge = document.getElementById('data-status-badge');
+            const icon = document.getElementById('sync-icon');
+            const splash = document.getElementById('splash-screen');
+            
+            if (badge) { 
+                badge.className = 'px-2 py-1 rounded-md bg-amber-500/10 text-amber-500 font-bold border border-amber-500/20 shadow-sm'; 
+                badge.innerText = 'Syncing...'; 
+            }
+            if (icon) icon.classList.add('animate-spin');
+
+            try {
+                const sheetMapping = {
+                    'sva': 'data SVA', 'sdm': 'SDM', 'kpi': 'data KPI', 'operational': 'data Operational', 
+                    'project': 'data project', 'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP',
+                    'asset-master': 'data Asset', 'asset-kut': 'asset-kut', 'pjb-aging': 'pjb-aging', 'asset-genset': 'data Genset'   
+                };
+
+                const keys = Object.keys(sheetMapping);
+                const results = await Promise.allSettled(keys.map(k => fetchFromSpreadsheet(sheetMapping[k])));
+                
+                keys.forEach((key, idx) => { 
+                    globalDataset[key] = results[idx].status === 'fulfilled' ? results[idx].value : []; 
+                });
+
+                if (badge) { 
+                    badge.className = 'px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-600 font-bold border border-emerald-500/20 shadow-sm'; 
+                    badge.innerText = 'Connected'; 
+                }
+                
+                buildFilterOptions('filter-pm-target-bulan', globalDataset['pm-target'], 'Bulan', 'Bulan');
+                buildFilterOptions('filter-pm-curvas-minggu', globalDataset['pm-curvas'], 'Minggu', 'Minggu');
+                buildFilterOptions('filter-asset-service-lokasi', globalDataset['asset-kut'], 'Lokasi', 'Lokasi');
+                buildFilterOptions('filter-asset-depresiasi-kat', globalDataset['asset-kut'], 'Kategori', 'Kategori');
+            } catch (err) {
+                if (badge) { 
+                    badge.className = 'px-2 py-1 rounded-md bg-rose-500/10 text-rose-600 font-bold border border-rose-500/20 shadow-sm'; 
+                    badge.innerText = 'Offline / Error'; 
+                }
+            } finally {
+                if (splash) { 
+                    splash.classList.add('opacity-0', 'pointer-events-none'); 
+                    setTimeout(() => splash.style.display = 'none', 700); 
+                }
+                if (icon) icon.classList.remove('animate-spin');
+                
+                if (!window.location.hash) {
+                    window.location.hash = '#sva'; 
+                } else {
+                    evaluateRoute();
+                }
+            }
+        }
+
+        // ==========================================
+        // HELPER FUNCTIONS (FILTER & PARSER)
+        // ==========================================
+        function buildFilterOptions(id, arr, key, lbl) {
+            const el = document.getElementById(id); 
+            if (!el || !arr) return;
+            const vals = [...new Set(arr.map(i => i[key]).filter(Boolean))];
+            el.innerHTML = `<option value="ALL">✨ Semua ${lbl}</option>` + vals.map(v => `<option value="${v}">${v}</option>`).join('');
+        }
+
+        function extractStringValue(row, names) {
+            for (let k in row) { 
+                let normalizedKey = k.toLowerCase().replace(/[^a-z0-9]/g, ''); 
+                for (let n of names) { 
+                    if (normalizedKey.includes(n.toLowerCase().replace(/[^a-z0-9]/g, ''))) {
+                        return row[k] ? String(row[k]) : '-'; 
+                    }
+                } 
+            }
+            return '-';
+        }
+
+        function updateDropdownOptions(id, arr, keys, lbl) {
+            const el = document.getElementById(id); 
+            if (!el) return;
+            const currentVal = el.value; 
+            const vals = [...new Set(arr.map(i => extractStringValue(i, Array.isArray(keys) ? keys : [keys])).filter(v => v !== '-'))].sort();
+            
+            el.innerHTML = `<option value="ALL">✨ Semua ${lbl}</option>` + vals.map(v => `<option value="${v}">${v}</option>`).join('');
+            
+            if (vals.includes(currentVal)) {
+                el.value = currentVal;
+            } else {
+                el.value = 'ALL';
+            }
+        }
+
+        function applyFilters() { 
+            renderActiveView(globalDataset); 
+        }
+
+        function toggleSection(containerId, arrowId) { 
+            const container = document.getElementById(containerId); 
+            const arrow = document.getElementById(arrowId); 
+            if (container) container.classList.toggle('hidden'); 
+            if (arrow) arrow.classList.toggle('rotate-180'); 
+        }
+
+        function toggleSubmenu(id) { 
+            toggleSection(id, `arrow-${id}`); 
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar'); 
+            const icon = document.getElementById('sidebar-toggle-icon');
+            if (sidebar.classList.contains('w-72')) { 
+                sidebar.classList.replace('w-72', 'w-0'); 
+                icon.className = 'fa-solid fa-outdent text-lg'; 
+            } else { 
+                sidebar.classList.replace('w-0', 'w-72'); 
+                icon.className = 'fa-solid fa-bars text-lg'; 
+            }
         }
 
         function parseFlexibleNumber(rawVal) {
@@ -438,285 +608,667 @@
             if (typeof rawVal === 'number') return rawVal;
             let str = String(rawVal).trim();
             if (str === '-' || str === '') return 0;
+            
             str = str.replace(/Rp/gi, '').replace(/%/g, '').trim();
-            if (str.includes('.') && str.includes(',')) { str = str.replace(/\./g, '').replace(',', '.'); }
-            else if (str.includes(',')) { const p = str.split(','); str = str.replace(/,/g, (p[p.length-1].length===3 && p.length>1) ? '' : '.'); }
-            else if (str.includes('.')) { const p = str.split('.'); if (p[p.length-1].length===3 && p.length>1) str = str.replace(/\./g, ''); }
+            
+            if (str.includes('.') && str.includes(',')) { 
+                str = str.replace(/\./g, '').replace(',', '.'); 
+            } else if (str.includes(',')) { 
+                const parts = str.split(','); 
+                str = str.replace(/,/g, (parts[parts.length-1].length === 3 && parts.length > 1) ? '' : '.'); 
+            } else if (str.includes('.')) { 
+                const parts = str.split('.'); 
+                if (parts[parts.length-1].length === 3 && parts.length > 1) {
+                    str = str.replace(/\./g, ''); 
+                }
+            }
             str = str.replace(/\s/g, '');
-            let num = parseFloat(str); return isNaN(num) ? 0 : num;
+            let num = parseFloat(str); 
+            return isNaN(num) ? 0 : num;
         }
 
         function extractValue(row, structuralNames) {
             for (let key in row) { 
-                let nK = key.toLowerCase().replace(/[^a-z0-9]/g, ''); 
-                for (let n of structuralNames) { if (nK.includes(n.toLowerCase().replace(/[^a-z0-9]/g, ''))) return parseFlexibleNumber(row[key]); } 
-            } return 0;
+                let normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, ''); 
+                for (let n of structuralNames) { 
+                    if (normalizedKey.includes(n.toLowerCase().replace(/[^a-z0-9]/g, ''))) {
+                        return parseFlexibleNumber(row[key]);
+                    }
+                } 
+            } 
+            return 0;
         }
 
-        // IMPLEMENTASI MBP MASTER AGGREGATE DAN DETAIL CARD SECARA LENGKAP
-        function renderMbpTableAndAnalysis(tableData) {
-            const tbody = document.getElementById('table-mbp-rh-new');
-            const analysisContainer = document.getElementById('mbp-analysis-container');
+        function buildTable(id, headers, rowsList, limit = null) {
+            const table = document.getElementById(id); 
+            if (!table) return;
             
-            if (!tbody || !analysisContainer) return;
-
-            if (tableData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini (atau Delta RH <= 0.3).</td></tr>`;
-                analysisContainer.innerHTML = `<div class="text-slate-400 text-sm font-semibold p-4 w-full text-center">Data tidak ditemukan.</div>`;
-                return;
+            let html = `<thead class="bg-slate-100/80 border-b border-slate-200 text-slate-500 font-bold text-[10px] uppercase tracking-wider text-left"><tr>`;
+            
+            headers.forEach(h => {
+                html += `<th class="px-5 py-4 whitespace-nowrap">${h.replace(/_/g, ' ')}</th>`;
+            });
+            html += `</tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
+            
+            const displayRows = limit ? rowsList.slice(0, limit) : rowsList;
+            
+            if (displayRows.length === 0) {
+                html += `<tr><td colspan="${headers.length}" class="px-5 py-8 text-center text-slate-400 font-medium">Tidak ada data.</td></tr>`;
+            } else {
+                displayRows.forEach(row => {
+                    html += `<tr class="hover:bg-indigo-50/40 transition-colors">`;
+                    headers.forEach(h => {
+                        let val = row[h] != null ? row[h] : '-';
+                        if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian)/i.test(h)) {
+                            val = 'Rp ' + val.toLocaleString('id-ID');
+                        }
+                        html += `<td class="px-5 py-3 font-medium text-xs whitespace-nowrap">${val}</td>`;
+                    });
+                    html += `</tr>`;
+                });
             }
-
-            // Grouping per NOP untuk ditaruh di Tabel Master
-            let agg = {};
-            tableData.forEach(r => {
-                let nop = r.NOP || '-';
-                if (!agg[nop]) { agg[nop] = { Total_Revenue: 0, Total_Anomali: 0, Total_Terverifikasi: 0 }; }
-                agg[nop].Total_Revenue += (r.Revenue || 0);
-                if (r.Status === 'Anomali') agg[nop].Total_Anomali++; else agg[nop].Total_Terverifikasi++;
-            });
-
-            let th = `<thead class="bg-slate-100 border-b border-slate-200"><tr class="text-slate-500 font-bold text-[10px] uppercase tracking-wider text-left">
-                <th class="p-4">NOP Master Box</th><th class="p-4">Total Revenue Akumulasi</th><th class="p-4">Total Kasus Anomali</th><th class="p-4">Total Kasus Terverifikasi</th></tr></thead><tbody class="divide-y divide-slate-100">`;
-
-            Object.keys(agg).forEach(nop => {
-                th += `<tr class="hover:bg-indigo-50/50 transition-colors">
-                    <td class="p-4 font-bold text-sm text-slate-700">${nop}</td>
-                    <td class="p-4 font-black text-indigo-700">Rp ${agg[nop].Total_Revenue.toLocaleString('id-ID')}</td>
-                    <td class="p-4 text-rose-600 font-extrabold">${agg[nop].Total_Anomali} Kasus</td>
-                    <td class="p-4 text-emerald-600 font-extrabold">${agg[nop].Total_Terverifikasi} Kasus</td></tr>`;
-            });
-            tbody.innerHTML = th + `</tbody>`;
-
-            // Render Detail Cards (Tanpa Efek Animasi Pulsa/Memantul - Sesuai Request)
-            let cHTML = '';
-            tableData.slice(0, 100).forEach(r => {
-                let isAno = r.Status === 'Anomali';
-                let bdg = isAno ? 'bg-rose-600 text-white border-rose-700' : 'bg-emerald-600 text-white border-emerald-700';
-                
-                cHTML += `
-                <div class="border rounded-xl p-4 flex flex-col gap-3 shadow-sm ${isAno ? 'bg-rose-50/40 border-rose-200' : 'bg-white border-slate-200'}">
-                    <div class="flex justify-between items-start">
-                        <span class="font-extrabold text-sm ${isAno?'text-rose-800':'text-slate-800'}">${r.NOP}</span>
-                        <span class="text-[9px] uppercase tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded font-bold">${r.Periode}</span>
-                    </div>
-                    
-                    <div class="text-xs space-y-1.5 text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 font-medium leading-tight">
-                        <p class="flex justify-between"><span>Ticket Number SWFM:</span><b class="font-mono text-indigo-600 font-bold">${r.Nomor_Tiket}</b></p>
-                        <p class="flex justify-between"><span>Site Id:</span><b class="text-slate-800">${r.Site_ID}</b></p>
-                        <p class="flex justify-between"><span>PIC Take Over Ticket:</span><b class="text-slate-800">${r.PIC}</b></p>
-                    </div>
-
-                    <div class="flex justify-between text-[10px] bg-white p-2 border border-slate-100 rounded-lg">
-                        <div class="flex flex-col"><span class="text-[8px] uppercase text-slate-400 font-bold">Delta Hour</span><span class="font-black text-sm text-slate-700">${r.Delta_Hour}</span></div>
-                        <div class="flex flex-col text-right"><span class="text-[8px] uppercase text-slate-400 font-bold">Delta RH</span><span class="font-black text-sm text-slate-700">${r.Delta_RH}</span></div>
-                    </div>
-                    
-                    <div class="flex justify-between items-end mt-1">
-                        <div><span class="text-[9px] uppercase text-slate-400 font-bold block leading-none mb-1">Selisih</span><span class="text-base font-black ${isAno?'text-rose-600':'text-emerald-600'}">${r.Selisih.toFixed(2)}</span></div>
-                        <span class="text-[9px] font-bold px-2.5 py-1.5 rounded-md ${bdg}">${r.Status}</span>
-                    </div>
-                </div>`;
-            });
-            if(tableData.length > 100) cHTML += `<div class="p-4 col-span-full text-center text-xs font-medium text-slate-400 bg-slate-50 border border-slate-200 rounded-xl">Menampilkan 100 kartu pertama. Gunakan filter untuk mencari NOP tertentu.</div>`;
-            analysisContainer.innerHTML = cHTML;
+            table.innerHTML = html + `</tbody>`;
         }
 
+
+        // ==========================================
+        // RENDER MASTER (LOGIKA FILTER & INJECT UI)
+        // ==========================================
         function renderActiveView(data) {
             try {
                 const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
                 
+                // 1. MONITORING SVA
                 if (currentView === 'sva') {
                     let arr = data['sva'] || [];
-                    let kN = ['nop', 'nopolisi'], kT = ['tanggal', 'tgl'], kB = ['bulan', 'month'], kS = ['statustiket', 'status'];
-                    updateDropdownOptions('filter-sva-nop', arr, kN, 'NOP'); updateDropdownOptions('filter-sva-tgl', arr, kT, 'Tanggal');
-                    updateDropdownOptions('filter-sva-bln', arr, kB, 'Bulan'); updateDropdownOptions('filter-sva-stts', arr, kS, 'Status');
-
-                    const fN = document.getElementById('filter-sva-nop').value, fT = document.getElementById('filter-sva-tgl').value, fB = document.getElementById('filter-sva-bln').value, fS = document.getElementById('filter-sva-stts').value;
-                    let flt = arr.filter(d => (fN==='ALL'||extractStringValue(d,kN)===fN) && (fT==='ALL'||extractStringValue(d,kT)===fT) && (fB==='ALL'||extractStringValue(d,kB)===fB) && (fS==='ALL'||extractStringValue(d,kS)===fS));
+                    let keysNOP = ['nop', 'nopolisi'], keysTgl = ['tanggal', 'tgl'], keysBln = ['bulan', 'month'], keysStts = ['statustiket', 'status'];
                     
-                    let tR=0, tB=0, tP=0, tNI=0;
-                    let tbD = flt.map(d => {
-                        let r=extractValue(d,['revenue','pendapatan','omset']), b=extractValue(d,['biaya','pengeluaran','expense']), p=extractValue(d,['pengembalian','return']), ni=extractValue(d,['netincome','lababersih']), npm=extractValue(d,['netprofitmargin','npm']);
-                        if (ni===0&&r>0) ni=r-b-p; if (npm===0&&r>0) npm=(ni/r)*100; else if(npm>0&&npm<1) npm*=100;
-                        tR+=r; tB+=b; tP+=p; tNI+=ni;
-                        return { NOP: extractStringValue(d,kN), Bulan: extractStringValue(d,kB), Revenue: r, Biaya: b, Pengembalian: p, Net_Income: ni, NPM: npm.toFixed(1)+'%' };
+                    updateDropdownOptions('filter-sva-nop', arr, keysNOP, 'NOP'); 
+                    updateDropdownOptions('filter-sva-tgl', arr, keysTgl, 'Tanggal');
+                    updateDropdownOptions('filter-sva-bln', arr, keysBln, 'Bulan'); 
+                    updateDropdownOptions('filter-sva-stts', arr, keysStts, 'Status');
+
+                    const fN = document.getElementById('filter-sva-nop').value;
+                    const fT = document.getElementById('filter-sva-tgl').value;
+                    const fB = document.getElementById('filter-sva-bln').value;
+                    const fS = document.getElementById('filter-sva-stts').value;
+                    
+                    let filteredArr = arr.filter(d => {
+                        return (fN === 'ALL' || extractStringValue(d, keysNOP) === fN) && 
+                               (fT === 'ALL' || extractStringValue(d, keysTgl) === fT) && 
+                               (fB === 'ALL' || extractStringValue(d, keysBln) === fB) && 
+                               (fS === 'ALL' || extractStringValue(d, keysStts) === fS);
                     });
                     
-                    document.getElementById('sva-kpi-1').innerText=formatIDR(tR); document.getElementById('sva-kpi-2').innerText=formatIDR(tB);
-                    document.getElementById('sva-kpi-3').innerText=formatIDR(tP); document.getElementById('sva-kpi-4').innerText=formatIDR(tNI);
-                    document.getElementById('sva-kpi-5').innerText=(tR>0?(tNI/tR)*100:0).toFixed(1)+'%';
+                    let totalRevenue = 0, totalBiaya = 0, totalPengembalian = 0, totalNetIncome = 0;
                     
-                    buildTable('table-sva', tbD.length?Object.keys(tbD[0]):['Keterangan'], tbD, 150);
-                    renderSvaCharts(tbD, tB, tP, tNI);
+                    let tableData = filteredArr.map(d => {
+                        let r = extractValue(d, ['revenue', 'pendapatan', 'omset', 'grossrevenue']);
+                        let b = extractValue(d, ['biaya', 'pengeluaran', 'expense', 'labakotor']);
+                        let p = extractValue(d, ['pengembalian', 'return', 'lababersih']);
+                        let ni = extractValue(d, ['netincome', 'lababersih']);
+                        let npm = extractValue(d, ['netprofitmargin', 'npm']);
+                        
+                        if (ni === 0 && r > 0) ni = r - b - p; 
+                        if (npm === 0 && r > 0) npm = (ni / r) * 100; else if (npm > 0 && npm < 1) npm *= 100;
+                        
+                        totalRevenue += r; 
+                        totalBiaya += b; 
+                        totalPengembalian += p; 
+                        totalNetIncome += ni;
+                        
+                        return { 
+                            NOP: extractStringValue(d, keysNOP), 
+                            Bulan: extractStringValue(d, keysBln), 
+                            Revenue: r, 
+                            Biaya: b, 
+                            Pengembalian: p, 
+                            Net_Income: ni, 
+                            NPM: npm.toFixed(1) + '%' 
+                        };
+                    });
+                    
+                    document.getElementById('sva-kpi-1').innerText = formatIDR(totalRevenue); 
+                    document.getElementById('sva-kpi-2').innerText = formatIDR(totalBiaya);
+                    document.getElementById('sva-kpi-3').innerText = formatIDR(totalPengembalian); 
+                    document.getElementById('sva-kpi-4').innerText = formatIDR(totalNetIncome);
+                    
+                    let finalNpm = totalRevenue > 0 ? (totalNetIncome / totalRevenue) * 100 : 0;
+                    document.getElementById('sva-kpi-5').innerText = finalNpm.toFixed(1) + '%';
+                    
+                    if (tableData.length > 0) {
+                        buildTable('table-sva', Object.keys(tableData[0]), tableData, 150);
+                    } else {
+                        buildTable('table-sva', ['Keterangan'], []);
+                    }
+                    
+                    renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
                 } 
+                
+                // 2. MONITORING MBP (KHUSUS: TANPA ANIMASI)
                 else if (currentView === 'mbp-rh') {
                     let arr = data['mbp-rh'] || [];
-                    let kP = ['periode'], kN = ['kolomenop', 'nop'], kS = ['siteid', 'site'], kT = ['ticketnumberswfm', 'ticketnumber', 'nomortiket', 'tiket'], kPic = ['pictakeoverticket', 'pic'];
+                    let keysPeriode = ['periode'], keysNOP = ['kolomenop', 'nop'], keysSite = ['siteid', 'site'], keysTiket = ['ticketnumberswfm', 'ticketnumber', 'nomortiket', 'tiket'], keysPic = ['pictakeoverticket', 'pic'];
 
-                    updateDropdownOptions('filter-mbp-periode', arr, kP, 'Periode'); updateDropdownOptions('filter-mbp-nop', arr, kN, 'NOP');
-                    const fP = document.getElementById('filter-mbp-periode').value, fN = document.getElementById('filter-mbp-nop').value;
+                    updateDropdownOptions('filter-mbp-periode', arr, keysPeriode, 'Periode'); 
+                    updateDropdownOptions('filter-mbp-nop', arr, keysNOP, 'NOP');
+                    
+                    const fP = document.getElementById('filter-mbp-periode').value;
+                    const fN = document.getElementById('filter-mbp-nop').value;
                     
                     let tableData = [];
                     let totalRevMBP = 0, totalLiter = 0, totalAnomali = 0;
 
-                    for(let i=0; i<arr.length; i++){
+                    for(let i = 0; i < arr.length; i++) {
                         let d = arr[i];
                         let dRH = extractValue(d, ['deltarh', 'rh']);
                         
-                        // Rule paten: Hanya memproses data dengan Delta RH > 0.3
-                        if(dRH > 0.3) {
-                            let p = extractStringValue(d, kP), n = extractStringValue(d, kN);
-                            if((fP === 'ALL' || p === fP) && (fN === 'ALL' || n === fN)) {
-                                let dH = extractValue(d, ['deltahour', 'dh']), sel = Math.abs(dH - dRH);
+                        // SYARAT MUTLAK: Hanya proses data yang Delta RH > 0.3
+                        if (dRH > 0.3) {
+                            let p = extractStringValue(d, keysPeriode);
+                            let n = extractStringValue(d, keysNOP);
+                            
+                            // Terapkan Filter Dropdown
+                            if ((fP === 'ALL' || p === fP) && (fN === 'ALL' || n === fN)) {
+                                let dH = extractValue(d, ['deltahour', 'dh']);
+                                let selisih = Math.abs(dH - dRH);
                                 let rev = extractValue(d, ['revenue', 'pendapatan', 'omset']);
                                 let ltr = extractValue(d, ['liter', 'konsumsi', 'bbm']);
                                 
-                                totalRevMBP += rev; totalLiter += ltr;
-                                if(sel >= 1) totalAnomali++;
+                                totalRevMBP += rev; 
+                                totalLiter += ltr;
+                                if (selisih >= 1) totalAnomali++;
 
                                 tableData.push({
-                                    NOP: n, Site_ID: extractStringValue(d, kS), Nomor_Tiket: extractStringValue(d, kT), PIC: extractStringValue(d, kPic), Periode: p,
-                                    Delta_Hour: dH, Delta_RH: dRH, Selisih: sel, Delta_Final: extractValue(d, ['deltafinal']), Liter: ltr,
-                                    Revenue: rev, Status: sel >= 1 ? 'Anomali' : 'Terverifikasi'
+                                    NOP: n, 
+                                    Site_ID: extractStringValue(d, keysSite), 
+                                    Nomor_Tiket: extractStringValue(d, keysTiket), 
+                                    PIC: extractStringValue(d, keysPic), 
+                                    Periode: p,
+                                    Delta_Hour: dH, 
+                                    Delta_RH: dRH, 
+                                    Selisih: selisih, 
+                                    Delta_Final: extractValue(d, ['deltafinal']), 
+                                    Liter: ltr,
+                                    Revenue: rev, 
+                                    Status: selisih >= 1 ? 'Anomali' : 'Terverifikasi'
                                 });
                             }
                         }
                     }
 
+                    // Update Angka KPI Summary MBP
                     document.getElementById('mbp-kpi-rev').innerText = formatIDR(totalRevMBP);
                     document.getElementById('mbp-kpi-liter').innerText = totalLiter.toLocaleString('id-ID') + ' Liter';
                     document.getElementById('mbp-kpi-anomali').innerText = totalAnomali + ' Tiket';
 
                     renderMbpCharts(tableData);
-                    renderMbpTableAndAnalysis(tableData);
+
+                    // ==========================================
+                    // MEMBANGUN TABEL MASTER MBP & CARD DETAIL
+                    // ==========================================
+                    const tbody = document.getElementById('table-mbp-rh-new');
+                    const analysisContainer = document.getElementById('mbp-analysis-container');
+                    
+                    if (tbody && analysisContainer) {
+                        if (tableData.length === 0) {
+                            tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini (atau Delta RH <= 0.3).</td></tr>`;
+                            analysisContainer.innerHTML = `<div class="text-slate-400 text-sm font-semibold p-4 w-full text-center border border-slate-200 rounded-xl bg-slate-50">Data tidak ditemukan.</div>`;
+                        } else {
+                            // 1. Grouping Data untuk Tabel Master Ringkasan
+                            let agg = {};
+                            tableData.forEach(r => {
+                                let nopKey = r.NOP || '-';
+                                if (!agg[nopKey]) { agg[nopKey] = { Total_Revenue: 0, Total_Anomali: 0, Total_Terverifikasi: 0 }; }
+                                agg[nopKey].Total_Revenue += (r.Revenue || 0);
+                                if (r.Status === 'Anomali') agg[nopKey].Total_Anomali++; else agg[nopKey].Total_Terverifikasi++;
+                            });
+
+                            let th = `<thead class="bg-slate-100/80 border-b border-slate-200"><tr class="text-slate-500 font-bold text-[10px] uppercase tracking-wider text-left">
+                                <th class="p-4">NOP Master Unit</th><th class="p-4">Total Revenue Akumulasi</th><th class="p-4">Total Kasus Anomali</th><th class="p-4">Total Kasus Terverifikasi</th></tr></thead><tbody class="divide-y divide-slate-100">`;
+
+                            Object.keys(agg).forEach(nop => {
+                                th += `<tr class="hover:bg-indigo-50/50 transition-colors">
+                                    <td class="p-4 font-extrabold text-sm text-slate-700">${nop}</td>
+                                    <td class="p-4 font-black text-sm text-indigo-700">Rp ${agg[nop].Total_Revenue.toLocaleString('id-ID')}</td>
+                                    <td class="p-4 text-sm text-rose-600 font-extrabold">${agg[nop].Total_Anomali} Kasus</td>
+                                    <td class="p-4 text-sm text-emerald-600 font-extrabold">${agg[nop].Total_Terverifikasi} Kasus</td></tr>`;
+                            });
+                            tbody.innerHTML = th + `</tbody>`;
+
+                            // 2. Render Card Detail (TANPA ANIMASI)
+                            let cHTML = '';
+                            
+                            // Batasi 100 kartu agar browser ringan
+                            tableData.slice(0, 100).forEach(r => {
+                                let isAno = r.Status === 'Anomali';
+                                let badgeClass = isAno ? 'bg-rose-600 text-white' : 'bg-emerald-600 text-white';
+                                
+                                cHTML += `
+                                <div class="border rounded-xl p-5 flex flex-col gap-3 shadow-sm ${isAno ? 'bg-rose-50/40 border-rose-200' : 'bg-white border-slate-200'}">
+                                    
+                                    <div class="flex justify-between items-start">
+                                        <span class="font-black text-sm ${isAno ? 'text-rose-900' : 'text-slate-800'}">${r.NOP}</span>
+                                        <span class="text-[9px] uppercase tracking-wider bg-slate-200 text-slate-600 px-2 py-1 rounded font-bold">${r.Periode}</span>
+                                    </div>
+                                    
+                                    <div class="text-xs space-y-1.5 text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-200 font-medium leading-tight">
+                                        <p class="flex justify-between"><span>Ticket Number SWFM:</span><b class="font-mono text-indigo-700 font-bold tracking-tight">${r.Nomor_Tiket}</b></p>
+                                        <p class="flex justify-between"><span>Site Id:</span><b class="text-slate-800">${r.Site_ID}</b></p>
+                                        <p class="flex justify-between"><span>PIC Take Over Ticket:</span><b class="text-slate-800 truncate max-w-[120px] text-right" title="${r.PIC}">${r.PIC}</b></p>
+                                    </div>
+
+                                    <div class="flex justify-between text-[10px] bg-white p-2.5 border border-slate-200 rounded-lg">
+                                        <div class="flex flex-col"><span class="text-[8px] uppercase text-slate-400 font-bold tracking-widest">Delta Hour</span><span class="font-black text-sm text-slate-700 mt-0.5">${r.Delta_Hour}</span></div>
+                                        <div class="flex flex-col text-right"><span class="text-[8px] uppercase text-slate-400 font-bold tracking-widest">Delta RH</span><span class="font-black text-sm text-slate-700 mt-0.5">${r.Delta_RH}</span></div>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-end mt-2">
+                                        <div>
+                                            <span class="text-[9px] uppercase text-slate-400 font-bold tracking-widest block leading-none mb-1">Selisih</span>
+                                            <span class="text-base font-black ${isAno ? 'text-rose-600' : 'text-emerald-600'}">${r.Selisih.toFixed(2)}</span>
+                                        </div>
+                                        <span class="text-[10px] tracking-wide font-bold px-3 py-1.5 rounded-md ${badgeClass}">${r.Status}</span>
+                                    </div>
+                                </div>`;
+                            });
+                            
+                            if (tableData.length > 100) {
+                                cHTML += `<div class="p-4 col-span-full text-center text-xs font-bold text-slate-500 bg-slate-100 border border-slate-200 rounded-xl">Menampilkan 100 kartu pertama agar browser cepat. Gunakan filter NOP untuk mencari unit tertentu.</div>`;
+                            }
+                            analysisContainer.innerHTML = cHTML;
+                        }
+                    }
                 }
+                
+                // 3. DATA SDM
                 else if (currentView === 'sdm') {
-                    let s = (data['sdm']||[]).reduce((a, r) => {
-                        let k = extractStringValue(r, ['kepemilikan', 'nama']); if (k === '-') k = 'Tanpa Pemilik';
-                        if (!a[k]) a[k] = 0; Object.keys(r).forEach(key => { if (!/kepemilikan|nama/i.test(key) && !isNaN(parseFloat(r[key]))) a[k]+=parseFloat(r[key]); }); return a;
+                    let s = (data['sdm'] || []).reduce((acc, r) => {
+                        let k = extractStringValue(r, ['kepemilikan', 'nama']); 
+                        if (k === '-') k = 'Tanpa Pemilik';
+                        if (!acc[k]) acc[k] = 0; 
+                        
+                        Object.keys(r).forEach(key => { 
+                            if (!/kepemilikan|nama/i.test(key) && !isNaN(parseFloat(r[key]))) {
+                                acc[k] += parseFloat(r[key]); 
+                            }
+                        }); 
+                        return acc;
                     }, {});
-                    buildTable('table-sdm', ['Kepemilikan', 'Total_Tools'], Object.keys(s).map(k => ({ 'Kepemilikan': k, 'Total_Tools': s[k] })));
+                    
+                    let tableData = Object.keys(s).map(k => ({ 'Kepemilikan': k, 'Total_Tools': s[k] }));
+                    if (tableData.length > 0) buildTable('table-sdm', ['Kepemilikan', 'Total_Tools'], tableData);
+                    else buildTable('table-sdm', ['Keterangan'], []);
                 }
+                
+                // 4. DATA ASSET MASTER MOBIL
                 else if (currentView === 'asset-master') {
                     let arr = data['asset-master'] || [];
-                    let tD = arr.map(d => ({ 'User': extractStringValue(d,['user']), 'Merek': extractStringValue(d,['merek']), 'Tipe': extractStringValue(d,['tipe']), 'NOP': extractStringValue(d,['nop']), 'Jenis': extractStringValue(d,['jenis']), 'Kondisi': extractStringValue(d,['kondisi']), 'Status': extractStringValue(d,['statuspemakaian']) })).filter(d => d.User !== '-');
-                    updateDropdownOptions('filter-asset-master-nop', tD, ['NOP'], 'NOP'); updateDropdownOptions('filter-asset-master-kondisi', tD, ['Kondisi'], 'Kondisi'); updateDropdownOptions('filter-asset-master-status', tD, ['Status'], 'Status');
-                    const fN = document.getElementById('filter-asset-master-nop').value, fK = document.getElementById('filter-asset-master-kondisi').value, fS = document.getElementById('filter-asset-master-status').value;
-                    let flt = tD.filter(d => (fN==='ALL'||d.NOP===fN) && (fK==='ALL'||d.Kondisi===fK) && (fS==='ALL'||d.Status===fS));
-                    buildTable('table-asset-master', ['User','Merek','Tipe','NOP','Jenis','Kondisi','Status'], flt, 100);
-                    renderAssetMasterCharts(flt);
+                    let tableData = arr.map(d => ({ 
+                        'User': extractStringValue(d, ['user']), 
+                        'Merek': extractStringValue(d, ['merek']), 
+                        'Tipe': extractStringValue(d, ['tipe']), 
+                        'NOP': extractStringValue(d, ['nop']), 
+                        'Jenis': extractStringValue(d, ['jenis']), 
+                        'Kondisi': extractStringValue(d, ['kondisi']), 
+                        'Status': extractStringValue(d, ['statuspemakaian']) 
+                    })).filter(d => d.User !== '-');
+
+                    updateDropdownOptions('filter-asset-master-nop', tableData, ['NOP'], 'NOP'); 
+                    updateDropdownOptions('filter-asset-master-kondisi', tableData, ['Kondisi'], 'Kondisi'); 
+                    updateDropdownOptions('filter-asset-master-status', tableData, ['Status'], 'Status');
+                    
+                    const fN = document.getElementById('filter-asset-master-nop').value;
+                    const fK = document.getElementById('filter-asset-master-kondisi').value;
+                    const fS = document.getElementById('filter-asset-master-status').value;
+                    
+                    let filteredData = tableData.filter(d => {
+                        return (fN === 'ALL' || d.NOP === fN) && 
+                               (fK === 'ALL' || d.Kondisi === fK) && 
+                               (fS === 'ALL' || d.Status === fS);
+                    });
+                    
+                    if (filteredData.length > 0) {
+                        buildTable('table-asset-master', ['User','Merek','Tipe','NOP','Jenis','Kondisi','Status'], filteredData, 150);
+                    } else {
+                        buildTable('table-asset-master', ['Keterangan'], []);
+                    }
+                    renderAssetMasterCharts(filteredData);
                 } 
+                
+                // 5. DATA ASSET GENSET
                 else if (currentView === 'asset-genset') {
                     let arr = data['asset-genset'] || [];
-                    let tD = arr.map(d => ({ 'NOP': extractStringValue(d,['nop']), 'Cluster': extractStringValue(d,['cluster']), 'Aset_Sewa': extractStringValue(d,['asetsewa']), 'No_Asset': extractStringValue(d,['noasset']), 'Kondisi': extractStringValue(d,['kondisi']), 'Aktif': extractStringValue(d,['aktifnonaktif']) })).filter(d => d.NOP !== '-');
-                    updateDropdownOptions('filter-asset-genset-nop', tD, ['NOP'], 'NOP'); updateDropdownOptions('filter-asset-genset-sewa', tD, ['Aset_Sewa'], 'Aset/Sewa'); updateDropdownOptions('filter-asset-genset-kondisi', tD, ['Kondisi'], 'Kondisi');
-                    const fN = document.getElementById('filter-asset-genset-nop').value, fCw = document.getElementById('filter-asset-genset-sewa').value, fK = document.getElementById('filter-asset-genset-kondisi').value;
-                    let flt = tD.filter(d => (fN==='ALL'||d.NOP===fN) && (fCw==='ALL'||d.Aset_Sewa===fCw) && (fK==='ALL'||d.Kondisi===fK));
-                    buildTable('table-asset-genset', ['NOP','Cluster','Aset_Sewa','No_Asset','Kondisi','Aktif'], flt, 100);
-                    renderAssetGensetCharts(flt);
+                    let tableData = arr.map(d => ({ 
+                        'NOP': extractStringValue(d, ['nop']), 
+                        'Cluster': extractStringValue(d, ['cluster']), 
+                        'Aset_Sewa': extractStringValue(d, ['asetsewa', 'aset/sewa']), 
+                        'No_Asset': extractStringValue(d, ['noasset']), 
+                        'Kondisi': extractStringValue(d, ['kondisi']), 
+                        'Aktif': extractStringValue(d, ['aktifnonaktif', 'aktif']) 
+                    })).filter(d => d.NOP !== '-');
+                    
+                    updateDropdownOptions('filter-asset-genset-nop', tableData, ['NOP'], 'NOP'); 
+                    updateDropdownOptions('filter-asset-genset-sewa', tableData, ['Aset_Sewa'], 'Aset/Sewa'); 
+                    updateDropdownOptions('filter-asset-genset-kondisi', tableData, ['Kondisi'], 'Kondisi');
+                    
+                    const fN = document.getElementById('filter-asset-genset-nop').value;
+                    const fCw = document.getElementById('filter-asset-genset-sewa').value;
+                    const fK = document.getElementById('filter-asset-genset-kondisi').value;
+                    
+                    let filteredData = tableData.filter(d => {
+                        return (fN === 'ALL' || d.NOP === fN) && 
+                               (fCw === 'ALL' || d.Aset_Sewa === fCw) && 
+                               (fK === 'ALL' || d.Kondisi === fK);
+                    });
+                    
+                    if (filteredData.length > 0) {
+                        buildTable('table-asset-genset', ['NOP','Cluster','Aset_Sewa','No_Asset','Kondisi','Aktif'], filteredData, 150);
+                    } else {
+                        buildTable('table-asset-genset', ['Keterangan'], []);
+                    }
+                    renderAssetGensetCharts(filteredData);
                 } 
+                
+                // 6. MENU LAINNYA (AGING, KPI, PROJECT, DLL)
                 else if (['kpi', 'operational', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
-                    let k = currentView.includes('aging') ? 'pjb-aging' : currentView; let arr = data[k] || [];
-                    if(currentView==='aging-sva') arr=arr.filter(d=>String(d.Kategori||d.Kategori_UM).toLowerCase().includes('sva'));
-                    else if(currentView==='aging-ops') arr=arr.filter(d=>String(d.Kategori||d.Kategori_UM).toLowerCase().includes('ops'));
-                    else if(currentView.includes('aging')) arr=arr.filter(d=>!/sva|ops/i.test(String(d.Kategori||d.Kategori_UM)));
-                    buildTable(`table-${currentView}`, arr.length?Object.keys(arr[0]):['Data'], arr, 100);
+                    let k = currentView.includes('aging') ? 'pjb-aging' : currentView; 
+                    let arr = data[k] || [];
+                    
+                    if (currentView === 'aging-sva') {
+                        arr = arr.filter(d => String(d.Kategori || d.Kategori_UM).toLowerCase().includes('sva'));
+                    } else if (currentView === 'aging-ops') {
+                        arr = arr.filter(d => String(d.Kategori || d.Kategori_UM).toLowerCase().includes('ops'));
+                    } else if (currentView.includes('aging')) {
+                        arr = arr.filter(d => !/sva|ops/i.test(String(d.Kategori || d.Kategori_UM)));
+                    }
+                    
+                    if (arr.length > 0) {
+                        buildTable(`table-${currentView}`, Object.keys(arr[0]), arr, 150);
+                    } else {
+                        buildTable(`table-${currentView}`, ['Keterangan'], []);
+                    }
                 }
-            } catch(e) { console.error(e); }
+            } catch(e) { 
+                console.error("Error dalam proses rendering Data:", e); 
+            }
         }
 
-        // FUNGSI GRAFIK (SUMBU X HANYA PERIODE BULANAN)
+        // ==========================================
+        // FUNGSI GRAFIK CHART.JS SANGAT RINGAN
+        // ==========================================
         function renderMbpCharts(data) {
-            let pD = {}; data.forEach(t => { let p=t.Periode||'-'; if(!pD[p]) pD[p]={R:0,DH:0,DR:0}; pD[p].R+=t.Revenue||0; pD[p].DH+=t.Delta_Hour||0; pD[p].DR+=t.Delta_RH||0; });
+            let pD = {}; 
+            data.forEach(t => { 
+                let p = t.Periode || '-'; 
+                if (!pD[p]) pD[p] = { R: 0, DH: 0, DR: 0 }; 
+                pD[p].R += (t.Revenue || 0); 
+                pD[p].DH += (t.Delta_Hour || 0); 
+                pD[p].DR += (t.Delta_RH || 0); 
+            });
             let lbs = Object.keys(pD);
             
+            // Render Bar Chart Revenue
             if (charts['mbp_rev']) charts['mbp_rev'].destroy();
             const ctxR = document.getElementById('chart-mbp-revenue');
-            if (ctxR) charts['mbp_rev'] = new Chart(ctxR, { type: 'bar', data: { labels: lbs, datasets: [{ label: 'Revenue (Rp)', data: lbs.map(p=>pD[p].R), backgroundColor: '#4f46e5', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: {display:false}} }});
+            if (ctxR) {
+                charts['mbp_rev'] = new Chart(ctxR, { 
+                    type: 'bar', 
+                    data: { 
+                        labels: lbs, 
+                        datasets: [{ 
+                            label: 'Revenue (Rp)', 
+                            data: lbs.map(p => pD[p].R), 
+                            backgroundColor: '#4f46e5', 
+                            borderRadius: 4 
+                        }] 
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        animation: false, 
+                        plugins: { datalabels: { display: false } } 
+                    }
+                });
+            }
             
+            // Render Bar Chart Delta
             if (charts['mbp_delta']) charts['mbp_delta'].destroy();
             const ctxD = document.getElementById('chart-mbp-delta');
-            if (ctxD) charts['mbp_delta'] = new Chart(ctxD, { type: 'bar', data: { labels: lbs, datasets: [{ label: 'Total DH', data: lbs.map(p=>pD[p].DH), backgroundColor: '#f59e0b', borderRadius: 4}, { label: 'Total DRH', data: lbs.map(p=>pD[p].DR), backgroundColor: '#06b6d4', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: {display:false}} }});
+            if (ctxD) {
+                charts['mbp_delta'] = new Chart(ctxD, { 
+                    type: 'bar', 
+                    data: { 
+                        labels: lbs, 
+                        datasets: [
+                            { label: 'Total DH', data: lbs.map(p => pD[p].DH), backgroundColor: '#f59e0b', borderRadius: 4}, 
+                            { label: 'Total DRH', data: lbs.map(p => pD[p].DR), backgroundColor: '#06b6d4', borderRadius: 4}
+                        ] 
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        animation: false, 
+                        plugins: { datalabels: { display: false } } 
+                    }
+                });
+            }
         }
 
         function renderSvaCharts(tbD, tB, tP, tNI) {
-            let mD = {}; tbD.forEach(t => { let b = t.Bulan||'-'; if(!mD[b]) mD[b]={R:0,B:0,NI:0}; mD[b].R+=t.Revenue||0; mD[b].B+=t.Biaya||0; mD[b].NI+=t.Net_Income||0; });
+            let mD = {}; 
+            tbD.forEach(t => { 
+                let b = t.Bulan || '-'; 
+                if (!mD[b]) mD[b] = { R: 0, B: 0, NI: 0 }; 
+                mD[b].R += (t.Revenue || 0); 
+                mD[b].B += (t.Biaya || 0); 
+                mD[b].NI += (t.Net_Income || 0); 
+            });
             let lbs = Object.keys(mD);
+
             if(charts['sva_line']) charts['sva_line'].destroy();
             const ctxL = document.getElementById('chart-sva-finance-line');
-            if(ctxL) charts['sva_line'] = new Chart(ctxL, { type: 'bar', data: { labels: lbs, datasets: [{ label: 'Rev', data: lbs.map(b=>mD[b].R), backgroundColor: '#4f46e5', borderRadius: 4}, { label: 'Biaya', data: lbs.map(b=>mD[b].B), backgroundColor: '#f43f5e', borderRadius: 4}, { label: 'Net Income', data: lbs.map(b=>mD[b].NI), backgroundColor: '#10b981', borderRadius: 4}]}, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: {display:false}} }});
+            if (ctxL) {
+                charts['sva_line'] = new Chart(ctxL, { 
+                    type: 'bar', 
+                    data: { 
+                        labels: lbs, 
+                        datasets: [
+                            { label: 'Rev', data: lbs.map(b => mD[b].R), backgroundColor: '#4f46e5', borderRadius: 4}, 
+                            { label: 'Biaya', data: lbs.map(b => mD[b].B), backgroundColor: '#f43f5e', borderRadius: 4}, 
+                            { label: 'Net Income', data: lbs.map(b => mD[b].NI), backgroundColor: '#10b981', borderRadius: 4}
+                        ]
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        animation: false, 
+                        plugins: { datalabels: { display: false } } 
+                    }
+                });
+            }
             
             if(charts['sva_pie']) charts['sva_pie'].destroy();
             const ctxP = document.getElementById('chart-sva-finance-pie');
-            if(ctxP) charts['sva_pie'] = new Chart(ctxP, { type: 'doughnut', data: { labels: ['Biaya', 'Pengembalian', 'Net Income'], datasets: [{ data: [tB, tP, tNI], backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: {display:false}} }});
+            if (ctxP) {
+                charts['sva_pie'] = new Chart(ctxP, { 
+                    type: 'doughnut', 
+                    data: { 
+                        labels: ['Biaya', 'Pengembalian', 'Net Income'], 
+                        datasets: [{ 
+                            data: [tB, tP, tNI], 
+                            backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'], 
+                            borderWidth: 0 
+                        }] 
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        animation: false, 
+                        plugins: { datalabels: { display: false } } 
+                    }
+                });
+            }
         }
 
         function renderAssetMasterCharts(tD) {
-            let cF = (k) => tD.reduce((a, r) => { let v=r[k]; if(v!=='-') a[v]=(a[v]||0)+1; return a; }, {});
-            let mC = cF('Merek'), jC = cF('Jenis'), kC = cF('Kondisi');
-            ['merek','jenis','kondisi'].forEach(n => { if(charts['asset_'+n]) charts['asset_'+n].destroy(); });
+            let countFreq = (k) => tD.reduce((acc, row) => { 
+                let val = row[k]; 
+                if (val !== '-') acc[val] = (acc[val] || 0) + 1; 
+                return acc; 
+            }, {});
+            
+            let mC = countFreq('Merek');
+            let jC = countFreq('Jenis');
+            let kC = countFreq('Kondisi');
+            
+            ['merek', 'jenis', 'kondisi'].forEach(n => { 
+                if (charts['asset_' + n]) charts['asset_' + n].destroy(); 
+            });
+
+            const opt = { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: { display: false }, legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } };
+            
             const ctxM = document.getElementById('chart-asset-merek');
-            if(ctxM) charts['asset_merek'] = new Chart(ctxM, { type: 'doughnut', data: { labels: Object.keys(mC), datasets: [{ data: Object.values(mC), backgroundColor: ['#4f46e5','#10b981','#f59e0b','#f43f5e'], borderWidth: 0 }] }, options:{responsive:true, maintainAspectRatio:false, animation: false, plugins: { datalabels: {display:false}, legend:{position:'right', labels:{boxWidth:10, font:{size:9}}} }}});
+            if (ctxM) charts['asset_merek'] = new Chart(ctxM, { type: 'doughnut', data: { labels: Object.keys(mC), datasets: [{ data: Object.values(mC), backgroundColor: ['#4f46e5','#10b981','#f59e0b','#f43f5e'], borderWidth: 0 }] }, options: opt });
+            
             const ctxJ = document.getElementById('chart-asset-jenis');
-            if(ctxJ) charts['asset_jenis'] = new Chart(ctxJ, { type: 'pie', data: { labels: Object.keys(jC), datasets: [{ data: Object.values(jC), backgroundColor: ['#0ea5e9','#8b5cf6','#64748b'], borderWidth: 0 }] }, options:{responsive:true, maintainAspectRatio:false, animation: false, plugins: { datalabels: {display:false}, legend:{position:'right', labels:{boxWidth:10, font:{size:9}}} }}});
+            if (ctxJ) charts['asset_jenis'] = new Chart(ctxJ, { type: 'pie', data: { labels: Object.keys(jC), datasets: [{ data: Object.values(jC), backgroundColor: ['#0ea5e9','#8b5cf6','#64748b'], borderWidth: 0 }] }, options: opt });
+            
             const ctxK = document.getElementById('chart-asset-kondisi');
-            if(ctxK) charts['asset_kondisi'] = new Chart(ctxK, { type: 'doughnut', data: { labels: Object.keys(kC), datasets: [{ data: Object.values(kC), backgroundColor: ['#10b981','#f59e0b','#f43f5e'], borderWidth: 0 }] }, options:{responsive:true, maintainAspectRatio:false, animation: false, plugins: { datalabels: {display:false}, legend:{position:'right', labels:{boxWidth:10, font:{size:9}}} }}});
+            if (ctxK) charts['asset_kondisi'] = new Chart(ctxK, { type: 'doughnut', data: { labels: Object.keys(kC), datasets: [{ data: Object.values(kC), backgroundColor: ['#10b981','#f59e0b','#f43f5e'], borderWidth: 0 }] }, options: opt });
         }
 
         function renderAssetGensetCharts(tD) {
-            let sC = tD.reduce((a, r) => { let v=r.Aset_Sewa; if(v!=='-') a[v]=(a[v]||0)+1; return a; }, {});
+            let sC = tD.reduce((acc, r) => { 
+                let val = r.Aset_Sewa; 
+                if (val !== '-') acc[val] = (acc[val] || 0) + 1; 
+                return acc; 
+            }, {});
+            
             if (charts['asset_genset_sewa']) charts['asset_genset_sewa'].destroy();
             const ctxG = document.getElementById('chart-asset-genset-sewa');
-            let securePlugins = typeof ChartDataLabels !== 'undefined' ? [ChartDataLabels] : [];
-            if(ctxG) charts['asset_genset_sewa'] = new Chart(ctxG, { type: 'doughnut', data: { labels: Object.keys(sC), datasets: [{ data: Object.values(sC), backgroundColor: ['#4f46e5','#10b981'], borderWidth: 0 }] }, plugins: securePlugins, options:{responsive:true, maintainAspectRatio:false, animation: false, plugins: { datalabels: {color:'#fff', font:{weight:'bold'}}, legend:{position:'right', labels:{boxWidth:12}} }}});
             
-            const gTot = document.getElementById('genset-total'); if(gTot) gTot.innerText = tD.length;
-            const gAkt = document.getElementById('genset-aktif'); if(gAkt) gAkt.innerText = tD.filter(d => /aktif/i.test(d.Aktif) && !/non/i.test(d.Aktif)).length;
+            let securePlugins = typeof ChartDataLabels !== 'undefined' ? [ChartDataLabels] : [];
+            
+            if (ctxG) {
+                charts['asset_genset_sewa'] = new Chart(ctxG, { 
+                    type: 'doughnut', 
+                    data: { 
+                        labels: Object.keys(sC), 
+                        datasets: [{ data: Object.values(sC), backgroundColor: ['#4f46e5','#10b981'], borderWidth: 0 }] 
+                    }, 
+                    plugins: securePlugins, 
+                    options: {
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        animation: false, 
+                        plugins: { 
+                            datalabels: { color: '#fff', font: { weight: 'bold' } }, 
+                            legend: { position: 'right', labels: { boxWidth: 12 } } 
+                        } 
+                    }
+                });
+            }
+            
+            const gTot = document.getElementById('genset-total'); 
+            if (gTot) gTot.innerText = tD.length;
+            
+            const gAkt = document.getElementById('genset-aktif'); 
+            if (gAkt) gAkt.innerText = tD.filter(d => /aktif/i.test(d.Aktif) && !/non/i.test(d.Aktif)).length;
         }
 
-        // PEMULIHAN MODULE DROP EXCEL PENUH
+        // ==========================================
+        // EXCEL DROPZONE (FULL WORKING MODULE)
+        // ==========================================
         function setupExcelDropZone() {
-            const dropZone = document.getElementById('drop-zone'); const fileInput = document.getElementById('excel-file-input');
-            if(!dropZone || !fileInput) return;
+            const dropZone = document.getElementById('drop-zone'); 
+            const fileInput = document.getElementById('excel-file-input');
+            
+            if (!dropZone || !fileInput) return;
+            
             dropZone.addEventListener('click', () => fileInput.click());
-            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500', 'bg-indigo-50'); });
-            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-500', 'bg-indigo-50'));
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault(); dropZone.classList.remove('border-indigo-500', 'bg-indigo-50');
-                if(e.dataTransfer.files.length) handleDroppedExcel(e.dataTransfer.files[0]);
+            dropZone.addEventListener('dragover', (e) => { 
+                e.preventDefault(); 
+                dropZone.classList.add('border-indigo-500', 'bg-indigo-50/50'); 
             });
-            fileInput.addEventListener('change', () => { if(fileInput.files.length) handleDroppedExcel(fileInput.files[0]); });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/50');
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault(); 
+                dropZone.classList.remove('border-indigo-500', 'bg-indigo-50/50');
+                if (e.dataTransfer.files.length) handleDroppedExcel(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', () => { 
+                if (fileInput.files.length) handleDroppedExcel(fileInput.files[0]); 
+            });
         }
 
         function handleDroppedExcel(file) {
-            const info = document.getElementById('file-info-zone'); if(info) { info.classList.remove('hidden'); info.innerText = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`; }
+            const info = document.getElementById('file-info-zone'); 
+            if (info) { 
+                info.classList.remove('hidden'); 
+                info.innerText = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`; 
+            }
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const data = new Uint8Array(e.target.result); const workbook = XLSX.read(data, { type: 'array' });
-                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); processExcelData(rows);
-                } catch(err) { console.error(err); }
+                    const data = new Uint8Array(e.target.result); 
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); 
+                    processExcelData(rows);
+                } catch (err) { 
+                    console.error("Gagal memproses file Excel:", err); 
+                }
             };
             reader.readAsArrayBuffer(file);
         }
 
         function processExcelData(rows) {
-            if(!rows || rows.length === 0) return;
+            if (!rows || rows.length === 0) return;
+            
             let keys = Object.keys(rows[0]);
-            let lblK = keys.find(k => /bulan|tanggal|nama/i.test(k)) || keys[0];
-            let revK = keys.find(k => /revenue|pendapatan|omset/i.test(k)) || keys[1];
-            let expK = keys.find(k => /expense|pengeluaran|biaya/i.test(k)) || keys[2];
-            let lbs = [], revs = [], exps = [];
-            rows.forEach(r => { lbs.push(r[lblK] || ''); revs.push(parseFloat(r[revK]) || 0); exps.push(parseFloat(r[expK]) || 0); });
-
-            const canv = document.getElementById('chart-excel-comparison'); if(!canv) return;
-            if(charts['excel_comparison']) charts['excel_comparison'].destroy();
-            charts['excel_comparison'] = new Chart(canv.getContext('2d'), {
-                type: 'bar',
-                data: { labels: lbs, datasets: [{ label: 'Pendapatan', data: revs, backgroundColor: '#4f46e5', borderRadius: 4 }, { label: 'Pengeluaran', data: exps, backgroundColor: '#ef4444', borderRadius: 4 }] },
-                options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: {display:false}} }
+            let labelKey = keys.find(k => /bulan|tanggal|nama/i.test(k)) || keys[0];
+            let revKey = keys.find(k => /revenue|pendapatan|omset/i.test(k)) || keys[1];
+            let expKey = keys.find(k => /expense|pengeluaran|biaya/i.test(k)) || keys[2];
+            
+            let labelsList = []; 
+            let revsList = []; 
+            let expsList = [];
+            
+            rows.forEach(r => { 
+                labelsList.push(r[labelKey] || ''); 
+                revsList.push(parseFloat(r[revKey]) || 0); 
+                expsList.push(parseFloat(r[expKey]) || 0); 
             });
-            const txt = document.getElementById('excel-analysis-text'); if(txt) txt.innerHTML = `<p class="text-emerald-600 font-bold">Analisa Drop Excel berhasil dirender!</p>`;
+
+            const canvas = document.getElementById('chart-excel-comparison'); 
+            if (!canvas) return;
+            
+            if (charts['excel_comparison']) charts['excel_comparison'].destroy();
+            
+            charts['excel_comparison'] = new Chart(canvas.getContext('2d'), {
+                type: 'bar',
+                data: { 
+                    labels: labelsList, 
+                    datasets: [
+                        { label: 'Pendapatan', data: revsList, backgroundColor: '#4f46e5', borderRadius: 4 }, 
+                        { label: 'Pengeluaran', data: expsList, backgroundColor: '#ef4444', borderRadius: 4 }
+                    ] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    animation: false, 
+                    plugins: { datalabels: { display: false } } 
+                }
+            });
+            
+            const textZone = document.getElementById('excel-analysis-text'); 
+            if (textZone) {
+                textZone.innerHTML = `<p class="text-emerald-600 font-bold text-sm">Analisa Drop Excel berhasil dirender dan visualisasi disajikan pada grafik!</p>`;
+            }
         }
     </script>
 </body>
