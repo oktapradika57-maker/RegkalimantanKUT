@@ -241,7 +241,7 @@
                         <div class="bg-indigo-50 text-indigo-600 p-4 rounded-full"><i class="fa-solid fa-money-bill-wave text-2xl"></i></div>
                     </div>
                     <div class="premium-card p-6 flex items-center justify-between bg-white border-b-4 border-b-amber-500">
-                        <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Konsumsi BBM</p><h3 id="mbp-kpi-liter" class="text-2xl font-black text-amber-600 mt-1">0 Liter</h3></div>
+                        <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Konsumsi BBM (Liter)</p><h3 id="mbp-kpi-liter" class="text-2xl font-black text-amber-600 mt-1">0 Liter</h3></div>
                         <div class="bg-amber-50 text-amber-600 p-4 rounded-full"><i class="fa-solid fa-droplet text-2xl"></i></div>
                     </div>
                     <div class="premium-card p-6 flex items-center justify-between bg-white border-b-4 border-b-rose-500">
@@ -252,10 +252,11 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="premium-card p-6 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Grafik Revenue Berdasarkan NOP</h4><div class="w-full h-[300px]"><canvas id="chart-mbp-revenue"></canvas></div></div>
+                    <div class="premium-card p-6 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-code-compare mr-2 text-amber-500"></i>Komparasi Delta Hour vs Delta RH</h4><div class="w-full h-[300px]"><canvas id="chart-mbp-delta"></canvas></div></div>
                 </div>
 
                 <div class="premium-card p-6 bg-white">
-                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest mb-6 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500"></i> Rincian Per NOP (Berdasarkan Estimasi Revenue)</h4>
+                    <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest mb-6 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500"></i> Rincian Per Tiket (Kartu)</h4>
                     <div id="mbp-analysis-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 max-h-[500px] overflow-y-auto pr-2 pb-2"></div>
                 </div>
 
@@ -408,7 +409,6 @@
         async function fetchFromSpreadsheet(sheetName) {
             try {
                 let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&headers=1`;
-                // MEMASTIKAN 'data MBP' BISA TERBACA DENGAN RANGE PENUH[cite: 3]
                 if (['data SVA', 'SDM', 'data MBP'].includes(sheetName)) {
                     url += '&range=A:AZ';
                 }
@@ -457,7 +457,6 @@
             if (icon) icon.classList.add('animate-spin');
 
             try {
-                // MEMASTIKAN 'mbp-rh' MEMBACA SHEET 'data MBP'[cite: 3]
                 const sheetMapping = {
                     'sva': 'data SVA', 'sdm': 'SDM', 'kpi': 'data KPI', 'operational': 'data Operational', 
                     'project': 'data project', 'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP',
@@ -646,12 +645,12 @@
                     renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
                 } 
                 
-                // 2. KODE BARU: MONITORING MBP DENGAN FILTER NOP & ESTIMASI REVENUE[cite: 3]
+                // 2. MONITORING MBP (KEMBALI KE KONSEP AWAL + LOGIKA NOP, REVENUE, LITER YANG BENAR)
                 else if (currentView === 'mbp-rh') {
                     let arr = data['mbp-rh'] || [];
                     
-                    // Ambil NOP unik untuk Dropdown
-                    let uniqueNOPs = [...new Set(arr.map(d => d['NOP'] || '-').filter(v => v !== '-'))].sort();
+                    // Setup Dropdown NOP
+                    let uniqueNOPs = [...new Set(arr.map(d => d['NOP'] || extractStringValue(d, ['nop'])).filter(v => v !== '-' && v !== ''))].sort();
                     let elNop = document.getElementById('filter-mbp-nop');
                     if(elNop) {
                         let currentVal = elNop.value;
@@ -662,40 +661,73 @@
                     const fN = elNop ? elNop.value : 'ALL';
                     
                     let tableData = [];
-                    let totalRevMBP = 0;
+                    let totalRevMBP = 0, totalLiter = 0, totalAnomali = 0;
 
-                    arr.forEach(d => {
-                        let nop = d['NOP'] || '-';
+                    for(let i = 0; i < arr.length; i++) {
+                        let d = arr[i];
+                        let nop = d['NOP'] || extractStringValue(d, ['nop']);
+                        
                         if (fN === 'ALL' || nop === fN) {
-                            let rev = parseFlexibleNumber(d['Estimasi Revenue']);
-                            totalRevMBP += rev;
-                            tableData.push({ NOP: nop, Revenue: rev });
+                            // Ekstraksi Kolom Spesifik (Estimasi Revenue dan Liter)
+                            let rev = parseFlexibleNumber(d['Estimasi Revenue'] || extractValue(d, ['estimasi revenue', 'revenue']));
+                            let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter', 'konsumsi', 'bbm']));
+                            
+                            // Ekstraksi Data Pelengkap untuk Kartu & Anomali
+                            let dH = extractValue(d, ['deltahour', 'delta jam']);
+                            let dRH = extractValue(d, ['deltarh']);
+                            let selisih = Math.abs(dH - dRH);
+                            let isAnomali = selisih >= 1; // Logika Anomali
+
+                            let p = extractStringValue(d, ['periode']);
+                            let site = extractStringValue(d, ['siteid', 'site']);
+                            let tiket = extractStringValue(d, ['ticketnumberswfm', 'ticketnumber', 'nomortiket', 'tiket']);
+                            let pic = extractStringValue(d, ['pictakeoverticket', 'pic']);
+                            
+                            totalRevMBP += rev; 
+                            totalLiter += ltr;
+                            if (isAnomali) totalAnomali++;
+
+                            tableData.push({
+                                NOP: nop, Site_ID: site, Nomor_Tiket: tiket, PIC: pic, Periode: p,
+                                Delta_Hour: dH, Delta_RH: dRH, Selisih: selisih, 
+                                Liter: ltr, Revenue: rev, Status: isAnomali ? 'Anomali' : 'Terverifikasi'
+                            });
                         }
-                    });
+                    }
 
+                    // Update KPI Atas
                     if (document.getElementById('mbp-kpi-rev')) document.getElementById('mbp-kpi-rev').innerText = formatIDR(totalRevMBP);
-                    if (document.getElementById('mbp-kpi-liter')) document.getElementById('mbp-kpi-liter').innerText = '0 Liter';
-                    if (document.getElementById('mbp-kpi-anomali')) document.getElementById('mbp-kpi-anomali').innerText = '0 Tiket';
+                    if (document.getElementById('mbp-kpi-liter')) document.getElementById('mbp-kpi-liter').innerText = totalLiter.toLocaleString('id-ID') + ' Liter';
+                    if (document.getElementById('mbp-kpi-anomali')) document.getElementById('mbp-kpi-anomali').innerText = totalAnomali + ' Tiket';
 
+                    // Gambar Grafik
+                    if (typeof renderMbpCharts === 'function') renderMbpCharts(tableData);
+
+                    // Membangun Tabel & Kartu
                     const tbody = document.getElementById('table-mbp-rh-new');
                     const analysisContainer = document.getElementById('mbp-analysis-container');
                     
                     if (tbody && analysisContainer) {
                         if (tableData.length === 0) {
-                            tbody.innerHTML = `<tr><td colspan="2" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>`;
+                            tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>`;
                             analysisContainer.innerHTML = `<div class="text-slate-400 text-sm font-semibold p-4 w-full text-center border border-slate-200 rounded-xl bg-slate-50">Data tidak ditemukan.</div>`;
                         } else {
+                            // Kelompokkan untuk tabel ringkasan
                             let agg = {};
                             tableData.forEach(r => {
                                 let nopKey = r.NOP || '-';
-                                if (!agg[nopKey]) agg[nopKey] = 0;
-                                agg[nopKey] += (Number(r.Revenue) || 0);
+                                if (!agg[nopKey]) { agg[nopKey] = { Total_Revenue: 0, Total_Anomali: 0, Total_Terverifikasi: 0 }; }
+                                agg[nopKey].Total_Revenue += (Number(r.Revenue) || 0);
+                                if (r.Status === 'Anomali') agg[nopKey].Total_Anomali++; else agg[nopKey].Total_Terverifikasi++;
                             });
 
+                            // Render Tabel Rincian Per NOP
                             let th = `<thead class="bg-gradient-to-r from-slate-100 to-slate-50 border-b border-slate-200 text-slate-600 font-extrabold text-[10px] uppercase tracking-wider text-left">
                                 <tr>
                                     <th class="p-4 rounded-tl-xl">Nama NOP</th>
-                                    <th class="p-4 rounded-tr-xl">Total Estimasi Revenue</th>
+                                    <th class="p-4">Estimasi Revenue</th>
+                                    <th class="p-4">Tiket Anomali</th>
+                                    <th class="p-4 rounded-tr-xl">Terverifikasi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 bg-white">`; 
@@ -710,45 +742,79 @@
                                         </div>
                                     </td> 
                                     <td class="p-4 font-black text-sm text-emerald-600">
-                                        Rp ${Number(agg[nop] || 0).toLocaleString('id-ID')}
+                                        Rp ${Number(agg[nop].Total_Revenue || 0).toLocaleString('id-ID')}
                                     </td> 
+                                    <td class="p-4">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-600 border border-rose-200">
+                                            <i class="fa-solid fa-circle-exclamation mr-1.5"></i> ${agg[nop].Total_Anomali} Kasus
+                                        </span>
+                                    </td> 
+                                    <td class="p-4">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200">
+                                            <i class="fa-solid fa-check-circle mr-1.5"></i> ${agg[nop].Total_Terverifikasi} Kasus
+                                        </span>
+                                    </td>
                                 </tr>`; 
                             });
                             tbody.innerHTML = th + `</tbody>`; 
 
+                            // Render Kartu Detail (Rincian per Tiket)
                             let cHTML = ''; 
-                            Object.keys(agg).slice(0, 100).forEach(nop => { 
+                            tableData.slice(0, 100).forEach(r => { 
+                                let isAno = r.Status === 'Anomali'; 
+                                let deltaJam = Number(r.Delta_Hour || 0);
+                                let revenueVal = Number(r.Revenue || 0);
+                                
                                 cHTML += `
-                                <div class="group relative bg-white border border-slate-200 rounded-2xl p-6 flex flex-col gap-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"> 
+                                <div class="group relative bg-white border ${isAno ? 'border-rose-200' : 'border-slate-200'} rounded-2xl p-6 flex flex-col gap-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"> 
+                                    <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-10 ${isAno ? 'bg-rose-500' : 'bg-emerald-500'} blur-xl transition-transform duration-500 group-hover:scale-150"></div>
                                     <div class="flex justify-between items-start relative z-10"> 
                                         <div class="flex flex-col">
-                                            <span class="font-black text-lg text-slate-800 tracking-tight">${nop}</span> 
+                                            <span class="font-black text-lg ${isAno ? 'text-rose-700' : 'text-slate-800'} tracking-tight">${r.NOP || '-'}</span> 
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1"><i class="fa-regular fa-clock mr-1"></i>${r.Periode || '-'}</span>
+                                        </div>
+                                        <span class="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm border ${isAno ? 'bg-rose-50 text-rose-600 border-rose-200' : 'bg-emerald-50 text-emerald-600 border-emerald-200'}">
+                                            ${isAno ? '<i class="fa-solid fa-triangle-exclamation mr-1"></i>' : '<i class="fa-solid fa-check-double mr-1"></i>'}
+                                            ${r.Status}
+                                        </span> 
+                                    </div> 
+                                    <div class="grid grid-cols-2 gap-3 text-xs text-slate-600 bg-slate-50/50 p-3.5 rounded-xl border border-slate-100 relative z-10 mt-2"> 
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-indigo-500"><i class="fa-solid fa-map-location-dot"></i></div>
+                                            <div class="flex flex-col overflow-hidden">
+                                                <span class="text-[9px] text-slate-400 uppercase font-bold">Site ID</span>
+                                                <span class="font-bold text-slate-700 truncate w-full" title="${r.Site_ID || '-'}">${r.Site_ID || '-'}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-amber-500"><i class="fa-solid fa-ticket"></i></div>
+                                            <div class="flex flex-col overflow-hidden">
+                                                <span class="text-[9px] text-slate-400 uppercase font-bold">Tiket</span>
+                                                <span class="font-bold text-slate-700 truncate w-full" title="${r.Nomor_Tiket || '-'}">${r.Nomor_Tiket || '-'}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2.5 col-span-2 pt-1">
+                                            <div class="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-sky-500"><i class="fa-solid fa-user-tie"></i></div>
+                                            <div class="flex flex-col">
+                                                <span class="text-[9px] text-slate-400 uppercase font-bold">PIC</span>
+                                                <span class="font-bold text-slate-700">${r.PIC || '-'}</span>
+                                            </div>
                                         </div>
                                     </div> 
                                     <div class="mt-auto pt-4 border-t border-slate-100 flex justify-between items-end relative z-10"> 
-                                        <div class="text-right w-full"> 
+                                        <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200"> 
+                                            <p class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Delta Hour</p> 
+                                            <p class="font-black text-sm ${deltaJam > 0 ? 'text-rose-600' : 'text-slate-700'}">${deltaJam.toFixed(2)} <span class="text-[10px] font-bold text-slate-400">Jam</span></p> 
+                                        </div> 
+                                        <div class="text-right"> 
                                             <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Estimasi Revenue</p> 
-                                            <p class="font-black text-xl text-indigo-700 tracking-tight">Rp ${Number(agg[nop] || 0).toLocaleString('id-ID')}</p> 
+                                            <p class="font-black text-xl text-indigo-700 tracking-tight">Rp ${revenueVal.toLocaleString('id-ID')}</p> 
                                         </div> 
                                     </div> 
                                 </div>`; 
                             }); 
-                            analysisContainer.innerHTML = cHTML;
                             
-                            // Render Chart MBP sederhana
-                            if (charts['mbp_rev']) charts['mbp_rev'].destroy();
-                            const ctxR = document.getElementById('chart-mbp-revenue');
-                            if (ctxR) {
-                                let lbs = Object.keys(agg);
-                                charts['mbp_rev'] = new Chart(ctxR, { 
-                                    type: 'bar', 
-                                    data: { 
-                                        labels: lbs, 
-                                        datasets: [{ label: 'Revenue (Rp)', data: lbs.map(p => agg[p]), backgroundColor: '#10b981', borderRadius: 4 }] 
-                                    }, 
-                                    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: { display: false } } }
-                                });
-                            }
+                            analysisContainer.innerHTML = cHTML;
                         }
                     }
                 }
@@ -891,6 +957,23 @@
         // ==========================================
         // FUNGSI GRAFIK (CHARTS)
         // ==========================================
+        function renderMbpCharts(data) {
+            let pD = {}; 
+            data.forEach(t => { 
+                let p = t.NOP || '-'; if (!pD[p]) pD[p] = { R: 0, DH: 0, DR: 0 }; 
+                pD[p].R += (t.Revenue || 0); pD[p].DH += (t.Delta_Hour || 0); pD[p].DR += (t.Delta_RH || 0); 
+            });
+            let lbs = Object.keys(pD);
+            
+            if (charts['mbp_rev']) charts['mbp_rev'].destroy();
+            const ctxR = document.getElementById('chart-mbp-revenue');
+            if (ctxR) charts['mbp_rev'] = new Chart(ctxR, { type: 'bar', data: { labels: lbs, datasets: [{ label: 'Revenue (Rp)', data: lbs.map(p => pD[p].R), backgroundColor: '#4f46e5', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: { display: false } } }});
+            
+            if (charts['mbp_delta']) charts['mbp_delta'].destroy();
+            const ctxD = document.getElementById('chart-mbp-delta');
+            if (ctxD) charts['mbp_delta'] = new Chart(ctxD, { type: 'bar', data: { labels: lbs, datasets: [{ label: 'Total DH', data: lbs.map(p => pD[p].DH), backgroundColor: '#f59e0b', borderRadius: 4}, { label: 'Total DRH', data: lbs.map(p => pD[p].DR), backgroundColor: '#06b6d4', borderRadius: 4}] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { datalabels: { display: false } } }});
+        }
+
         function renderSvaCharts(tbD, tB, tP, tNI) {
             let mD = {}; tbD.forEach(t => { let b = t.Bulan || '-'; if (!mD[b]) mD[b] = { R: 0, B: 0, NI: 0 }; mD[b].R += (t.Revenue || 0); mD[b].B += (t.Biaya || 0); mD[b].NI += (t.Net_Income || 0); });
             let lbs = Object.keys(mD);
