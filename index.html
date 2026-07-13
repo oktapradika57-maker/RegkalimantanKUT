@@ -232,7 +232,6 @@
             <section id="view-mbp-rh" class="view-pane space-y-8">
                 <div class="premium-card p-5 flex gap-4 flex-wrap items-center bg-white border-l-4 border-l-emerald-500">
                     <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-widest"><i class="fa-solid fa-filter mr-2"></i>Filter Data MBP</span>
-                    <!-- 3 FILTER BARU: PERIODE, NOP, STATUS -->
                     <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-emerald-500"><option value="ALL">Semua Periode (Kolom AM)</option></select>
                     <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-emerald-500"><option value="ALL">Semua NOP (Kolom T)</option></select>
                     <select id="filter-mbp-status" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-emerald-500">
@@ -275,7 +274,32 @@
                 </div>
             </section>
             
-            <section id="view-mbp-bbm" class="view-pane space-y-8"><div class="premium-card p-6 h-[400px] bg-white"><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-droplet mr-2 text-amber-500"></i>Analisa Konsumsi BBM</h4><div class="w-full h-[300px]"><canvas id="chart-mbp-bbm"></canvas></div></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap" id="table-mbp-bbm"></table></div></section>
+            <!-- SECTION BARU UNTUK ANALISA BBM (EVALUASI PIC & LITER VS DELTA RH) -->
+            <section id="view-mbp-bbm" class="view-pane space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="premium-card p-6 h-[400px] bg-white">
+                        <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-column mr-2 text-rose-500"></i>Grafik PIC (Tiket Tidak Safe)</h4>
+                        <div class="w-full h-[300px]"><canvas id="chart-mbp-bbm"></canvas></div>
+                    </div>
+                    <div class="premium-card overflow-hidden bg-white flex flex-col h-[400px]">
+                        <div class="p-6 border-b border-slate-100 bg-slate-50/80">
+                            <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-user-shield mr-2 text-indigo-500"></i>Daftar PIC Perlu Evaluasi (> 3 Anomali)</h4>
+                        </div>
+                        <div class="overflow-y-auto flex-1 p-2">
+                            <table class="w-full text-left text-xs whitespace-nowrap" id="table-mbp-bbm-evaluasi"></table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="premium-card overflow-hidden bg-white">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/80 flex justify-between items-center">
+                        <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-table-list mr-2 text-indigo-500"></i>Rincian Komparasi Liter vs Delta RH</h4>
+                    </div>
+                    <div class="overflow-x-auto max-h-[500px]">
+                        <table class="w-full text-left text-xs whitespace-nowrap" id="table-mbp-bbm"></table>
+                    </div>
+                </div>
+            </section>
             
             <section id="view-asset-master" class="view-pane space-y-8">
                 <div class="premium-card p-6 bg-white flex flex-wrap items-center justify-between gap-4 border-l-4 border-l-indigo-500">
@@ -584,6 +608,14 @@
                     headers.forEach(h => {
                         let val = row[h] != null ? row[h] : '-';
                         if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian)/i.test(h)) val = 'Rp ' + val.toLocaleString('id-ID');
+                        
+                        // Kustomisasi warna jika status / tindakan muncul
+                        if (val === '❌ Tidak Safe' || val === '⚠️ Perlu Evaluasi') {
+                            val = `<span class="text-rose-600 font-black bg-rose-50 px-2 py-1 rounded-md border border-rose-200">${val}</span>`;
+                        } else if (val === '✅ Safe') {
+                            val = `<span class="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-md border border-emerald-200">${val}</span>`;
+                        }
+                        
                         html += `<td class="px-5 py-3 font-medium text-xs whitespace-nowrap">${val}</td>`;
                     });
                     html += `</tr>`;
@@ -652,9 +684,7 @@
                     renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
                 } 
                 
-                // ==========================================
-                // 2. KODE BARU MONITORING MBP (REVENUE COL AL, LITER COL AJ, PERIODE COL AM)
-                // ==========================================
+                // 2. MONITORING MBP (REVENUE COL AL, LITER COL AJ, PERIODE COL AM)
                 else if (currentView === 'mbp-rh') {
                     let arr = data['mbp-rh'] || [];
                     
@@ -787,9 +817,7 @@
                             });
                             tbody.innerHTML = th + `</tbody>`; 
 
-                            // ==========================================
                             // Render Kartu Detail (Rincian per Tiket)
-                            // ==========================================
                             let cHTML = ''; 
                             tableData.slice(0, 100).forEach(r => { 
                                 let isAno = r.Status === 'Anomali'; 
@@ -861,7 +889,88 @@
                     }
                 }
                 
-                // 3. DATA SDM
+                // ==========================================
+                // 3. ANALISA KONSUMSI BBM (EVALUASI PIC LITER VS DELTA RH)
+                // ==========================================
+                else if (currentView === 'mbp-bbm') {
+                    let arr = data['mbp-rh'] || []; // Mengambil data BBM dari sheet MBP
+                    let tableData = [];
+                    let picAnomaliCount = {};
+
+                    arr.forEach(d => {
+                        let tiket = extractStringValue(d, ['ticketnumberswfm', 'ticketnumber', 'nomortiket', 'tiket']);
+                        let pic = extractStringValue(d, ['pictakeoverticket', 'pic', 'nama']);
+                        let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter', 'konsumsi', 'bbm']));
+                        let dRH = parseFlexibleNumber(d['Delta RH'] || extractValue(d, ['deltarh']));
+
+                        // LOGIKA EVALUASI: Liter > 20 DAN Delta RH <= 5 jam dikategorikan "Tidak Safe"
+                        let isTidakSafe = (ltr > 20 && dRH <= 5);
+                        let status = isTidakSafe ? '❌ Tidak Safe' : '✅ Safe';
+
+                        // Menghitung jumlah anomali per PIC
+                        if (pic !== '-' && pic !== '') {
+                            if (!picAnomaliCount[pic]) picAnomaliCount[pic] = 0;
+                            if (isTidakSafe) picAnomaliCount[pic]++;
+                        }
+
+                        tableData.push({
+                            'Nomor_Tiket': tiket,
+                            'Nama_PIC': pic,
+                            'Total_Liter': ltr,
+                            'Delta_RH': dRH,
+                            'Status_Evaluasi': status
+                        });
+                    });
+
+                    // Render Tabel Detail Seluruh BBM
+                    if (tableData.length > 0) buildTable('table-mbp-bbm', ['Nomor_Tiket', 'Nama_PIC', 'Total_Liter', 'Delta_RH', 'Status_Evaluasi'], tableData, 200);
+                    else buildTable('table-mbp-bbm', ['Keterangan'], []);
+
+                    // LOGIKA PERLU EVALUASI: > 3 kali anomali
+                    let evaluasiPIC = Object.keys(picAnomaliCount)
+                        .filter(pic => picAnomaliCount[pic] > 3)
+                        .sort((a, b) => picAnomaliCount[b] - picAnomaliCount[a]) // Urutkan yang paling banyak
+                        .map(pic => ({
+                            'Nama_PIC': pic,
+                            'Jumlah_Tiket_Anomali': picAnomaliCount[pic],
+                            'Tindakan': '⚠️ Perlu Evaluasi'
+                        }));
+
+                    // Render Tabel Evaluasi
+                    if (evaluasiPIC.length > 0) buildTable('table-mbp-bbm-evaluasi', ['Nama_PIC', 'Jumlah_Tiket_Anomali', 'Tindakan'], evaluasiPIC);
+                    else buildTable('table-mbp-bbm-evaluasi', ['Keterangan'], [{ Keterangan: 'Belum ada PIC yang melebihi batas 3 anomali.' }]);
+
+                    // Render Grafik Top 10 PIC bermasalah
+                    if (charts['mbp_bbm']) charts['mbp_bbm'].destroy();
+                    const ctxBBM = document.getElementById('chart-mbp-bbm');
+                    if (ctxBBM) {
+                        let sortedPICs = Object.keys(picAnomaliCount)
+                            .map(p => ({ pic: p, count: picAnomaliCount[p] }))
+                            .filter(p => p.count > 0)
+                            .sort((a, b) => b.count - a.count)
+                            .slice(0, 10);
+
+                        charts['mbp_bbm'] = new Chart(ctxBBM, {
+                            type: 'bar',
+                            data: {
+                                labels: sortedPICs.map(p => p.pic.substring(0, 12)), 
+                                datasets: [{
+                                    label: 'Total Tiket Tidak Safe',
+                                    data: sortedPICs.map(p => p.count),
+                                    backgroundColor: sortedPICs.map(p => p.count > 3 ? '#ef4444' : '#f59e0b'), // Merah jika >3, Oranye jika <=3
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: { 
+                                responsive: true, 
+                                maintainAspectRatio: false,
+                                plugins: { datalabels: { display: false } }
+                            }
+                        });
+                    }
+                }
+                
+                // 4. DATA SDM
                 else if (currentView === 'sdm') {
                     let s = (data['sdm'] || []).reduce((acc, r) => {
                         let k = extractStringValue(r, ['kepemilikan', 'nama']); 
@@ -881,7 +990,7 @@
                     else buildTable('table-sdm', ['Keterangan'], []);
                 }
                 
-                // 4. DATA ASSET MASTER MOBIL
+                // 5. DATA ASSET MASTER MOBIL
                 else if (currentView === 'asset-master') {
                     let arr = data['asset-master'] || [];
                     let tableData = arr.map(d => ({ 
@@ -902,7 +1011,7 @@
                     renderAssetMasterCharts(filteredData);
                 } 
                 
-                // 5. DATA ASSET GENSET
+                // 6. DATA ASSET GENSET
                 else if (currentView === 'asset-genset') {
                     let arr = data['asset-genset'] || [];
                     let tableData = arr.map(d => ({ 
@@ -923,7 +1032,7 @@
                     renderAssetGensetCharts(filteredData);
                 } 
                 
-                // 6. DATA OPERATIONAL 
+                // 7. DATA OPERATIONAL 
                 else if (currentView === 'operational') {
                     let arr = data['operational'] || [];
                     
@@ -982,7 +1091,7 @@
                     }
                 }
                 
-                // 7. MENU LAINNYA
+                // 8. MENU LAINNYA
                 else if (['kpi', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya'].includes(currentView)) {
                     let k = currentView.includes('aging') ? 'pjb-aging' : currentView; let arr = data[k] || [];
                     
