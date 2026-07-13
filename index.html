@@ -231,7 +231,7 @@
 
             <section id="view-mbp-rh" class="view-pane space-y-8">
                 <div class="premium-card p-5 flex gap-4 flex-wrap items-center bg-white border-l-4 border-l-emerald-500">
-                    <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-widest"><i class="fa-solid fa-bolt mr-2"></i>Mode Cepat (Delta RH >= 0.3)</span>
+                    <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-widest"><i class="fa-solid fa-bolt mr-2"></i>Mode MBP (Semua Data)</span>
                     <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-emerald-500"><option value="ALL">Semua Periode</option></select>
                     <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-3 py-2 outline-none focus:border-emerald-500"><option value="ALL">Semua NOP (Kolom E)</option></select>
                 </div>
@@ -410,7 +410,7 @@
         async function fetchFromSpreadsheet(sheetName) {
             try {
                 let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&headers=1`;
-                if (['data SVA', 'SDM', 'MBP'].includes(sheetName)) {
+                if (['data SVA', 'SDM', 'data MBP'].includes(sheetName)) {
                     url += '&range=A:AZ';
                 }
                 
@@ -461,7 +461,7 @@
             try {
                 const sheetMapping = {
                     'sva': 'data SVA', 'sdm': 'SDM', 'kpi': 'data KPI', 'operational': 'data Operational', 
-                    'project': 'data project', 'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'MBP',
+                    'project': 'data project', 'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP',
                     'asset-master': 'data Asset', 'asset-kut': 'asset-kut', 'pjb-aging': 'pjb-aging', 'asset-genset': 'data Genset'   
                 };
 
@@ -667,7 +667,7 @@
                         let d = arr[i];
                         let dRH = extractValue(d, ['deltarh']); 
                         
-                        if (dRH >= 0) {
+                        if (dRH >= 0) { // FILTER DIUBAH MENJADI >= 0 AGAR SEMUA DATA MUNCUL
                             let p = extractStringValue(d, keysPeriode);
                             let n = extractStringValue(d, keysNOP);
                             
@@ -702,7 +702,7 @@
                     
                     if (tbody && analysisContainer) {
                         if (tableData.length === 0) {
-                            tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini (atau Delta RH < 0.3).</td></tr>`;
+                            tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-medium">Tidak ada data untuk filter ini.</td></tr>`;
                             analysisContainer.innerHTML = `<div class="text-slate-400 text-sm font-semibold p-4 w-full text-center border border-slate-200 rounded-xl bg-slate-50">Data tidak ditemukan.</div>`;
                         } else {
                             let agg = {};
@@ -803,12 +803,12 @@
                                         </div> 
                                     </div> 
                                 </div>`; 
-                }); 
-                
-                analysisContainer.innerHTML = cHTML;
-            }
-        }
-    }
+                            }); 
+                            
+                            analysisContainer.innerHTML = cHTML;
+                        }
+                    }
+                }
                 
                 // 3. DATA SDM
                 else if (currentView === 'sdm') {
@@ -881,8 +881,6 @@
                     let tableData = arr.map(d => {
                         let keys = Object.keys(d);
                         
-                        // Sistem pintar otomatis mengambil index kolom ke 7 (G), 8 (H), 9 (I), 10 (J), 21 (U), 22 (V)
-                        // Karena Array Index dimulai dari 0, maka G=6, H=7, I=8, J=9, U=20, V=21.
                         let kG = keys[6] || 'Kolom_G';
                         let kH = keys[7] || 'Kolom_H';
                         let kI = keys[8] || 'Kolom_I';
