@@ -274,7 +274,7 @@
                 </div>
             </section>
             
-            <!-- SECTION BARU UNTUK ANALISA BBM (EVALUASI PIC & LITER VS DELTA RH) -->
+            <!-- SECTION ANALISA BBM (EVALUASI PIC LITER VS DELTA RH KHUSUS DATA ANOMALI) -->
             <section id="view-mbp-bbm" class="view-pane space-y-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="premium-card p-6 h-[400px] bg-white">
@@ -283,7 +283,7 @@
                     </div>
                     <div class="premium-card overflow-hidden bg-white flex flex-col h-[400px]">
                         <div class="p-6 border-b border-slate-100 bg-slate-50/80">
-                            <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-user-shield mr-2 text-indigo-500"></i>Daftar PIC Perlu Evaluasi (> 3 Anomali)</h4>
+                            <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-user-shield mr-2 text-indigo-500"></i>Daftar PIC Perlu Evaluasi (> 3 Kasus)</h4>
                         </div>
                         <div class="overflow-y-auto flex-1 p-2">
                             <table class="w-full text-left text-xs whitespace-nowrap" id="table-mbp-bbm-evaluasi"></table>
@@ -293,7 +293,7 @@
                 
                 <div class="premium-card overflow-hidden bg-white">
                     <div class="p-6 border-b border-slate-100 bg-slate-50/80 flex justify-between items-center">
-                        <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-table-list mr-2 text-indigo-500"></i>Rincian Komparasi Liter vs Delta RH</h4>
+                        <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-table-list mr-2 text-indigo-500"></i>Rincian Komparasi (Hanya Menampilkan Tiket Anomali)</h4>
                     </div>
                     <div class="overflow-x-auto max-h-[500px]">
                         <table class="w-full text-left text-xs whitespace-nowrap" id="table-mbp-bbm"></table>
@@ -609,11 +609,12 @@
                         let val = row[h] != null ? row[h] : '-';
                         if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian)/i.test(h)) val = 'Rp ' + val.toLocaleString('id-ID');
                         
-                        // Kustomisasi warna jika status / tindakan muncul
+                        // Kustomisasi warna badge untuk status / tindakan
                         if (val === '❌ Tidak Safe' || val === '⚠️ Perlu Evaluasi') {
                             val = `<span class="text-rose-600 font-black bg-rose-50 px-2 py-1 rounded-md border border-rose-200">${val}</span>`;
-                        } else if (val === '✅ Safe') {
-                            val = `<span class="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-md border border-emerald-200">${val}</span>`;
+                        } else if (val === '✅ Safe' || val === '⚠️ Anomali Waktu') {
+                            let color = val === '✅ Safe' ? 'emerald' : 'amber';
+                            val = `<span class="text-${color}-600 font-bold bg-${color}-50 px-2 py-1 rounded-md border border-${color}-200">${val}</span>`;
                         }
                         
                         html += `<td class="px-5 py-3 font-medium text-xs whitespace-nowrap">${val}</td>`;
@@ -838,11 +839,19 @@
                                         </span> 
                                     </div> 
                                     
+                                    <!-- Menambahkan kembali SITE ID dan grid informasi lokasi/PIC -->
                                     <div class="grid grid-cols-2 gap-3 text-xs text-slate-600 bg-slate-50/50 p-3.5 rounded-xl border border-slate-100 relative z-10 mt-1"> 
-                                        <div class="flex items-center gap-2.5">
-                                            <div class="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-indigo-500"><i class="fa-solid fa-ticket"></i></div>
+                                        <div class="flex items-center gap-2.5 col-span-2">
+                                            <div class="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-indigo-500"><i class="fa-solid fa-map-location-dot"></i></div>
                                             <div class="flex flex-col overflow-hidden">
-                                                <span class="text-[9px] text-slate-400 uppercase font-bold">Tiket / Site</span>
+                                                <span class="text-[9px] text-slate-400 uppercase font-bold">Site ID</span>
+                                                <span class="font-bold text-slate-700 truncate w-full" title="${r.Site_ID || '-'}">${r.Site_ID || '-'}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center text-amber-500"><i class="fa-solid fa-ticket"></i></div>
+                                            <div class="flex flex-col overflow-hidden">
+                                                <span class="text-[9px] text-slate-400 uppercase font-bold">Tiket</span>
                                                 <span class="font-bold text-slate-700 truncate w-full" title="${r.Nomor_Tiket}">${r.Nomor_Tiket}</span>
                                             </div>
                                         </div>
@@ -890,57 +899,64 @@
                 }
                 
                 // ==========================================
-                // 3. ANALISA KONSUMSI BBM (EVALUASI PIC LITER VS DELTA RH)
+                // 3. ANALISA KONSUMSI BBM (FOKUS HANYA PADA DATA ANOMALI)
                 // ==========================================
                 else if (currentView === 'mbp-bbm') {
-                    let arr = data['mbp-rh'] || []; // Mengambil data BBM dari sheet MBP
+                    let arr = data['mbp-rh'] || []; 
                     let tableData = [];
                     let picAnomaliCount = {};
 
                     arr.forEach(d => {
-                        let tiket = extractStringValue(d, ['ticketnumberswfm', 'ticketnumber', 'nomortiket', 'tiket']);
-                        let pic = extractStringValue(d, ['pictakeoverticket', 'pic', 'nama']);
-                        let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter', 'konsumsi', 'bbm']));
+                        let dH = parseFlexibleNumber(d['Delta Hour'] || extractValue(d, ['deltahour', 'delta jam']));
                         let dRH = parseFlexibleNumber(d['Delta RH'] || extractValue(d, ['deltarh']));
+                        let selisih = Math.abs(dH - dRH);
 
-                        // LOGIKA EVALUASI: Liter > 20 DAN Delta RH <= 5 jam dikategorikan "Tidak Safe"
-                        let isTidakSafe = (ltr > 20 && dRH <= 5);
-                        let status = isTidakSafe ? '❌ Tidak Safe' : '✅ Safe';
+                        // HANYA MENGAMBIL DATA TIKET ANOMALI SAJA AGAR LURUS DENGAN MENU MBP RH
+                        if (selisih >= 1) {
+                            let tiket = extractStringValue(d, ['ticketnumberswfm', 'ticketnumber', 'nomortiket', 'tiket']);
+                            let pic = extractStringValue(d, ['pictakeoverticket', 'pic', 'nama']);
+                            let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter', 'konsumsi', 'bbm']));
 
-                        // Menghitung jumlah anomali per PIC
-                        if (pic !== '-' && pic !== '') {
-                            if (!picAnomaliCount[pic]) picAnomaliCount[pic] = 0;
-                            if (isTidakSafe) picAnomaliCount[pic]++;
+                            // LOGIKA EVALUASI: Khusus tiket anomali, jika liter > 20 dan dRH <= 5 jam dikategorikan "Tidak Safe"
+                            let isTidakSafe = (ltr > 20 && dRH <= 5);
+                            let status = isTidakSafe ? '❌ Tidak Safe' : '⚠️ Anomali Waktu';
+
+                            // Menghitung jumlah kategori "Tidak Safe" per PIC
+                            if (pic !== '-' && pic !== '') {
+                                if (!picAnomaliCount[pic]) picAnomaliCount[pic] = 0;
+                                if (isTidakSafe) picAnomaliCount[pic]++;
+                            }
+
+                            tableData.push({
+                                'Nomor_Tiket': tiket,
+                                'Nama_PIC': pic,
+                                'Total_Liter': ltr,
+                                'Delta_Hour': dH,
+                                'Delta_RH': dRH,
+                                'Status_Evaluasi': status
+                            });
                         }
-
-                        tableData.push({
-                            'Nomor_Tiket': tiket,
-                            'Nama_PIC': pic,
-                            'Total_Liter': ltr,
-                            'Delta_RH': dRH,
-                            'Status_Evaluasi': status
-                        });
                     });
 
-                    // Render Tabel Detail Seluruh BBM
-                    if (tableData.length > 0) buildTable('table-mbp-bbm', ['Nomor_Tiket', 'Nama_PIC', 'Total_Liter', 'Delta_RH', 'Status_Evaluasi'], tableData, 200);
+                    // Render Tabel Detail Seluruh BBM Anomali
+                    if (tableData.length > 0) buildTable('table-mbp-bbm', ['Nomor_Tiket', 'Nama_PIC', 'Total_Liter', 'Delta_Hour', 'Delta_RH', 'Status_Evaluasi'], tableData, 200);
                     else buildTable('table-mbp-bbm', ['Keterangan'], []);
 
-                    // LOGIKA PERLU EVALUASI: > 3 kali anomali
+                    // LOGIKA PERLU EVALUASI: > 3 kali melakukan tiket "Tidak Safe"
                     let evaluasiPIC = Object.keys(picAnomaliCount)
                         .filter(pic => picAnomaliCount[pic] > 3)
                         .sort((a, b) => picAnomaliCount[b] - picAnomaliCount[a]) // Urutkan yang paling banyak
                         .map(pic => ({
                             'Nama_PIC': pic,
-                            'Jumlah_Tiket_Anomali': picAnomaliCount[pic],
+                            'Jumlah_Kasus_Tidak_Safe': picAnomaliCount[pic],
                             'Tindakan': '⚠️ Perlu Evaluasi'
                         }));
 
-                    // Render Tabel Evaluasi
-                    if (evaluasiPIC.length > 0) buildTable('table-mbp-bbm-evaluasi', ['Nama_PIC', 'Jumlah_Tiket_Anomali', 'Tindakan'], evaluasiPIC);
-                    else buildTable('table-mbp-bbm-evaluasi', ['Keterangan'], [{ Keterangan: 'Belum ada PIC yang melebihi batas 3 anomali.' }]);
+                    // Render Tabel Evaluasi PIC
+                    if (evaluasiPIC.length > 0) buildTable('table-mbp-bbm-evaluasi', ['Nama_PIC', 'Jumlah_Kasus_Tidak_Safe', 'Tindakan'], evaluasiPIC);
+                    else buildTable('table-mbp-bbm-evaluasi', ['Keterangan'], [{ Keterangan: 'Belum ada PIC yang melebihi batas 3 kasus.' }]);
 
-                    // Render Grafik Top 10 PIC bermasalah
+                    // Render Grafik Top PIC bermasalah
                     if (charts['mbp_bbm']) charts['mbp_bbm'].destroy();
                     const ctxBBM = document.getElementById('chart-mbp-bbm');
                     if (ctxBBM) {
@@ -955,9 +971,9 @@
                             data: {
                                 labels: sortedPICs.map(p => p.pic.substring(0, 12)), 
                                 datasets: [{
-                                    label: 'Total Tiket Tidak Safe',
+                                    label: 'Total Kasus Tidak Safe',
                                     data: sortedPICs.map(p => p.count),
-                                    backgroundColor: sortedPICs.map(p => p.count > 3 ? '#ef4444' : '#f59e0b'), // Merah jika >3, Oranye jika <=3
+                                    backgroundColor: sortedPICs.map(p => p.count > 3 ? '#ef4444' : '#f59e0b'), // Merah jika >3
                                     borderRadius: 4
                                 }]
                             },
