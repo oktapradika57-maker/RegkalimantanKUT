@@ -10,245 +10,331 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         :root { --primary: #4f46e5; --secondary: #10b981; --bg-dark: #0f172a; --bg-card: rgba(255, 255, 255, 0.98); }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; perspective: 1000px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
+        /* Kartu Premium Elegan */
         .premium-card {
             background: var(--bg-card); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 1.5rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
         }
-        .premium-card:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.15); }
+        .premium-card:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(79, 70, 229, 0.1); }
         
-        /* Sidebar 3D */
-        .menu-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
-        .menu-btn:hover { transform: translateX(8px); color: white !important; background-color: rgba(30, 41, 59, 0.8); }
-        .active-menu-3d { background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%) !important; color: white !important; box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4); transform: translateX(10px) scale(1.02); font-weight: 700; border-left: 4px solid #818cf8; }
-        
-        /* Layout & Transitions (STRICT) */
-        .view-pane { display: none; opacity: 0; transform: translateY(15px); }
-        .view-pane.active { display: block; animation: floatIn 0.5s ease-out forwards; }
-        @keyframes floatIn { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        /* Animasi Transisi Halaman yang Lembut */
+        .view-pane { display: none; opacity: 0; transform: translateY(10px); }
+        .view-pane.active { display: block; animation: floatIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes floatIn { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
 
-        /* General Styling */
-        .filter-select { appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.2em; cursor: pointer; }
+        /* TABEL & FILTER DROPDOWN (DIPERBAIKI) */
+        .filter-select {
+            cursor: pointer; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem;
+            padding: 0.5rem 1rem; font-weight: 700; color: #334155; outline: none; transition: all 0.2s;
+        }
+        .filter-select:focus { border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
         .custom-table th { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(5px); position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #e2e8f0; }
         .custom-table tr:hover td { background-color: rgba(79, 70, 229, 0.03); }
 
-        /* AI Box */
-        .ai-insight { background: linear-gradient(120deg, #ffffff 0%, #f1f5f9 100%); border-left: 6px solid; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative; overflow: hidden; }
-        .ai-insight::after { content: '\f544'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -5px; bottom: -15px; font-size: 80px; opacity: 0.04; }
+        /* AI Insight Box (Elegan) */
+        .ai-insight { background: linear-gradient(120deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid; box-shadow: 0 4px 20px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
+        .ai-insight::after { content: '\f544'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 0; bottom: -20px; font-size: 100px; opacity: 0.03; }
         
-        /* Splash Screen */
-        .logo-glow { animation: logoPulse 2s infinite ease-in-out; }
-        @keyframes logoPulse { 0%, 100% { filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3)); } 50% { filter: drop-shadow(0 0 25px rgba(99, 102, 241, 0.7)); } }
+        /* Animasi Logo */
+        .logo-glow { animation: logoPulse 2.5s infinite ease-in-out; }
+        @keyframes logoPulse { 0%, 100% { filter: drop-shadow(0 0 10px rgba(79, 70, 229, 0.2)); } 50% { filter: drop-shadow(0 0 25px rgba(79, 70, 229, 0.5)); } }
+
+        /* Desain Menu Utama (Grid Profesional ala Enterprise) */
+        .main-menu-bg {
+            background-color: #fbbd23; background-image: radial-gradient(#fde047 1px, transparent 1px); background-size: 20px 20px;
+            min-height: 70vh; border-radius: 2rem; border: 4px solid white; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .grid-menu-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 16px; cursor: pointer; text-decoration: none; padding: 10px; transition: transform 0.3s;
+        }
+        .grid-menu-btn .circle-icon {
+            width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #75b8ba, #4b8285);
+            box-shadow: inset -5px -5px 12px rgba(0,0,0,0.2), inset 5px 5px 10px rgba(255,255,255,0.2), 5px 5px 15px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.3);
+            display: flex; align-items: center; justify-content: center; font-size: 3.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden;
+        }
+        .grid-menu-btn:hover .circle-icon { transform: scale(1.1) rotate(5deg); box-shadow: inset -5px -5px 12px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.4); }
+        .grid-menu-btn .pill-label {
+            color: white; font-weight: 900; font-size: 13px; padding: 8px 24px; border-radius: 999px; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2), inset 0 2px 3px rgba(255,255,255,0.3); border: 3px solid white; transition: all 0.3s;
+        }
+        .grid-menu-btn:hover .pill-label { transform: translateY(2px); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        .grad-cyan-yellow { background: linear-gradient(90deg, #0ea5e9, #10b981, #eab308); }
+        .grad-purple-pink { background: linear-gradient(90deg, #6366f1, #d946ef, #f43f5e); }
+        .grad-blue-cyan { background: linear-gradient(90deg, #3b82f6, #06b6d4, #14b8a6); }
+        .grad-orange-red { background: linear-gradient(90deg, #f59e0b, #ea580c, #ef4444); }
+        .grad-dark-blue { background: linear-gradient(90deg, #1e3a8a, #312e81, #4f46e5); }
+        
+        /* Sidebar Menu 3D */
+        .menu-btn { transition: all 0.2s ease; position: relative; }
+        .menu-btn:hover { background-color: rgba(241, 245, 249, 0.8); color: #4f46e5; padding-left: 1.25rem; }
+        .active-menu-3d { background-color: #eff6ff !important; color: #4f46e5 !important; font-weight: 700; border-left: 4px solid #4f46e5; }
     </style>
 </head>
-<body class="text-slate-800 overflow-hidden h-screen flex">
+<body class="text-slate-800 h-screen flex overflow-hidden">
 
     <!-- SPLASH SCREEN -->
-    <div id="splash-screen" class="fixed inset-0 bg-[#0f172a] z-50 flex flex-col items-center justify-center transition-opacity duration-700">
-        <div class="text-center space-y-6 max-w-md px-6">
-            <div class="logo-glow bg-white p-6 rounded-3xl inline-block shadow-2xl border-4 border-slate-800">
-                <!-- User Specific Logo in Splash Screen -->
-                <img src="koperasi-jasa-konstruksi-tower-event-organizer-network-monitoring-telekomunikasi-kisel-group-logo-kut.webp" alt="Logo KUT" class="h-20 w-auto object-contain mb-2 mx-auto">
+    <div id="splash-screen" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="text-center space-y-8 max-w-md px-6">
+            <div class="logo-glow inline-block">
+                <img src="koperasi-jasa-konstruksi-tower-event-organizer-network-monitoring-telekomunikasi-kisel-group-logo-kut.webp" onerror="this.src='https://via.placeholder.com/250x100?text=LOGO+KUT'" alt="Logo KUT" class="h-28 w-auto object-contain mx-auto">
             </div>
-            <div class="space-y-2">
-                <h2 class="text-white text-xl font-extrabold tracking-wide">PT KINARYA UTAMA TEKNIK</h2>
-                <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest">Enterprise Loading & Syncing...</p>
+            <div class="space-y-3">
+                <h2 class="text-slate-800 text-2xl font-black tracking-tight">KUT Enterprise System</h2>
+                <p class="text-indigo-500 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> Sinkronisasi Database...
+                </p>
             </div>
-            <div class="w-48 h-1.5 bg-slate-800 rounded-full mx-auto overflow-hidden relative mt-4">
-                <div class="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 w-full rounded-full absolute -translateX-full animate-[loadingBar_2s_infinite_ease-in-out]"></div>
+            <div class="w-56 h-1.5 bg-slate-100 rounded-full mx-auto overflow-hidden relative mt-4 shadow-inner">
+                <div class="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 w-full rounded-full absolute -translateX-full animate-[loadingBar_2s_infinite_ease-in-out]"></div>
             </div>
         </div>
     </div>
 
     <!-- SIDEBAR -->
-    <aside id="sidebar" class="w-72 bg-[#0b1120] text-slate-400 flex flex-col h-full flex-shrink-0 shadow-[10px_0_30px_rgba(0,0,0,0.2)] z-20 border-r border-slate-800 transition-all duration-400 overflow-hidden relative">
-        <div class="p-5 h-24 flex items-center justify-center border-b border-slate-800/80 bg-white relative rounded-br-3xl">
-            <!-- LOGO REQUESTED BY USER -->
-            <img id="main-logo" src="koperasi-jasa-konstruksi-tower-event-organizer-network-monitoring-telekomunikasi-kisel-group-logo-kut.webp" alt="Logo KUT" class="h-16 w-auto object-contain transition-transform hover:scale-105 cursor-pointer drop-shadow-md">
+    <aside id="sidebar" class="w-72 bg-white text-slate-600 flex flex-col h-full flex-shrink-0 z-20 border-r border-slate-200 transition-all duration-300 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+        <div class="p-6 h-24 flex items-center justify-center border-b border-slate-100 bg-slate-50/50">
+            <a href="#home" class="block transition-transform hover:scale-105">
+                <img src="koperasi-jasa-konstruksi-tower-event-organizer-network-monitoring-telekomunikasi-kisel-group-logo-kut.webp" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'" alt="Logo KUT" class="h-14 w-auto object-contain">
+            </a>
         </div>
 
-        <nav class="flex-1 overflow-y-auto p-4 space-y-3 text-sm whitespace-nowrap scroll-smooth mt-2">
-            <button onclick="toggleSection('main-analyzer-container', 'arrow-main-analyzer')" class="w-full flex items-center justify-between px-3 py-2 text-[10px] font-bold text-slate-500 hover:text-indigo-400 uppercase tracking-widest transition-colors focus:outline-none">
-                <div class="flex items-center space-x-2"><i class="fa-solid fa-layer-group text-slate-600"></i><span>Main Analyzer</span></div><i id="arrow-main-analyzer" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
-            </button>
-            <div id="main-analyzer-container" class="space-y-2.5 transition-all duration-300">
-                <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-analisa-file')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all hover:bg-slate-800 hover:text-white focus:outline-none group"><div class="flex items-center"><i class="fa-solid fa-file-excel text-lg w-8 text-indigo-500 group-hover:scale-110 transition-transform"></i><span>AI File Drop</span></div><i id="arrow-submenu-analisa-file" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i></button>
-                    <div id="submenu-analisa-file" class="pl-6 space-y-1 bg-slate-900/30 py-2 rounded-xl border-l-2 border-indigo-900 ml-4 hidden transition-all">
-                        <a href="#analisa-pm" id="btn-analisa-pm" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400"><i class="fa-solid fa-chart-area mr-2"></i>Analisa PM (S-Curve)</a>
-                        <a href="#analisa-prod" id="btn-analisa-prod" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400"><i class="fa-solid fa-people-carry-box mr-2"></i>Productivity Tiketing</a>
-                    </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2 text-sm whitespace-nowrap scroll-smooth">
+            <a href="#home" id="btn-home" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">
+                <i class="fa-solid fa-grip text-lg w-8 text-indigo-500"></i><span>Menu Utama</span>
+            </a>
+
+            <div class="pt-2 pb-1"><p class="px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Main Analyzer</p></div>
+            
+            <!-- MENU DROPDOWN SIDEBAR -->
+            <div class="space-y-1">
+                <button onclick="toggleSubmenu('submenu-analisa-file')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-all hover:bg-slate-50 text-slate-700 focus:outline-none group">
+                    <div class="flex items-center"><i class="fa-solid fa-file-excel text-lg w-8 text-sky-500"></i><span>AI File Drop</span></div>
+                    <i id="arrow-submenu-analisa-file" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
+                </button>
+                <div id="submenu-analisa-file" class="pl-6 space-y-1 py-1 rounded-xl border-l-2 border-slate-100 ml-4 hidden transition-all">
+                    <a href="#analisa-pm" id="btn-analisa-pm" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Analisa PM (S-Curve)</a>
+                    <a href="#analisa-prod" id="btn-analisa-prod" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Productivity Tiketing</a>
                 </div>
-                <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold"><i class="fa-solid fa-wallet text-lg w-8 text-emerald-500"></i><span>Monitoring SVA (Profit)</span></a>
-                <a href="#kpi" id="btn-kpi" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold"><i class="fa-solid fa-gauge-high text-lg w-8 text-sky-500"></i><span>Data KPI</span></a>
-                <a href="#operational" id="btn-operational" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold"><i class="fa-solid fa-gears text-lg w-8 text-amber-500"></i><span>Data Operational</span></a>
-                <a href="#sdm" id="btn-sdm" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold"><i class="fa-solid fa-users-gear text-lg w-8 text-purple-500"></i><span>Data SDM & Tools</span></a>
-                <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-pjb-aging')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-slate-800 hover:text-white focus:outline-none"><div class="flex items-center"><i class="fa-solid fa-clock-rotate-left text-lg w-8 text-rose-500"></i><span>Data PJB Aging</span></div><i id="arrow-submenu-pjb-aging" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i></button>
-                    <div id="submenu-pjb-aging" class="pl-6 space-y-1 bg-slate-900/30 py-2 rounded-xl border-l-2 border-rose-900 ml-4 hidden transition-all">
-                        <a href="#aging-sva" id="btn-aging-sva" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400"><i class="fa-solid fa-money-check-dollar mr-2"></i>Aging UM SVA</a>
-                        <a href="#aging-ops" id="btn-aging-ops" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400"><i class="fa-solid fa-briefcase mr-2"></i>Aging UM OPS</a>
-                        <a href="#aging-lainnya" id="btn-aging-lainnya" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400"><i class="fa-solid fa-ellipsis mr-2"></i>Aging UM Lainnya</a>
-                    </div>
+            </div>
+
+            <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-wallet text-lg w-8 text-emerald-500"></i><span>Monitoring SVA</span></a>
+            <a href="#kpi" id="btn-kpi" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-gauge-high text-lg w-8 text-indigo-500"></i><span>Data KPI</span></a>
+            <a href="#operational" id="btn-operational" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-gears text-lg w-8 text-amber-500"></i><span>Data Operational</span></a>
+            <a href="#sdm" id="btn-sdm" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-users-gear text-lg w-8 text-purple-500"></i><span>SDM & Tools</span></a>
+
+            <div class="pt-4 pb-1"><p class="px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Database & Tracking</p></div>
+            
+            <div class="space-y-1">
+                <button onclick="toggleSubmenu('submenu-mbp')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-slate-50 text-slate-700 focus:outline-none">
+                    <div class="flex items-center"><i class="fa-solid fa-gas-pump text-lg w-8 text-cyan-500"></i><span>Monitoring MBP</span></div>
+                    <i id="arrow-submenu-mbp" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
+                </button>
+                <div id="submenu-mbp" class="pl-6 space-y-1 py-1 rounded-xl border-l-2 border-slate-100 ml-4 hidden transition-all">
+                    <a href="#mbp-rh" id="btn-mbp-rh" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Analisa Delta & Revenue</a>
+                    <a href="#mbp-bbm" id="btn-mbp-bbm" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Analisa Konsumsi BBM</a>
                 </div>
-                <a href="#project" id="btn-project" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold"><i class="fa-solid fa-diagram-project text-lg w-8 text-teal-500"></i><span>Data Project</span></a>
-                <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-pm')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-slate-800 hover:text-white focus:outline-none"><div class="flex items-center"><i class="fa-solid fa-screwdriver-wrench text-lg w-8 text-orange-500"></i><span>Monitoring PM</span></div><i id="arrow-submenu-pm" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i></button>
-                    <div id="submenu-pm" class="pl-6 space-y-1 bg-slate-900/30 py-2 rounded-xl border-l-2 border-orange-900 ml-4 hidden transition-all">
-                        <a href="#pm-target" id="btn-pm-target" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Target & Pencapaian</a>
-                        <a href="#pm-curvas" id="btn-pm-curvas" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Curva S Progress</a>
-                    </div>
+            </div>
+
+            <div class="space-y-1">
+                <button onclick="toggleSubmenu('submenu-asset')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-slate-50 text-slate-700 focus:outline-none">
+                    <div class="flex items-center"><i class="fa-solid fa-car text-lg w-8 text-pink-500"></i><span>Asset KUT System</span></div>
+                    <i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
+                </button>
+                <div id="submenu-asset" class="pl-6 space-y-1 py-1 rounded-xl border-l-2 border-slate-100 ml-4 hidden transition-all">
+                    <a href="#asset-master" id="btn-asset-master" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Data Master Mobil</a>
+                    <a href="#asset-genset" id="btn-asset-genset" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Data Master Genset</a>
+                    <a href="#asset-service" id="btn-asset-service" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Biaya Service</a>
+                    <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Depresiasi Nilai Buku</a>
+                    <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Sewa Vendor</a>
                 </div>
-                <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-mbp')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-slate-800 hover:text-white focus:outline-none"><div class="flex items-center"><i class="fa-solid fa-gas-pump text-lg w-8 text-cyan-500"></i><span>Monitoring MBP</span></div><i id="arrow-submenu-mbp" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i></button>
-                    <div id="submenu-mbp" class="pl-6 space-y-1 bg-slate-900/30 py-2 rounded-xl border-l-2 border-cyan-900 ml-4 hidden transition-all">
-                        <a href="#mbp-rh" id="btn-mbp-rh" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Analisa Delta & Revenue</a>
-                        <a href="#mbp-bbm" id="btn-mbp-bbm" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Analisa Konsumsi BBM</a>
-                    </div>
-                </div>
-                <div class="space-y-1">
-                    <button onclick="toggleSubmenu('submenu-asset')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-slate-800 hover:text-white focus:outline-none"><div class="flex items-center"><i class="fa-solid fa-car text-lg w-8 text-pink-500"></i><span>Asset KUT System</span></div><i id="arrow-submenu-asset" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i></button>
-                    <div id="submenu-asset" class="pl-6 space-y-1 bg-slate-900/30 py-2 rounded-xl border-l-2 border-pink-900 ml-4 hidden transition-all">
-                        <a href="#asset-master" id="btn-asset-master" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Data Master Mobil</a>
-                        <a href="#asset-genset" id="btn-asset-genset" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Data Master Genset</a>
-                        <a href="#asset-service" id="btn-asset-service" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Biaya Service</a>
-                        <a href="#asset-depresiasi" id="btn-asset-depresiasi" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Depresiasi Nilai Buku</a>
-                        <a href="#asset-sewa" id="btn-asset-sewa" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-400">Sewa Vendor</a>
-                    </div>
+            </div>
+
+            <div class="space-y-1">
+                <button onclick="toggleSubmenu('submenu-pjb-aging')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-slate-50 text-slate-700 focus:outline-none">
+                    <div class="flex items-center"><i class="fa-solid fa-clock-rotate-left text-lg w-8 text-rose-500"></i><span>Data PJB Aging</span></div>
+                    <i id="arrow-submenu-pjb-aging" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
+                </button>
+                <div id="submenu-pjb-aging" class="pl-6 space-y-1 py-1 rounded-xl border-l-2 border-slate-100 ml-4 hidden transition-all">
+                    <a href="#aging-sva" id="btn-aging-sva" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Aging UM SVA</a>
+                    <a href="#aging-ops" id="btn-aging-ops" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Aging UM OPS</a>
+                    <a href="#aging-lainnya" id="btn-aging-lainnya" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Aging UM Lainnya</a>
                 </div>
             </div>
             
-            <div class="pt-5 mt-4 border-t border-slate-800/50">
-                <a href="https://simakin-kut.streamlit.app/" target="_blank" class="w-full flex items-center px-4 py-3.5 rounded-xl font-bold transition-all bg-gradient-to-r from-sky-500/10 to-indigo-500/10 text-sky-400 hover:from-sky-500 hover:to-indigo-500 hover:text-white border border-sky-500/30 shadow-[0_0_15px_rgba(14,165,233,0.1)] group relative overflow-hidden">
-                    <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-xl"></div>
-                    <i class="fa-solid fa-rocket text-lg w-8 relative z-10 group-hover:-translate-y-1 group-hover:scale-110 transition-all"></i>
-                    <span class="whitespace-normal leading-tight text-xs tracking-wide relative z-10">Kunjungi Simakin<br>biar kamu Yakin</span>
-                </a>
+            <a href="#project" id="btn-project" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-diagram-project text-lg w-8 text-teal-500"></i><span>Data Project</span></a>
+            
+            <div class="space-y-1">
+                <button onclick="toggleSubmenu('submenu-pm')" class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-slate-50 text-slate-700 focus:outline-none">
+                    <div class="flex items-center"><i class="fa-solid fa-screwdriver-wrench text-lg w-8 text-orange-500"></i><span>Monitoring PM</span></div>
+                    <i id="arrow-submenu-pm" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform"></i>
+                </button>
+                <div id="submenu-pm" class="pl-6 space-y-1 py-1 rounded-xl border-l-2 border-slate-100 ml-4 hidden transition-all">
+                    <a href="#pm-target" id="btn-pm-target" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Target & Pencapaian</a>
+                    <a href="#pm-curvas" id="btn-pm-curvas" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Curva S Progress</a>
+                </div>
             </div>
         </nav>
-        <div class="p-4 border-t border-slate-800/80 bg-slate-900/50 text-xs flex justify-between items-center">
-            <span class="text-slate-500 font-medium">Status Data:</span>
-            <span id="data-status-badge" class="px-2 py-1 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30 shadow-inner">Syncing...</span>
+        
+        <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center text-xs">
+            <span class="text-slate-500 font-bold flex items-center gap-2"><i class="fa-solid fa-database"></i> DB Status</span>
+            <span id="data-status-badge" class="px-2 py-1 rounded bg-amber-100 text-amber-700 font-bold border border-amber-200">Syncing...</span>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50/50">
+    <main class="flex-1 flex flex-col h-full overflow-hidden">
         <!-- HEADER -->
-        <header class="h-20 bg-white/80 backdrop-blur-lg border-b border-slate-200 px-8 flex items-center justify-between flex-shrink-0 z-10 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+        <header class="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between flex-shrink-0 z-10">
             <div class="flex items-center space-x-4">
-                <button onclick="toggleSidebar()" class="text-slate-500 hover:text-indigo-600 focus:outline-none p-2 rounded-xl hover:bg-slate-100 transition-all"><i id="sidebar-toggle-icon" class="fa-solid fa-bars text-xl"></i></button>
+                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-indigo-600 focus:outline-none p-2 rounded-xl hover:bg-slate-50 transition-colors"><i id="sidebar-toggle-icon" class="fa-solid fa-bars text-xl"></i></button>
                 <div class="h-8 w-px bg-slate-200"></div>
                 <div class="flex flex-col">
-                    <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Enterprise Workspace</span>
-                    <span id="breadcrumb-current" class="text-slate-800 font-black text-base uppercase tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-emerald-600">Dashboard Utama</span>
+                    <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Workspace</span>
+                    <span id="breadcrumb-current" class="text-slate-800 font-black text-base uppercase tracking-wide">Menu Utama</span>
                 </div>
             </div>
             <div class="flex items-center space-x-6">
-                <button onclick="reloadData()" class="px-5 py-2.5 bg-white text-indigo-600 hover:bg-indigo-50 text-xs font-extrabold rounded-xl transition-all shadow-[0_2px_10px_rgba(79,70,229,0.15)] flex items-center gap-2 border border-indigo-100 hover:-translate-y-0.5"><i id="sync-icon" class="fa-solid fa-arrows-rotate"></i> Sync Live DB</button>
+                <button onclick="reloadData()" class="px-5 py-2.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white text-xs font-extrabold rounded-xl transition-all flex items-center gap-2 border border-indigo-100"><i id="sync-icon" class="fa-solid fa-arrows-rotate"></i> Sinkronisasi Ulang</button>
                 <div class="flex items-center space-x-3 pl-4 border-l border-slate-200 hidden sm:flex">
                     <div class="text-right">
                         <p class="text-xs font-black text-slate-800 leading-tight">Financial Operator</p>
-                        <p class="text-[10px] text-emerald-500 font-bold uppercase tracking-wider">Kalimantan Center</p>
+                        <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Kalimantan Area</p>
                     </div>
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center text-indigo-600 border border-indigo-200 shadow-sm"><i class="fa-solid fa-user-astronaut text-xl"></i></div>
+                    <div class="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500"><i class="fa-solid fa-user-tie"></i></div>
                 </div>
             </div>
         </header>
 
-        <!-- DASHBOARD CONTENT (VERTICAL SINGLE PAGE) -->
+        <!-- DASHBOARD CONTENT (VERTICAL VIEW PANE) -->
         <div class="flex-1 overflow-y-auto p-8" id="dashboard-content">
             
-            <!-- SECTION SVA -->
-            <section id="view-sva" class="view-pane space-y-6">
-                <!-- AI INSIGHT BOX -->
+            <!-- MENU UTAMA (GRID PROFESIONAL ALA ENTERPRISE) -->
+            <section id="view-home" class="view-pane active max-w-7xl mx-auto space-y-8 pb-10">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-black text-slate-800 tracking-tight">Enterprise Analytics <span class="text-indigo-600">Hub</span></h1>
+                    <p class="text-sm font-medium text-slate-500 mt-2">Pilih modul untuk melihat analisis data, visualisasi, dan laporan performa perusahaan.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <a href="#sva" class="menu-grid-card" style="--hover-color: #10b981;">
+                        <div class="menu-grid-icon-box bg-emerald-50 text-emerald-500"><i class="fa-solid fa-wallet"></i></div>
+                        <h3 class="font-black text-slate-800 text-sm">Dashboard SVA</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Monitoring finansial & Profit Margin</p>
+                    </a>
+                    
+                    <a href="#mbp-rh" class="menu-grid-card" style="--hover-color: #06b6d4;">
+                        <div class="menu-grid-icon-box bg-cyan-50 text-cyan-500"><i class="fa-solid fa-gas-pump"></i></div>
+                        <h3 class="font-black text-slate-800 text-sm">Monitoring MBP</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Analisa Delta RH & Konsumsi BBM</p>
+                    </a>
+                    
+                    <a href="#analisa-pm" class="menu-grid-card" style="--hover-color: #f97316;">
+                        <div class="menu-grid-icon-box bg-orange-50 text-orange-500"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                        <h3 class="font-black text-slate-800 text-sm">PM Analyzer (AI)</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Kurva S & Proyeksi Eksekusi Data</p>
+                    </a>
+                    
+                    <a href="#analisa-prod" class="menu-grid-card" style="--hover-color: #8b5cf6;">
+                        <div class="menu-grid-icon-box bg-purple-50 text-purple-500"><i class="fa-solid fa-people-carry-box"></i></div>
+                        <h3 class="font-black text-slate-800 text-sm">Produktivitas PIC</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Evaluasi Take Over & Kinerja SDM</p>
+                    </a>
+                    
+                    <a href="#asset-master" class="menu-grid-card" style="--hover-color: #ec4899;">
+                        <div class="menu-grid-icon-box bg-pink-50 text-pink-500"><i class="fa-solid fa-car"></i></div>
+                        <h3 class="font-black text-slate-800 text-sm">Fleet Asset Master</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Data Mobil, Genset, & Depresiasi</p>
+                    </a>
+                    
+                    <a href="#operational" class="menu-grid-card" style="--hover-color: #eab308;">
+                        <div class="menu-grid-icon-box bg-yellow-50 text-yellow-500"><i class="fa-solid fa-gears"></i></div>
+                        <h3 class="font-black text-slate-800 text-sm">Data Operational</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Distribusi biaya & Analisa Kinerja</p>
+                    </a>
+                    
+                    <a href="#kpi" class="menu-grid-card" style="--hover-color: #3b82f6;">
+                        <div class="menu-grid-icon-box bg-blue-50 text-blue-500"><i class="fa-solid fa-gauge-high"></i></div>
+                        <h3 class="font-black text-slate-800 text-sm">Indikator KPI</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Laporan pencapaian target utama</p>
+                    </a>
+                    
+                    <a href="#aging-sva" class="menu-grid-card" style="--hover-color: #ef4444;">
+                        <div class="menu-grid-icon-box bg-red-50 text-red-500"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                        <h3 class="font-black text-slate-800 text-sm">Laporan PJB Aging</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Status piutang SVA & OPS Lainnya</p>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- SVA -->
+            <section id="view-sva" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div id="ai-insight-sva" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #10b981;">
-                    <div class="flex items-start gap-4 relative z-10">
-                        <div class="w-12 h-12 bg-white rounded-xl shadow flex items-center justify-center flex-shrink-0 text-emerald-600 border border-emerald-100"><i class="fa-solid fa-brain text-2xl"></i></div>
-                        <div><h4 class="text-sm font-black text-emerald-900 uppercase tracking-wider mb-2">AI Eksekutif Summary (SVA)</h4><div id="ai-text-sva" class="text-sm font-medium text-slate-700 leading-relaxed space-y-1"></div></div>
-                    </div>
+                    <div class="flex items-start gap-4 relative z-10"><div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0 text-emerald-600"><i class="fa-solid fa-brain text-xl"></i></div><div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">Executive Summary (AI)</h4><div id="ai-text-sva" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div></div>
                 </div>
 
                 <div class="premium-card p-5 flex gap-4 flex-wrap items-center bg-white border-l-4 border-l-indigo-500">
                     <span class="text-xs font-black text-indigo-700 uppercase tracking-widest"><i class="fa-solid fa-filter mr-2"></i>Filter SVA</span>
-                    <select id="filter-sva-nop" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-4 py-2 outline-none focus:border-indigo-500"><option value="ALL">Semua NOP</option></select>
-                    <select id="filter-sva-tgl" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-4 py-2 outline-none focus:border-indigo-500"><option value="ALL">Semua Tanggal</option></select>
-                    <select id="filter-sva-bln" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-4 py-2 outline-none focus:border-indigo-500"><option value="ALL">Semua Bulan</option></select>
-                    <select id="filter-sva-stts" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-4 py-2 outline-none focus:border-indigo-500"><option value="ALL">Status Tiket</option></select>
+                    <!-- CLASS SELECT DIPERBAIKI AGAR BERFUNGSI SEMPURNA -->
+                    <select id="filter-sva-nop" onchange="applyFilters()" class="filter-select"><option value="ALL">Semua NOP</option></select>
+                    <select id="filter-sva-tgl" onchange="applyFilters()" class="filter-select"><option value="ALL">Semua Tanggal</option></select>
+                    <select id="filter-sva-bln" onchange="applyFilters()" class="filter-select"><option value="ALL">Semua Bulan</option></select>
+                    <select id="filter-sva-stts" onchange="applyFilters()" class="filter-select"><option value="ALL">Status Tiket</option></select>
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                    <div class="premium-card p-6 flex flex-col justify-center bg-white">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Revenue (H)</p><h3 id="sva-kpi-1" class="text-2xl font-black text-slate-800 mt-2 tracking-tight">Rp 0</h3>
-                    </div>
-                    <div class="premium-card p-6 flex flex-col justify-center bg-white">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Biaya (I)</p><h3 id="sva-kpi-2" class="text-2xl font-black text-rose-600 mt-2 tracking-tight">Rp 0</h3>
-                    </div>
-                    <div class="premium-card p-6 flex flex-col justify-center bg-white">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pengembalian (J)</p><h3 id="sva-kpi-3" class="text-2xl font-black text-amber-600 mt-2 tracking-tight">Rp 0</h3>
-                    </div>
-                    <div class="premium-card p-6 flex flex-col justify-center bg-white">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Net Income (K)</p><h3 id="sva-kpi-4" class="text-2xl font-black text-emerald-600 mt-2 tracking-tight">Rp 0</h3>
-                    </div>
-                    <div class="premium-card p-6 flex flex-col justify-center bg-gradient-to-br from-indigo-600 to-purple-700 text-white shadow-[0_10px_20px_rgba(79,70,229,0.3)]">
-                        <p class="text-[10px] font-black text-indigo-200 uppercase tracking-widest">Profit Margin</p><h3 id="sva-kpi-5" class="text-3xl font-black text-white mt-2 tracking-tight">0%</h3>
-                    </div>
+                    <div class="premium-card p-6 flex flex-col justify-center bg-white"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Revenue (H)</p><h3 id="sva-kpi-1" class="text-2xl font-black text-slate-800 mt-2 tracking-tight">Rp 0</h3></div>
+                    <div class="premium-card p-6 flex flex-col justify-center bg-white"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Biaya (I)</p><h3 id="sva-kpi-2" class="text-2xl font-black text-rose-600 mt-2 tracking-tight">Rp 0</h3></div>
+                    <div class="premium-card p-6 flex flex-col justify-center bg-white"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pengembalian (J)</p><h3 id="sva-kpi-3" class="text-2xl font-black text-amber-600 mt-2 tracking-tight">Rp 0</h3></div>
+                    <div class="premium-card p-6 flex flex-col justify-center bg-white"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Net Income (K)</p><h3 id="sva-kpi-4" class="text-2xl font-black text-emerald-600 mt-2 tracking-tight">Rp 0</h3></div>
+                    <div class="premium-card p-6 flex flex-col justify-center bg-gradient-to-br from-indigo-600 to-indigo-800 text-white"><p class="text-[10px] font-black text-indigo-200 uppercase tracking-widest">Profit Margin</p><h3 id="sva-kpi-5" class="text-3xl font-black text-white mt-2 tracking-tight">0%</h3></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="premium-card p-6 lg:col-span-2 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-line mr-2 text-indigo-500"></i>Tren Finansial Bulanan</h4><div class="w-full flex-1 relative"><canvas id="chart-sva-finance-line"></canvas></div></div>
                     <div class="premium-card p-6 lg:col-span-1 h-[400px] flex flex-col items-center bg-white"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4 w-full"><i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i>Proporsi Alokasi</h4><div class="w-full flex-1 relative"><canvas id="chart-sva-finance-pie"></canvas></div></div>
                 </div>
-                
-                <div class="premium-card overflow-hidden bg-white">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest">Laporan Neraca SVA Detail</h4></div>
-                    <div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sva"></table></div>
-                </div>
+                <div class="premium-card overflow-hidden bg-white"><div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest">Laporan Neraca SVA Detail</h4></div><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sva"></table></div></div>
             </section>
 
-            <!-- SECTION MBP RH (SUPERIOR UI) -->
-            <section id="view-mbp-rh" class="view-pane space-y-6">
-                <!-- AI INSIGHT -->
+            <!-- MBP RH -->
+            <section id="view-mbp-rh" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
+                <div class="flex gap-4 mb-4">
+                    <a href="#mbp-rh" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-cyan-50 text-cyan-700 border border-cyan-200 shadow-sm"><i class="fa-solid fa-chart-bar mr-2"></i>Analisa Delta & Revenue</a>
+                    <a href="#mbp-bbm" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-gas-pump mr-2"></i>Analisa Konsumsi BBM</a>
+                </div>
+
                 <div id="ai-insight-mbp-rh" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #0ea5e9;">
-                    <div class="flex items-start gap-4 relative z-10">
-                        <div class="w-12 h-12 bg-white rounded-xl shadow flex items-center justify-center flex-shrink-0 text-sky-500 border border-sky-100"><i class="fa-solid fa-robot text-2xl"></i></div>
-                        <div><h4 class="text-sm font-black text-sky-900 uppercase tracking-wider mb-2">AI Analisa Delta & Validasi Data</h4><div id="ai-text-mbp-rh" class="text-sm font-medium text-slate-700 leading-relaxed space-y-1"></div></div>
-                    </div>
+                    <div class="flex items-start gap-4 relative z-10"><div class="w-12 h-12 bg-sky-50 rounded-xl flex items-center justify-center flex-shrink-0 text-sky-600"><i class="fa-solid fa-robot text-xl"></i></div><div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">AI Analisa Delta</h4><div id="ai-text-mbp-rh" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div></div>
                 </div>
 
                 <div class="premium-card p-5 flex gap-4 flex-wrap items-center bg-white border-l-4 border-l-cyan-500">
-                    <span class="text-xs font-black text-cyan-700 uppercase tracking-widest"><i class="fa-solid fa-filter mr-2"></i>Filter Data MBP</span>
-                    <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-2 outline-none"><option value="ALL">Semua Periode</option></select>
-                    <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-2 outline-none"><option value="ALL">Semua NOP</option></select>
-                    <select id="filter-mbp-status" onchange="applyFilters()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-2 outline-none"><option value="ALL">Semua Status</option><option value="Anomali">Tiket Anomali</option><option value="Terverifikasi">Tiket Terverifikasi</option></select>
+                    <span class="text-xs font-black text-cyan-700 uppercase tracking-widest"><i class="fa-solid fa-filter mr-2"></i>Filter MBP</span>
+                    <!-- CLASS SELECT DIPERBAIKI AGAR BERFUNGSI SEMPURNA -->
+                    <select id="filter-mbp-periode" onchange="applyFilters()" class="filter-select"><option value="ALL">Semua Periode</option></select>
+                    <select id="filter-mbp-nop" onchange="applyFilters()" class="filter-select"><option value="ALL">Semua NOP</option></select>
+                    <select id="filter-mbp-status" onchange="applyFilters()" class="filter-select"><option value="ALL">Semua Status</option><option value="Anomali">Tiket Anomali</option><option value="Terverifikasi">Tiket Terverifikasi</option></select>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="premium-card p-6 bg-white border-b-4 border-b-indigo-500">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Estimasi Revenue MBP</p><h3 id="mbp-kpi-rev" class="text-2xl font-black text-indigo-700 mt-1">Rp 0</h3>
-                    </div>
-                    <div class="premium-card p-6 bg-white border-b-4 border-b-amber-500">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Total BBM Digunakan</p><h3 id="mbp-kpi-liter" class="text-2xl font-black text-amber-600 mt-1">0 Liter</h3>
-                    </div>
-                    <div class="premium-card p-6 bg-white border-b-4 border-b-rose-500 bg-rose-50/30">
-                        <p class="text-[10px] font-black text-rose-400 uppercase tracking-wider"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Tiket Anomali</p><h3 id="mbp-kpi-anomali" class="text-2xl font-black text-rose-600 mt-1">0 Tiket</h3>
-                    </div>
-                    <div class="premium-card p-6 bg-white border-b-4 border-b-emerald-500">
-                        <p class="text-[10px] font-black text-emerald-500 uppercase tracking-wider"><i class="fa-solid fa-circle-check mr-1"></i>Tiket Valid</p><h3 id="mbp-kpi-valid" class="text-2xl font-black text-emerald-600 mt-1">0 Tiket</h3>
-                    </div>
+                    <div class="premium-card p-6 bg-white border-b-4 border-b-indigo-500"><p class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Estimasi Revenue MBP</p><h3 id="mbp-kpi-rev" class="text-2xl font-black text-indigo-700 mt-1">Rp 0</h3></div>
+                    <div class="premium-card p-6 bg-white border-b-4 border-b-amber-500"><p class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Total BBM Digunakan</p><h3 id="mbp-kpi-liter" class="text-2xl font-black text-amber-600 mt-1">0 Liter</h3></div>
+                    <div class="premium-card p-6 bg-white border-b-4 border-b-rose-500 bg-rose-50/30"><p class="text-[10px] font-black text-rose-500 uppercase tracking-wider"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Tiket Anomali</p><h3 id="mbp-kpi-anomali" class="text-2xl font-black text-rose-600 mt-1">0 Tiket</h3></div>
+                    <div class="premium-card p-6 bg-white border-b-4 border-b-emerald-500"><p class="text-[10px] font-black text-emerald-500 uppercase tracking-wider"><i class="fa-solid fa-circle-check mr-1"></i>Tiket Valid</p><h3 id="mbp-kpi-valid" class="text-2xl font-black text-emerald-600 mt-1">0 Tiket</h3></div>
                 </div>
 
                 <div class="premium-card p-6 bg-white">
-                    <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest mb-6 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500 text-lg"></i> Rincian Evaluasi Per Tiket Secara Detail</h4>
+                    <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest mb-6 flex items-center"><i class="fa-solid fa-magnifying-glass-chart mr-2 text-indigo-500 text-lg"></i> Rincian Evaluasi Tiket</h4>
                     <div id="mbp-analysis-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 max-h-[600px] overflow-y-auto pr-2 pb-2"></div>
                 </div>
 
@@ -256,27 +342,23 @@
                     <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-bar mr-2 text-indigo-500"></i>Grafik Revenue NOP</h4><div class="w-full flex-1 relative"><canvas id="chart-mbp-revenue"></canvas></div></div>
                     <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-code-compare mr-2 text-amber-500"></i>Komparasi Delta (Hour vs RH)</h4><div class="w-full flex-1 relative"><canvas id="chart-mbp-delta"></canvas></div></div>
                 </div>
-
-                <div class="premium-card overflow-hidden bg-white">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest">Tabel Ringkasan Per NOP</h4></div>
-                    <div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-rh-new"></table></div>
-                </div>
+                <div class="premium-card overflow-hidden bg-white"><div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest">Tabel Ringkasan Per NOP</h4></div><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-rh-new"></table></div></div>
             </section>
             
-            <!-- SECTION MBP BBM -->
-            <section id="view-mbp-bbm" class="view-pane space-y-6">
+            <!-- MBP BBM -->
+            <section id="view-mbp-bbm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
+                 <div class="flex gap-4 mb-4">
+                    <a href="#mbp-rh" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-chart-bar mr-2"></i>Analisa Delta & Revenue</a>
+                    <a href="#mbp-bbm" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-rose-50 text-rose-700 border border-rose-200 shadow-sm"><i class="fa-solid fa-gas-pump mr-2"></i>Analisa Konsumsi BBM</a>
+                </div>
+
                 <div id="ai-insight-mbp-bbm" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #f43f5e;">
-                    <div class="flex items-start gap-4 relative z-10">
-                        <div class="w-12 h-12 bg-white rounded-xl shadow flex items-center justify-center flex-shrink-0 text-rose-500 border border-rose-100"><i class="fa-solid fa-gas-pump text-2xl"></i></div>
-                        <div><h4 class="text-sm font-black text-rose-900 uppercase tracking-wider mb-2">AI Profiling: Kebocoran Konsumsi BBM</h4><div id="ai-text-mbp-bbm" class="text-sm font-medium text-slate-700 leading-relaxed space-y-1"></div></div>
-                    </div>
+                    <div class="flex items-start gap-4 relative z-10"><div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center flex-shrink-0 text-rose-600"><i class="fa-solid fa-gas-pump text-xl"></i></div><div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">AI Profiling: BBM</h4><div id="ai-text-mbp-bbm" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div></div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="premium-card overflow-hidden bg-white flex flex-col h-[450px]">
-                        <div class="p-6 border-b border-slate-100 bg-rose-50/50">
-                            <h4 class="text-xs font-black text-rose-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-user-shield mr-2"></i>Daftar PIC Berisiko Tinggi (Perlu Evaluasi)</h4>
-                        </div>
+                        <div class="p-6 border-b border-slate-100 bg-rose-50/30"><h4 class="text-xs font-black text-rose-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-user-shield mr-2"></i>Daftar PIC Berisiko (Perlu Evaluasi)</h4></div>
                         <div class="overflow-y-auto flex-1 p-4"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-bbm-evaluasi"></table></div>
                     </div>
                     <div class="premium-card p-6 h-[450px] bg-white flex flex-col">
@@ -284,124 +366,133 @@
                         <div class="w-full flex-1 relative"><canvas id="chart-mbp-bbm"></canvas></div>
                     </div>
                 </div>
-                
-                <div class="premium-card overflow-hidden bg-white">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-table-list mr-2 text-indigo-500"></i>Log Semua Tiket Anomali / Tidak Safe</h4></div>
-                    <div class="overflow-x-auto max-h-[500px]"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-bbm"></table></div>
-                </div>
+                <div class="premium-card overflow-hidden bg-white"><div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-table-list mr-2 text-indigo-500"></i>Log Semua Tiket Anomali / Tidak Safe</h4></div><div class="overflow-x-auto max-h-[500px]"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-bbm"></table></div></div>
             </section>
 
-            <!-- SECTION AI FILE DROP (PM) -->
-            <section id="view-analisa-pm" class="view-pane space-y-6">
-                <div id="drop-zone-pm" class="premium-card p-12 text-center cursor-pointer border-dashed border-2 border-indigo-200 hover:border-indigo-500 bg-gradient-to-b from-white to-indigo-50/30 flex flex-col items-center justify-center">
-                    <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mb-4"><i class="fa-solid fa-cloud-arrow-up text-4xl text-indigo-600"></i></div>
-                    <p class="text-base font-black text-slate-700">Drop Dataset PM Excel Di Sini</p>
+            <!-- PM S-CURVE (FUNGSI DROPZONE UTUH 100%) -->
+            <section id="view-analisa-pm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
+                <div id="drop-zone-pm" class="premium-card p-12 text-center cursor-pointer border-dashed border-2 border-slate-300 hover:border-indigo-400 bg-slate-50/50 flex flex-col items-center justify-center transition-all">
+                    <div class="w-20 h-20 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-4 text-indigo-500 pointer-events-none"><i class="fa-solid fa-file-excel text-3xl"></i></div>
+                    <p class="text-sm font-black text-slate-700 pointer-events-none">KLIK / DROP FILE DATASET PM (EXCEL) DI SINI</p>
+                    <p class="text-xs text-slate-500 mt-2 font-medium pointer-events-none">Sistem memproses Rencana, Aktual, dan mengkalibrasi S-Curve secara otomatis.</p>
                     <input type="file" id="input-file-pm" class="hidden" accept=".xlsx, .xls, .csv">
-                    <div id="info-file-pm" class="hidden text-xs mt-4 font-bold bg-emerald-50 text-emerald-700 px-4 py-2.5 rounded-xl border border-emerald-200"></div>
+                    <div id="info-file-pm" class="hidden text-xs mt-4 font-bold bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl border border-emerald-200"></div>
                 </div>
+                
                 <div class="grid grid-cols-2 gap-6">
-                    <div class="premium-card p-8 bg-white"><p class="text-[11px] text-slate-400 font-extrabold uppercase">Total Rencana Proyek</p><h3 id="pm-total-plan" class="text-5xl font-black text-slate-800 mt-2">0</h3></div>
+                    <div class="premium-card p-8 bg-white"><p class="text-[11px] text-slate-400 font-extrabold uppercase">Total Rencana Proyek (Plan)</p><h3 id="pm-total-plan" class="text-5xl font-black text-slate-800 mt-2">0</h3></div>
                     <div class="premium-card p-8 bg-white flex justify-between items-start">
-                        <div><p class="text-[11px] text-slate-400 font-extrabold uppercase">Total Eksekusi</p><h3 id="pm-total-actual" class="text-5xl font-black text-emerald-600 mt-2">0</h3></div>
-                        <div class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl"><p id="pm-total-ach" class="text-sm font-black">Ach: 0%</p></div>
+                        <div><p class="text-[11px] text-slate-400 font-extrabold uppercase">Total Eksekusi (Actual)</p><h3 id="pm-total-actual" class="text-5xl font-black text-emerald-600 mt-2">0</h3></div>
+                        <div class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl border border-emerald-100"><p id="pm-total-ach" class="text-sm font-black">Ach: 0%</p></div>
                     </div>
                 </div>
+                
+                <div id="ai-insight-pm" class="ai-insight p-6 rounded-2xl hidden"><h4 class="text-sm font-black text-slate-800 mb-2">AI Proyeksi S-Curve</h4><div id="ai-text-pm" class="text-sm text-slate-600"></div></div>
+                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase mb-4">Kurva S PMS</h4><div class="w-full flex-1 relative"><canvas id="chart-pm-pms"></canvas></div></div>
-                    <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase mb-4">Kurva S PMG</h4><div class="w-full flex-1 relative"><canvas id="chart-pm-pmg"></canvas></div></div>
+                    <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Kurva S - Kinerja PMS</h4><div class="w-full flex-1 relative"><canvas id="chart-pm-pms"></canvas></div></div>
+                    <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Kurva S - Kinerja PMG</h4><div class="w-full flex-1 relative"><canvas id="chart-pm-pmg"></canvas></div></div>
                 </div>
-                <div id="ai-insight-pm" class="ai-insight p-6 rounded-2xl hidden"><h4 class="text-sm font-black text-indigo-900 mb-2">AI Analysis</h4><div id="ai-text-pm" class="text-sm text-slate-700"></div></div>
             </section>
 
-            <!-- SECTION AI FILE DROP (PROD) -->
-            <section id="view-analisa-prod" class="view-pane space-y-6">
+            <!-- PRODUCTIVITY (FUNGSI DROPZONE UTUH 100%) -->
+            <section id="view-analisa-prod" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div id="drop-zone-prod" class="lg:col-span-2 premium-card p-10 text-center cursor-pointer border-dashed border-2 border-emerald-200 hover:border-emerald-500 bg-gradient-to-br from-white to-emerald-50/30 flex flex-col items-center">
-                        <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4"><i class="fa-solid fa-file-circle-plus text-3xl text-emerald-600"></i></div>
-                        <p class="text-sm font-black text-slate-700">Batch Upload Multi-File Excel (Main, PM, FNA)</p>
+                    <div id="drop-zone-prod" class="lg:col-span-2 premium-card p-10 text-center cursor-pointer border-dashed border-2 border-slate-300 hover:border-emerald-400 bg-slate-50/50 flex flex-col items-center justify-center transition-all">
+                        <div class="w-16 h-16 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-4 text-emerald-500 pointer-events-none"><i class="fa-solid fa-file-circle-plus text-2xl"></i></div>
+                        <p class="text-sm font-black text-slate-700 pointer-events-none">KLIK / DROP BATCH UPLOAD FILE EXCEL (MAIN, PM, FNA)</p>
+                        <p class="text-xs text-slate-500 mt-2 font-medium pointer-events-none">AI mendeteksi redundansi dan merangkum produktivitas PIC.</p>
                         <input type="file" id="input-file-prod" class="hidden" accept=".xlsx, .xls, .csv" multiple>
                     </div>
-                    <div class="premium-card p-6 bg-white text-center">
-                        <p class="text-[10px] text-slate-400 font-black uppercase">Tiket Tervalidasi</p><h3 id="prod-total-tiket" class="text-5xl font-black text-slate-800 mt-2">0</h3>
-                        <p id="prod-file-count" class="text-[11px] font-bold text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full mt-2 inline-block">Menunggu File</p>
-                        <button onclick="resetProdData()" class="mt-4 px-4 py-2 bg-rose-500 text-white text-xs font-black rounded-lg w-full">RESET DATA</button>
+                    <div class="premium-card p-6 bg-white text-center flex flex-col justify-center items-center">
+                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Tiket Tervalidasi</p><h3 id="prod-total-tiket" class="text-5xl font-black text-slate-800 mt-2">0</h3>
+                        <p id="prod-file-count" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 mt-3 inline-block">Menunggu Data</p>
+                        <button onclick="resetProdData()" class="mt-4 px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-500 hover:text-white border border-rose-200 text-xs font-black rounded-lg w-full transition-colors">RESET DATASTORE</button>
                     </div>
                 </div>
-                <div class="premium-card p-5 bg-white"><select id="filter-prod-nop" onchange="renderProdData()" class="filter-select bg-slate-50 border border-slate-200 text-xs font-bold rounded-xl px-4 py-2"><option value="ALL">Semua Area NOP</option></select></div>
-                <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase mb-4">Leaderboard PIC</h4><div class="w-full flex-1 relative"><canvas id="chart-prod-pic"></canvas></div></div>
-                <div id="ai-insight-prod" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #10b981;"><h4 class="text-sm font-black text-emerald-900 mb-2">AI Evaluasi SDM</h4><div id="ai-text-prod" class="text-sm text-slate-700"></div></div>
+                
+                <div class="premium-card p-5 bg-white border-l-4 border-l-emerald-500">
+                    <select id="filter-prod-nop" onchange="renderProdData()" class="filter-select w-64"><option value="ALL">Semua Area NOP</option></select>
+                </div>
+                <div id="ai-insight-prod" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #10b981;"><h4 class="text-sm font-black text-slate-800 mb-2">AI Evaluasi Kinerja SDM</h4><div id="ai-text-prod" class="text-sm text-slate-600"></div></div>
+                <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Leaderboard Produktivitas PIC</h4><div class="w-full flex-1 relative"><canvas id="chart-prod-pic"></canvas></div></div>
                 <div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-analisa-prod"></table></div>
             </section>
 
-            <!-- SECTION ASSET MASTER -->
-            <section id="view-asset-master" class="view-pane space-y-6">
+            <!-- ASSET MASTER -->
+            <section id="view-asset-master" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div id="ai-insight-asset" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #ec4899;">
-                    <div class="flex items-start gap-4 relative z-10"><div class="w-12 h-12 bg-white rounded-xl shadow flex items-center justify-center flex-shrink-0 text-pink-500 border border-pink-100"><i class="fa-solid fa-robot text-2xl"></i></div><div><h4 class="text-sm font-black text-pink-900 uppercase tracking-wider mb-2">AI Fleet Management</h4><div id="ai-text-asset" class="text-sm font-medium text-slate-700 leading-relaxed space-y-1"></div></div></div>
+                    <div class="flex items-start gap-4 relative z-10"><div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center flex-shrink-0 text-pink-500"><i class="fa-solid fa-car text-xl"></i></div><div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">AI Fleet Management</h4><div id="ai-text-asset" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div></div>
                 </div>
-                <div class="premium-card p-6 bg-white flex flex-wrap items-center justify-between gap-4 border-l-4 border-l-pink-500"><h3 class="text-sm font-black text-slate-800 uppercase tracking-widest"><i class="fa-solid fa-car mr-2 text-pink-500 text-lg"></i>Master Mobil</h3><div class="flex gap-2"><select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select px-4 py-2 text-xs font-bold bg-slate-50 rounded-xl"><option value="ALL">Semua NOP</option></select><select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select px-4 py-2 text-xs font-bold bg-slate-50 rounded-xl"><option value="ALL">Kondisi</option></select></div></div>
+                <div class="premium-card p-5 bg-white flex flex-wrap items-center justify-between gap-4 border-l-4 border-l-pink-500">
+                    <h3 class="text-xs font-black text-pink-600 uppercase tracking-widest"><i class="fa-solid fa-car mr-2"></i>Master Mobil</h3>
+                    <div class="flex gap-2">
+                        <select id="filter-asset-master-nop" onchange="applyFilters()" class="filter-select"><option value="ALL">Semua NOP</option></select>
+                        <select id="filter-asset-master-kondisi" onchange="applyFilters()" class="filter-select"><option value="ALL">Kondisi</option></select>
+                    </div>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="premium-card p-6 h-[300px] flex flex-col bg-white"><canvas id="chart-asset-merek"></canvas></div><div class="premium-card p-6 h-[300px] flex flex-col bg-white"><canvas id="chart-asset-jenis"></canvas></div><div class="premium-card p-6 h-[300px] flex flex-col bg-white"><canvas id="chart-asset-kondisi"></canvas></div></div>
                 <div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-asset-master"></table></div>
             </section>
 
-            <!-- SECTION ASSET GENSET -->
-            <section id="view-asset-genset" class="view-pane space-y-6">
-                <div class="premium-card p-6 bg-white flex flex-wrap items-center justify-between gap-4 border-l-4 border-l-pink-500"><h3 class="text-sm font-black text-slate-800 uppercase tracking-widest"><i class="fa-solid fa-server mr-2 text-pink-500 text-lg"></i>Master Genset</h3></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="premium-card p-6 h-[300px] bg-white"><canvas id="chart-asset-genset-sewa"></canvas></div><div class="premium-card p-6 flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 text-center gap-16"><div><h3 id="genset-total" class="text-6xl font-black text-indigo-700">0</h3><p class="text-xs text-slate-500 font-bold mt-2">TOTAL UNIT</p></div><div><h3 id="genset-aktif" class="text-6xl font-black text-emerald-600">0</h3><p class="text-xs text-slate-500 font-bold mt-2">UNIT AKTIF</p></div></div></div>
+            <!-- ASSET GENSET -->
+            <section id="view-asset-genset" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
+                <div class="premium-card p-5 bg-white flex flex-wrap items-center justify-between gap-4 border-l-4 border-l-pink-500"><h3 class="text-xs font-black text-pink-600 uppercase tracking-widest"><i class="fa-solid fa-server mr-2"></i>Master Genset</h3></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="premium-card p-6 h-[300px] bg-white"><canvas id="chart-asset-genset-sewa"></canvas></div><div class="premium-card p-6 flex items-center justify-center bg-white border border-slate-100 text-center gap-16"><div><h3 id="genset-total" class="text-6xl font-black text-slate-800">0</h3><p class="text-xs text-slate-400 font-bold mt-2 uppercase tracking-widest">TOTAL UNIT</p></div><div><h3 id="genset-aktif" class="text-6xl font-black text-emerald-500">0</h3><p class="text-xs text-slate-400 font-bold mt-2 uppercase tracking-widest">UNIT AKTIF</p></div></div></div>
                 <div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-asset-genset"></table></div>
             </section>
 
-            <!-- OTHER SECTIONS -->
-            <section id="view-sdm" class="view-pane space-y-6"><div id="ai-insight-sdm" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color:#8b5cf6;"><h4 class="text-sm font-black text-purple-900 mb-2">AI Summary SDM</h4><div id="ai-text-sdm" class="text-sm text-slate-700"></div></div><div class="premium-card p-6 bg-white"><h3 class="text-lg font-black text-slate-800"><i class="fa-solid fa-users-gear mr-2 text-purple-500"></i>Data SDM & Tools</h3></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sdm"></table></div></section>
+            <!-- SDM, KPI, OPS -->
+            <section id="view-sdm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div id="ai-insight-sdm" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color:#8b5cf6;"><h4 class="text-sm font-black text-slate-800 mb-2">AI Summary SDM</h4><div id="ai-text-sdm" class="text-sm text-slate-600"></div></div><div class="premium-card p-6 bg-white border-l-4 border-l-purple-500"><h3 class="text-xs font-black text-purple-600 uppercase tracking-widest"><i class="fa-solid fa-users-gear mr-2"></i>Data SDM & Tools</h3></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sdm"></table></div></section>
             
-            <section id="view-kpi" class="view-pane space-y-6"><div class="premium-card p-6 bg-white"><h3 class="font-black text-slate-800 text-lg"><i class="fa-solid fa-gauge-high text-sky-500 mr-2"></i>Indikator Kinerja Utama (KPI)</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-kpi"></table></div></section>
+            <section id="view-kpi" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-indigo-500"><h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest"><i class="fa-solid fa-gauge-high mr-2"></i>Indikator Kinerja Utama (KPI)</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-kpi"></table></div></section>
             
-            <section id="view-operational" class="view-pane space-y-6">
-                <div id="ai-insight-ops" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color:#f59e0b;"><h4 class="text-sm font-black text-amber-900 mb-2">AI Operational Insight</h4><div id="ai-text-ops" class="text-sm text-slate-700"></div></div>
-                <div class="grid grid-cols-2 gap-6"><div class="premium-card p-6 bg-white border-b-4 border-b-emerald-500"><p class="text-[10px] font-black text-slate-400 uppercase">Total U</p><h3 id="ops-kpi-u" class="text-2xl font-black text-emerald-600 mt-1">0</h3></div><div class="premium-card p-6 bg-white border-b-4 border-b-indigo-500"><p class="text-[10px] font-black text-slate-400 uppercase">Total V</p><h3 id="ops-kpi-v" class="text-2xl font-black text-indigo-700 mt-1">0</h3></div></div>
+            <section id="view-operational" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
+                <div id="ai-insight-ops" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color:#f59e0b;"><h4 class="text-sm font-black text-slate-800 mb-2">AI Operational Insight</h4><div id="ai-text-ops" class="text-sm text-slate-600"></div></div>
+                <div class="grid grid-cols-2 gap-6"><div class="premium-card p-6 bg-white border-b-4 border-b-emerald-500"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total U</p><h3 id="ops-kpi-u" class="text-2xl font-black text-emerald-600 mt-1">0</h3></div><div class="premium-card p-6 bg-white border-b-4 border-b-indigo-500"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total V</p><h3 id="ops-kpi-v" class="text-2xl font-black text-indigo-700 mt-1">0</h3></div></div>
                 <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><div class="w-full flex-1 relative"><canvas id="chart-operational"></canvas></div></div>
                 <div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-operational"></table></div>
             </section>
             
-            <section id="view-pm-target" class="view-pane space-y-6"><div class="premium-card p-5 bg-white"><select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select px-4 py-2 text-xs bg-slate-50 rounded-xl"></select></div><div class="grid grid-cols-4 gap-6"><div class="premium-card p-6 text-center bg-white"><h3 id="pmt-kpi-1" class="text-2xl font-black">0</h3><p class="text-[10px] text-slate-400 font-bold uppercase mt-2">Target</p></div><div class="premium-card p-6 text-center bg-white"><h3 id="pmt-kpi-2" class="text-2xl font-black text-emerald-600">0</h3><p class="text-[10px] text-slate-400 font-bold uppercase mt-2">Realisasi</p></div><div class="premium-card p-6 text-center bg-white"><h3 id="pmt-kpi-3" class="text-2xl font-black text-rose-600">0</h3><p class="text-[10px] text-slate-400 font-bold uppercase mt-2">Deviasi</p></div><div class="premium-card p-6 text-center bg-white"><h3 id="pmt-kpi-4" class="text-2xl font-black text-indigo-600">0%</h3><p class="text-[10px] text-slate-400 font-bold uppercase mt-2">% Capai</p></div></div><div class="premium-card p-6 h-[400px] bg-white"><canvas id="chart-pm-target"></canvas></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-pm-target"></table></div></section>
+            <!-- FALLBACKS (FILTER PM-TARGET DIPERBAIKI 100%) -->
+            <section id="view-pm-target" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
+                <div class="premium-card p-5 bg-white">
+                    <select id="filter-pm-target-bulan" onchange="applyFilters()" class="filter-select"><option value="ALL">Semua Bulan</option></select>
+                </div>
+                <div class="grid grid-cols-4 gap-6"><div class="premium-card p-6 text-center bg-white"><h3 id="pmt-kpi-1" class="text-2xl font-black">0</h3><p class="text-[10px] text-slate-400 font-bold uppercase mt-2">Target</p></div><div class="premium-card p-6 text-center bg-white"><h3 id="pmt-kpi-2" class="text-2xl font-black text-emerald-500">0</h3><p class="text-[10px] text-slate-400 font-bold uppercase mt-2">Realisasi</p></div><div class="premium-card p-6 text-center bg-white"><h3 id="pmt-kpi-3" class="text-2xl font-black text-rose-500">0</h3><p class="text-[10px] text-slate-400 font-bold uppercase mt-2">Deviasi</p></div><div class="premium-card p-6 text-center bg-white"><h3 id="pmt-kpi-4" class="text-2xl font-black text-indigo-500">0%</h3><p class="text-[10px] text-slate-400 font-bold uppercase mt-2">% Capai</p></div></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-pm-target"></table></div>
+            </section>
             
-            <!-- FALLBACK SECTIONS -->
-            <section id="view-aging-sva" class="view-pane space-y-6"><div class="premium-card p-6 bg-white"><h3 class="font-black text-slate-800">Aging UM SVA</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-aging-sva"></table></div></section>
-            <section id="view-aging-ops" class="view-pane space-y-6"><div class="premium-card p-6 bg-white"><h3 class="font-black text-slate-800">Aging UM OPS</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-aging-ops"></table></div></section>
-            <section id="view-aging-lainnya" class="view-pane space-y-6"><div class="premium-card p-6 bg-white"><h3 class="font-black text-slate-800">Aging UM Lainnya</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-aging-lainnya"></table></div></section>
-            <section id="view-project" class="view-pane space-y-6"><div class="premium-card p-6 bg-white"><h3 class="font-black text-slate-800">Data Project</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-project"></table></div></section>
-            <section id="view-asset-service" class="view-pane space-y-6"><div class="premium-card p-6 h-[400px] bg-white"><canvas id="chart-asset-service"></canvas></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-asset-service"></table></div></section>
-            <section id="view-asset-depresiasi" class="view-pane space-y-6"><div class="premium-card p-6 h-[400px] bg-white"><canvas id="chart-asset-depresiasi"></canvas></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-asset-depresiasi"></table></div></section>
-            <section id="view-asset-sewa" class="view-pane space-y-6"><div class="premium-card p-6 bg-white font-black text-slate-700">Pembiayaan Sewa Vendor</div></section>
-            <section id="view-pm-curvas" class="view-pane space-y-6"><div class="premium-card p-6 h-[400px] bg-white"><canvas id="chart-pm-curvas"></canvas></div></section>
+            <section id="view-aging-sva" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-rose-500"><h3 class="text-xs font-black text-rose-600 uppercase tracking-widest">Aging UM SVA</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-aging-sva"></table></div></section>
+            <section id="view-aging-ops" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-rose-500"><h3 class="text-xs font-black text-rose-600 uppercase tracking-widest">Aging UM OPS</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-aging-ops"></table></div></section>
+            <section id="view-aging-lainnya" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-rose-500"><h3 class="text-xs font-black text-rose-600 uppercase tracking-widest">Aging UM Lainnya</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-aging-lainnya"></table></div></section>
+            <section id="view-project" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-teal-500"><h3 class="text-xs font-black text-teal-600 uppercase tracking-widest">Data Project</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-project"></table></div></section>
+            <section id="view-asset-service" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-pink-500"><h3 class="text-xs font-black text-pink-600 uppercase tracking-widest">Biaya Service</h3></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-asset-service"></table></div></section>
+            <section id="view-asset-depresiasi" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-pink-500"><h3 class="text-xs font-black text-pink-600 uppercase tracking-widest">Depresiasi</h3></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-asset-depresiasi"></table></div></section>
+            <section id="view-asset-sewa" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-pink-500"><h3 class="text-xs font-black text-pink-600 uppercase tracking-widest">Pembiayaan Sewa Vendor</h3></div></section>
+            <section id="view-pm-curvas" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 h-[400px] bg-white"><canvas id="chart-pm-curvas"></canvas></div></section>
         </div>
     </main>
 
+    <!-- ==========================================
+         JAVASCRIPT LOGIC (SEMUA DIKEMBALIKAN UTUH & DROP-DOWN DIPERBAIKI)
+         ========================================== -->
     <script>
         Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif"; Chart.defaults.color = '#94a3b8'; Chart.defaults.scale.grid.color = 'rgba(241, 245, 249, 0.5)'; Chart.defaults.scale.grid.drawBorder = false; Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)'; Chart.defaults.plugins.tooltip.titleFont = { size: 13, weight: 'bold' }; Chart.defaults.plugins.tooltip.padding = 12; Chart.defaults.plugins.tooltip.cornerRadius = 8; Chart.defaults.elements.line.tension = 0.4;
-        const SPREADSHEET_ID = '1hIeT51_SVdNrz62s93zpZNyqepBMdNCa-mDRH-wVOIw'; let globalDataset = {}; let charts = {}; let currentView = 'sva'; let globalProdData = []; let prodFileCount = 0;
-        const titleLabels = { 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'Operational Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Analisa Konsumsi BBM', 'asset-master': 'Master Mobil', 'asset-service': 'Maintenance Cost', 'asset-depresiasi': 'Depresiasi', 'asset-sewa': 'Rental Vendor', 'asset-genset': 'Master Genset' };
+        const SPREADSHEET_ID = '1hIeT51_SVdNrz62s93zpZNyqepBMdNCa-mDRH-wVOIw'; let globalDataset = {}; let charts = {}; let currentView = 'home'; let globalProdData = []; let prodFileCount = 0;
+        
+        const titleLabels = { 'home': 'Menu Utama', 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'Operational Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Analisa Konsumsi BBM', 'asset-master': 'Master Mobil', 'asset-service': 'Maintenance Cost', 'asset-depresiasi': 'Depresiasi', 'asset-sewa': 'Rental Vendor', 'asset-genset': 'Master Genset' };
 
         window.addEventListener('DOMContentLoaded', () => { window.addEventListener('hashchange', evaluateRoute); setupAllDropZones(); reloadData(); });
 
-        // LOGIKA SINGLE PAGE STRICT (HANYA SATU MENU MUNCUL)
+        // LOGIKA SINGLE PAGE
         function evaluateRoute() {
-            let hash = window.location.hash.replace('#', '') || 'sva'; currentView = hash;
+            let hash = window.location.hash.replace('#', '') || 'home'; currentView = hash;
             
-            // STRICT HIDE SEMUA
-            document.querySelectorAll('.view-pane').forEach(el => { 
-                el.style.display = 'none'; 
-                el.classList.remove('active'); 
-            });
+            document.querySelectorAll('.view-pane').forEach(el => { el.style.display = 'none'; el.classList.remove('active'); });
             
-            // SHOW YANG AKTIF SAJA
             const paneEl = document.getElementById(`view-${currentView}`);
-            if (paneEl) { 
-                paneEl.style.display = 'block'; 
-                void paneEl.offsetWidth; // trigger CSS animation
-                paneEl.classList.add('active'); 
-            }
+            if (paneEl) { paneEl.style.display = 'block'; void paneEl.offsetWidth; paneEl.classList.add('active'); }
 
-            // HIGHLIGHT MENU SIDEBAR
             document.querySelectorAll('.menu-btn').forEach(el => el.classList.remove('active-menu-3d'));
             const activeBtn = document.getElementById(`btn-${currentView}`);
             if (activeBtn) {
@@ -410,7 +501,7 @@
                 if (parentSubmenu) { parentSubmenu.classList.remove('hidden'); const arrow = document.getElementById(`arrow-${parentSubmenu.id}`); if (arrow) arrow.classList.add('rotate-180'); }
             }
             document.getElementById('breadcrumb-current').innerText = titleLabels[currentView] || 'Portal Utama';
-            if (Object.keys(globalDataset).length > 0 && !currentView.includes('analisa-')) { renderActiveView(globalDataset); }
+            if (Object.keys(globalDataset).length > 0 && !currentView.includes('analisa-') && currentView !== 'home') { renderActiveView(globalDataset); }
         }
 
         async function fetchFromSpreadsheet(sheetName) {
@@ -419,25 +510,33 @@
 
         async function reloadData() {
             const badge = document.getElementById('data-status-badge'); const icon = document.getElementById('sync-icon'); const splash = document.getElementById('splash-screen');
-            if (badge) { badge.className = 'px-3 py-1 rounded bg-amber-500/20 text-amber-500 font-bold'; badge.innerText = 'Syncing...'; } if (icon) icon.classList.add('animate-spin');
+            if (badge) { badge.className = 'px-2 py-1 rounded bg-amber-100 text-amber-700 font-bold'; badge.innerText = 'Syncing...'; } if (icon) icon.classList.add('animate-spin');
             try {
                 const sheetMapping = { 'sva': 'data SVA', 'sdm': 'SDM', 'kpi': 'data KPI', 'operational': 'data Operational', 'project': 'data project', 'pm-target': 'data PM', 'pm-curvas': 'data PM', 'mbp-rh': 'data MBP', 'asset-master': 'data Asset', 'asset-kut': 'asset-kut', 'pjb-aging': 'pjb-aging', 'asset-genset': 'data Genset' };
                 const keys = Object.keys(sheetMapping); const results = await Promise.allSettled(keys.map(k => fetchFromSpreadsheet(sheetMapping[k])));
                 keys.forEach((key, idx) => { globalDataset[key] = results[idx].status === 'fulfilled' ? results[idx].value : []; });
-                if (badge) { badge.className = 'px-3 py-1 rounded bg-emerald-500/20 text-emerald-500 font-bold'; badge.innerText = 'Online'; }
-            } catch (err) { if (badge) { badge.className = 'px-3 py-1 rounded bg-rose-500/20 text-rose-500 font-bold'; badge.innerText = 'Offline'; } } finally {
+                if (badge) { badge.className = 'px-2 py-1 rounded bg-emerald-100 text-emerald-700 font-bold'; badge.innerText = 'Online'; }
+            } catch (err) { if (badge) { badge.className = 'px-2 py-1 rounded bg-rose-100 text-rose-700 font-bold'; badge.innerText = 'Offline'; } } finally {
                 if (splash) { splash.classList.add('opacity-0', 'pointer-events-none'); setTimeout(() => splash.style.display = 'none', 700); }
-                if (icon) icon.classList.remove('animate-spin'); if (!window.location.hash) { window.location.hash = '#sva'; } else { evaluateRoute(); }
+                if (icon) icon.classList.remove('animate-spin'); if (!window.location.hash) { window.location.hash = '#home'; } else { evaluateRoute(); }
             }
         }
 
-        // Helpers
         function extractStringValue(row, names) { for (let k in row) { let normalizedKey = String(k).toLowerCase().replace(/[^a-z0-9]/g, ''); for (let n of names) { if (normalizedKey.includes(n.toLowerCase().replace(/[^a-z0-9]/g, ''))) return row[k] ? String(row[k]) : '-'; } } return '-'; }
-        function updateDropdownOptions(id, arr, keys, lbl) { const el = document.getElementById(id); if (!el) return; const currentVal = el.value; const vals = [...new Set(arr.map(i => extractStringValue(i, Array.isArray(keys) ? keys : [keys])).filter(v => v !== '-'))].sort(); el.innerHTML = `<option value="ALL">✨ Semua ${lbl}</option>` + vals.map(v => `<option value="${v}">${v}</option>`).join(''); if (vals.includes(currentVal)) { el.value = currentVal; } else { el.value = 'ALL'; } }
+        
+        // FUNGSI UPDATE OPSI DROPDOWN
+        function updateDropdownOptions(id, arr, keys, lbl) { 
+            const el = document.getElementById(id); if (!el) return; 
+            const currentVal = el.value; 
+            const vals = [...new Set(arr.map(i => extractStringValue(i, Array.isArray(keys) ? keys : [keys])).filter(v => v !== '-'))].sort(); 
+            el.innerHTML = `<option value="ALL">Semua ${lbl}</option>` + vals.map(v => `<option value="${v}">${v}</option>`).join(''); 
+            if (vals.includes(currentVal)) { el.value = currentVal; } else { el.value = 'ALL'; } 
+        }
+        
         function applyFilters() { renderActiveView(globalDataset); }
         function toggleSection(containerId, arrowId) { const c = document.getElementById(containerId); const a = document.getElementById(arrowId); if (c) c.classList.toggle('hidden'); if (a) a.classList.toggle('rotate-180'); }
         function toggleSubmenu(id) { toggleSection(id, `arrow-${id}`); }
-        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const icon = document.getElementById('sidebar-toggle-icon'); if (sidebar.classList.contains('w-72')) { sidebar.classList.replace('w-72', 'w-0'); icon.className = 'fa-solid fa-outdent text-xl text-indigo-600'; } else { sidebar.classList.replace('w-0', 'w-72'); icon.className = 'fa-solid fa-bars text-xl text-slate-500'; } }
+        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const icon = document.getElementById('sidebar-toggle-icon'); if (sidebar.classList.contains('w-72')) { sidebar.classList.replace('w-72', 'w-0'); icon.className = 'fa-solid fa-outdent text-xl text-indigo-600'; } else { sidebar.classList.replace('w-0', 'w-72'); icon.className = 'fa-solid fa-bars text-xl text-slate-400'; } }
         function parseFlexibleNumber(rawVal) { if (rawVal == null) return 0; if (typeof rawVal === 'number') return rawVal; let str = String(rawVal).trim(); if (str === '-' || str === '') return 0; str = str.replace(/Rp/gi, '').replace(/%/g, '').trim(); if (str.includes('.') && str.includes(',')) { str = str.replace(/\./g, '').replace(',', '.'); } else if (str.includes(',')) { const parts = str.split(','); str = str.replace(/,/g, (parts[parts.length-1].length === 3 && parts.length > 1) ? '' : '.'); } else if (str.includes('.')) { const parts = str.split('.'); if (parts[parts.length-1].length === 3 && parts.length > 1) str = str.replace(/\./g, ''); } str = str.replace(/\s/g, ''); let num = parseFloat(str); return isNaN(num) ? 0 : num; }
         function extractValue(row, structuralNames) { for (let key in row) { let normalizedKey = String(key).toLowerCase().replace(/[^a-z0-9]/g, ''); for (let n of structuralNames) { let nName = n.toLowerCase().replace(/[^a-z0-9]/g, ''); if (normalizedKey === nName || normalizedKey.includes(nName)) return parseFlexibleNumber(row[key]); } } return 0; }
         const formatIDR = (n) => 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n || 0);
@@ -447,14 +546,166 @@
             let html = `<thead><tr>`; headers.forEach(h => { html += `<th class="px-6 py-4 text-[10px] font-black uppercase text-slate-500 tracking-wider">${h.replace(/_/g, ' ')}</th>`; }); html += `</tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
             const displayRows = limit ? rowsList.slice(0, limit) : rowsList;
             if (displayRows.length === 0) { html += `<tr><td colspan="${headers.length}" class="px-6 py-12 text-center text-slate-400 font-bold"><i class="fa-solid fa-folder-open text-2xl mb-2 block"></i> Data Kosong</td></tr>`; } 
-            else { displayRows.forEach(row => { html += `<tr>`; headers.forEach(h => { let val = row[h] != null ? row[h] : '-'; if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian)/i.test(h)) val = formatIDR(val); if (val === '❌ Tidak Safe' || val === '⚠️ Perlu Evaluasi' || val === 'VERY POOR' || val === 'ZERO') { val = `<span class="inline-flex items-center text-[10px] text-rose-700 font-black bg-rose-100 px-3 py-1 rounded-full shadow-sm"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i>${val.replace(/❌|⚠️/g, '')}</span>`; } else if (val === '✅ Safe' || val === 'GOOD' || val === 'Terverifikasi') { val = `<span class="inline-flex items-center text-[10px] text-emerald-700 font-black bg-emerald-100 px-3 py-1 rounded-full shadow-sm"><i class="fa-solid fa-circle-check mr-1.5"></i>${val.replace('✅', '')}</span>`; } else if (val === '⚠️ Anomali Waktu' || val === 'POOR' || val === 'Anomali') { val = `<span class="inline-flex items-center text-[10px] text-amber-700 font-black bg-amber-100 px-3 py-1 rounded-full shadow-sm"><i class="fa-solid fa-circle-exclamation mr-1.5"></i>${val.replace('⚠️', '')}</span>`; } html += `<td class="px-6 py-4 font-medium text-xs whitespace-nowrap">${val}</td>`; }); html += `</tr>`; }); } table.innerHTML = html + `</tbody>`;
+            else { displayRows.forEach(row => { html += `<tr>`; headers.forEach(h => { let val = row[h] != null ? row[h] : '-'; if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian)/i.test(h)) val = formatIDR(val); if (val === '❌ Tidak Safe' || val === '⚠️ Perlu Evaluasi' || val === 'VERY POOR' || val === 'ZERO' || val === '🔴 Kritis' || val === '🟠 Tinggi') { val = `<span class="inline-flex items-center text-[10px] text-rose-700 font-black bg-rose-100 px-3 py-1 rounded-full"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i>${val.replace(/❌|⚠️|🔴|🟠/g, '')}</span>`; } else if (val === '✅ Safe' || val === 'GOOD' || val === 'Terverifikasi' || val === 'Aman.') { val = `<span class="inline-flex items-center text-[10px] text-emerald-700 font-black bg-emerald-100 px-3 py-1 rounded-full"><i class="fa-solid fa-circle-check mr-1.5"></i>${val.replace('✅', '')}</span>`; } else if (val === '⚠️ Anomali Waktu' || val === 'POOR' || val === 'Anomali' || val === '🟡 Menengah') { val = `<span class="inline-flex items-center text-[10px] text-amber-700 font-black bg-amber-100 px-3 py-1 rounded-full"><i class="fa-solid fa-circle-exclamation mr-1.5"></i>${val.replace(/⚠️|🟡/g, '')}</span>`; } html += `<td class="px-6 py-4 font-medium text-xs whitespace-nowrap">${val}</td>`; }); html += `</tr>`; }); } table.innerHTML = html + `</tbody>`;
         }
 
-        // DRAG DROP EXCEL & AI (PM & PROD) [TETAP SAMA DENGAN VERSI SEBELUMNYA]
-        function setupAllDropZones() { /* logic sama seperti sblmnya */ }
-        function parseExcelDate(val) { if (val == null || val === '') return null; if (typeof val === 'number') return new Date(Math.round((val - 25569) * 86400 * 1000)); let d = new Date(val); if (!isNaN(d.getTime())) return d; return null; }
-        
-        // RENDER FUNGSI UTAMA (SVA, MBP, DLL)
+        // =========================================================
+        // FUNGSI FILE DROPZONE & AI ANALYZER
+        // =========================================================
+        function setupAllDropZones() {
+            setupDropZoneHelper('drop-zone-pm', 'input-file-pm', handlePMDrop, false);
+            setupDropZoneHelper('drop-zone-prod', 'input-file-prod', handleProdDrop, true);
+        }
+
+        function setupDropZoneHelper(zoneId, inputId, callback, allowMultiple = false) {
+            const dropZone = document.getElementById(zoneId); const fileInput = document.getElementById(inputId); if (!dropZone || !fileInput) return;
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-400', 'bg-indigo-50', 'scale-105'); });
+            dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-indigo-400', 'bg-indigo-50', 'scale-105'); });
+            dropZone.addEventListener('drop', (e) => { 
+                e.preventDefault(); dropZone.classList.remove('border-indigo-400', 'bg-indigo-50', 'scale-105'); 
+                if (e.dataTransfer.files.length) { if(allowMultiple) { Array.from(e.dataTransfer.files).forEach(f => callback(f)); } else { callback(e.dataTransfer.files[0]); } } 
+            });
+            fileInput.addEventListener('change', () => { 
+                if (fileInput.files.length) { if(allowMultiple) { Array.from(fileInput.files).forEach(f => callback(f)); } else { callback(fileInput.files[0]); } } 
+            });
+        }
+
+        function parseExcelDate(val) { 
+            if (val == null || val === '') return null; 
+            if (typeof val === 'number') return new Date(Math.round((val - 25569) * 86400 * 1000)); 
+            if (typeof val === 'string') { let d = new Date(val); if (!isNaN(d.getTime())) return d; let parts = val.split(/[-/]/); if (parts.length === 3) { if (parts[0].length === 4) return new Date(parts[0], parts[1]-1, parts[2]); if (parts[2].length === 4) return new Date(parts[2], parts[1]-1, parts[0]); } } return null; 
+        }
+        function formatDateForChart(d) { return d ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` : 'Unknown'; }
+
+        // --- Logika PM S-Curve ---
+        function handlePMDrop(file) {
+            const info = document.getElementById('info-file-pm'); if (info) { info.classList.remove('hidden'); info.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Menganalisa struktur ${file.name}...`; }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result); const workbook = XLSX.read(data, { type: 'array' });
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1}); 
+                    processPMData(rows);
+                    if (info) info.innerHTML = `<i class="fa-solid fa-check-double mr-2"></i>Selesai membaca data! File: ${file.name}`;
+                } catch (err) { console.error("Error PM Drop:", err); }
+            }; reader.readAsArrayBuffer(file);
+        }
+
+        function processPMData(rows) {
+            if (!rows || rows.length <= 1) return;
+            let groupedData = { 'PMS': {}, 'PMG': {} }; let overallTotalPlan = 0; let overallTotalActual = 0;
+            let headers = (rows[0] || []).map(h => String(h).toLowerCase().trim());
+            let idxStatusPM = headers.findIndex(h => h.includes('pm status')); if (idxStatusPM === -1) idxStatusPM = 9;
+            let idxStatusSWFM = headers.findIndex(h => h.includes('status swfm') || h === 'status'); if (idxStatusSWFM === -1) idxStatusSWFM = 14;
+            let idxSubmit = headers.findIndex(h => h.includes('submit')); if (idxSubmit === -1) idxSubmit = 15;
+            let idxPlan = headers.findIndex(h => h === 'plan'); if (idxPlan === -1) idxPlan = 20;
+
+            for (let i = 1; i < rows.length; i++) {
+                let r = rows[i]; if (!r || r.length === 0) continue;
+                let pmStatus = String(r[idxStatusPM] || '').toUpperCase().trim(); let swfmStatus = String(r[idxStatusSWFM] || '').toUpperCase().trim();
+                let submitDateRaw = r[idxSubmit]; let planRaw = r[idxPlan];
+                if (pmStatus !== 'PMS' && pmStatus !== 'PMG') continue;
+
+                if (planRaw !== undefined && planRaw !== null && String(planRaw).trim() !== '') {
+                    overallTotalPlan++; let parsedPlanDate = parseExcelDate(planRaw); let planDateKey = formatDateForChart(parsedPlanDate);
+                    if (planDateKey !== 'Unknown') { if (!groupedData[pmStatus][planDateKey]) groupedData[pmStatus][planDateKey] = { plan: 0, actual: 0 }; groupedData[pmStatus][planDateKey].plan++; }
+                }
+                let parsedSubmitDate = parseExcelDate(submitDateRaw); let submitDateKey = formatDateForChart(parsedSubmitDate);
+                if ((swfmStatus === 'CLOSED' || swfmStatus === 'SUBMITTED') && parsedSubmitDate && parsedSubmitDate.getFullYear() >= 2024) {
+                    overallTotalActual++;
+                    if (submitDateKey !== 'Unknown') { if (!groupedData[pmStatus][submitDateKey]) groupedData[pmStatus][submitDateKey] = { plan: 0, actual: 0 }; groupedData[pmStatus][submitDateKey].actual++; }
+                }
+            }
+
+            document.getElementById('pm-total-plan').innerText = overallTotalPlan.toLocaleString('id-ID');
+            document.getElementById('pm-total-actual').innerText = overallTotalActual.toLocaleString('id-ID');
+            let ach = overallTotalPlan > 0 ? ((overallTotalActual / overallTotalPlan) * 100).toFixed(1) : 0;
+            document.getElementById('pm-total-ach').innerText = `Ach: ${ach}%`;
+
+            renderSCurveChart('chart-pm-pms', groupedData['PMS'], 'PMS', 'sky');
+            renderSCurveChart('chart-pm-pmg', groupedData['PMG'], 'PMG', 'indigo');
+
+            const aiBox = document.getElementById('ai-insight-pm'); const aiText = document.getElementById('ai-text-pm');
+            if(aiBox && aiText) {
+                aiBox.classList.remove('hidden'); let sentiment = ach >= 80 ? 'Kinerja sangat optimal' : (ach >= 50 ? 'Berjalan cukup stabil' : 'Terdapat defisit signifikan');
+                aiText.innerHTML = `Sistem mendeteksi <b>${overallTotalPlan}</b> titik Rencana dengan serapan Aktual sebanyak <b>${overallTotalActual}</b> tiket. Proyeksi AI: Penyelesaian berada di angka <b>${ach}%</b> (${sentiment}).`;
+            }
+        }
+
+        function renderSCurveChart(canvasId, dataDict, labelSuffix, colorTheme) {
+            const canvas = document.getElementById(canvasId); if (!canvas) return; if (charts[canvasId]) charts[canvasId].destroy();
+            let sortedDates = Object.keys(dataDict).sort(); let labels = [], planCum = [], actualCum = [], runningPlan = 0, runningActual = 0;
+            sortedDates.forEach(d => { labels.push(d); runningPlan += dataDict[d].plan; runningActual += dataDict[d].actual; planCum.push(runningPlan); actualCum.push(runningActual); });
+
+            let ctx = canvas.getContext('2d');
+            charts[canvasId] = new Chart(ctx, { 
+                type: 'line', 
+                data: { labels: labels, datasets: [
+                    { label: `Plan ${labelSuffix}`, data: planCum, borderColor: colorTheme === 'sky' ? '#0ea5e9' : '#4f46e5', backgroundColor: 'rgba(14,165,233,0.1)', fill: true, borderWidth: 3, pointRadius: 0 }, 
+                    { label: `Actual ${labelSuffix}`, data: actualCum, borderColor: '#10b981', borderDash: [5, 5], fill: false, borderWidth: 2, pointRadius: 2 }
+                ]}, 
+                options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } }, interaction: { mode: 'index', intersect: false } } 
+            });
+        }
+
+        // --- Logika Productivity Tiketing ---
+        function handleProdDrop(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result); const workbook = XLSX.read(data, { type: 'array' });
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    processProdData(rows); prodFileCount++;
+                    document.getElementById('prod-file-count').innerHTML = `<i class="fa-solid fa-file-circle-check mr-1"></i> Data dari ${prodFileCount} file`;
+                } catch (err) { console.error("Error Prod Drop:", err); }
+            }; reader.readAsArrayBuffer(file);
+        }
+
+        function resetProdData() { globalProdData = []; prodFileCount = 0; document.getElementById('prod-file-count').innerHTML = `Menunggu Data`; document.getElementById('prod-total-tiket').innerText = `0`; renderProdData(); document.getElementById('ai-insight-prod').classList.add('hidden'); }
+
+        function processProdData(rows) {
+            if (!rows || rows.length === 0) return;
+            rows.forEach(r => {
+                let nop = extractStringValue(r, ['nop']); let status = extractStringValue(r, ['ticket swfm status', 'swfm status', 'status']); let pic = extractStringValue(r, ['pic take over ticket', 'pic takeover', 'pic take over', 'nama']); let checkIn = extractStringValue(r, ['check in at', 'check in']);
+                let isStatusValid = status === '-' || /closed|submitted/i.test(status); let hasPic = pic !== '-' && pic !== '' && pic !== 'undefined';
+                let ticketPoint = 0; if (hasPic && isStatusValid) { if (checkIn !== '-' && checkIn.length > 2) ticketPoint = 1; else if (checkIn === '-' && /pm|fna/i.test(JSON.stringify(r))) ticketPoint = 1; else ticketPoint = 1; }
+                if (ticketPoint > 0) { globalProdData.push({ NOP: nop, PIC: pic, Point: ticketPoint }); }
+            });
+            updateDropdownOptions('filter-prod-nop', globalProdData, ['NOP'], 'NOP'); renderProdData();
+        }
+
+        function renderProdData() {
+            const fN = document.getElementById('filter-prod-nop'); const filterVal = fN ? fN.value : 'ALL';
+            let filteredData = globalProdData.filter(d => filterVal === 'ALL' || d.NOP === filterVal);
+            let picCounts = {}; let grandTotal = 0;
+            filteredData.forEach(d => { if (!picCounts[d.PIC]) picCounts[d.PIC] = 0; picCounts[d.PIC] += d.Point; grandTotal += d.Point; });
+            document.getElementById('prod-total-tiket').innerText = grandTotal.toLocaleString('id-ID');
+
+            let currentDay = new Date().getDate();
+            let tableData = Object.keys(picCounts).map(pic => {
+                let total = picCounts[pic]; let diff = currentDay - total; let status = "GOOD";
+                if (total === 0) status = "ZERO"; else if (diff >= 10) status = "VERY POOR"; else if (diff >= 5) status = "POOR"; else status = "GOOD";
+                return { 'Nama_PIC': pic, 'Total_Tiket_TakeOver': total, 'Status_Produktivitas': status };
+            }).sort((a, b) => b.Total_Tiket_TakeOver - a.Total_Tiket_TakeOver);
+
+            if (tableData.length > 0) buildTable('table-analisa-prod', ['Nama_PIC', 'Total_Tiket_TakeOver', 'Status_Produktivitas'], tableData); else buildTable('table-analisa-prod', ['Keterangan'], []);
+
+            if(tableData.length > 0) {
+                const aiBox = document.getElementById('ai-insight-prod'); const aiText = document.getElementById('ai-text-prod');
+                aiBox.classList.remove('hidden');
+                let topPIC = tableData[0].Nama_PIC; let poorCount = tableData.filter(t => t.Status_Produktivitas.includes('POOR')).length;
+                aiText.innerHTML = `Sistem memvalidasi <b>${grandTotal}</b> tiket sah. <b>${topPIC}</b> memimpin leaderboard. <br><span class="text-emerald-700 font-bold">Peringatan:</span> Terdapat <b>${poorCount}</b> PIC di bawah standar rata-rata target harian.`;
+            }
+
+            const canvas = document.getElementById('chart-prod-pic'); if (!canvas) return; if (charts['prod_pic']) charts['prod_pic'].destroy();
+            let chartData = tableData.slice(0, 20); let ctx = canvas.getContext('2d');
+            charts['prod_pic'] = new Chart(ctx, { type: 'bar', data: { labels: chartData.map(d => String(d.Nama_PIC).substring(0, 15)), datasets: [{ label: 'Take Over', data: chartData.map(d => d.Total_Tiket_TakeOver), backgroundColor: '#10b981', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } } } });
+        }
+
+        // =========================================================
+        // LOGIKA RENDER DATA SPREADSHEET (TERMASUK DROPDOWN FALLBACK)
+        // =========================================================
         function renderActiveView(data) {
             try {
                 if (currentView === 'sva') {
@@ -469,7 +720,6 @@
                     if (tableData.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData, 150); else buildTable('table-sva', ['Keterangan'], []);
                     renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
 
-                    // AI INSIGHT SVA
                     const aiBox = document.getElementById('ai-insight-sva');
                     if (aiBox && tableData.length > 0) {
                         let avgMargin = finalNpm.toFixed(2);
@@ -495,10 +745,8 @@
                     const tbody = document.getElementById('table-mbp-rh-new'); const analysisContainer = document.getElementById('mbp-analysis-container');
                     if (tbody && analysisContainer) {
                         if (tableData.length === 0) { analysisContainer.innerHTML = `<div class="text-slate-400 p-4 text-center">Data kosong.</div>`; } else {
-                            // UI KARTU DETIL (SANGAT DETAIL & PROFESIONAL)
                             let cHTML = ''; tableData.slice(0, 50).forEach(r => { 
-                                let isAno = r.Status === 'Anomali'; let maxDelta = Math.max(r.Delta_Hour, r.Delta_RH, 1);
-                                let pDH = (r.Delta_Hour / maxDelta) * 100; let pDRH = (r.Delta_RH / maxDelta) * 100;
+                                let isAno = r.Status === 'Anomali'; let maxDelta = Math.max(r.Delta_Hour, r.Delta_RH, 1); let pDH = (r.Delta_Hour / maxDelta) * 100; let pDRH = (r.Delta_RH / maxDelta) * 100;
                                 cHTML += `
                                 <div class="bg-white border ${isAno ? 'border-rose-200 shadow-rose-100' : 'border-slate-200'} rounded-2xl p-5 flex flex-col gap-3 shadow hover:-translate-y-1 transition-all group relative overflow-hidden">
                                     <div class="absolute -right-4 -top-4 w-16 h-16 rounded-full opacity-10 ${isAno ? 'bg-rose-500' : 'bg-emerald-500'} blur-xl"></div>
@@ -516,17 +764,14 @@
                                     </div>
                                 </div>`; 
                             }); analysisContainer.innerHTML = cHTML;
-                            // Tabel Rekap NOP
                             let agg = {}; tableData.forEach(r => { if (!agg[r.NOP]) agg[r.NOP] = { Rev: 0, Ano: 0, Val: 0 }; agg[r.NOP].Rev += r.Revenue; if (r.Status === 'Anomali') agg[r.NOP].Ano++; else agg[r.NOP].Val++; });
                             let th = `<thead class="bg-slate-50"><tr><th class="p-4">Nama NOP</th><th class="p-4">Estimasi Revenue</th><th class="p-4">Tiket Anomali</th><th class="p-4">Terverifikasi</th></tr></thead><tbody>`; Object.keys(agg).forEach(nop => { th += `<tr><td class="p-4 font-bold">${nop}</td><td class="p-4 font-bold text-emerald-600">${formatIDR(agg[nop].Rev)}</td><td class="p-4 text-rose-600 font-bold">${agg[nop].Ano}</td><td class="p-4 text-emerald-600 font-bold">${agg[nop].Val}</td></tr>`; }); tbody.innerHTML = th + `</tbody>`;
                         }
                     }
 
-                    // AI INSIGHT MBP RH
                     const aiBoxMbp = document.getElementById('ai-insight-mbp-rh');
                     if (aiBoxMbp && tableData.length > 0) {
                         let avgDelta = (tableData.reduce((sum, d) => sum + d.Selisih, 0) / tableData.length).toFixed(1);
-                        let lossPotential = totalAnomali * 150000; // Asumsi simulasi
                         document.getElementById('ai-text-mbp-rh').innerHTML = `AI memvalidasi <b>${totalAnomali}</b> tiket anomali dari total ${tableData.length} data. Rata-rata deviasi (Selisih DH vs DRH) sebesar <b>${avgDelta} jam</b>. <br><span class="text-sky-700 font-bold">Peringatan:</span> Jika dibiarkan, deviasi ini berisiko mengurangi nilai validasi revenue. Fokuskan evaluasi pada tiket dengan selisih di atas 2 jam.`;
                         aiBoxMbp.classList.remove('hidden');
                     }
@@ -545,7 +790,6 @@
                     
                     if (charts['mbp_bbm']) charts['mbp_bbm'].destroy(); const ctxBBM = document.getElementById('chart-mbp-bbm'); if (ctxBBM) { let sortedPICs = evaluasiPIC.slice(0, 10); charts['mbp_bbm'] = new Chart(ctxBBM, { type: 'bar', data: { labels: sortedPICs.map(p => p.Nama_PIC.substring(0, 12)), datasets: [{ label: 'Kasus Tidak Safe', data: sortedPICs.map(p => p.Total_Kasus_Tidak_Safe), backgroundColor: '#f43f5e', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } } }}); }
 
-                    // AI INSIGHT MBP BBM
                     const aiBoxBBM = document.getElementById('ai-insight-mbp-bbm');
                     if (aiBoxBBM && evaluasiPIC.length > 0) {
                         let topOffender = evaluasiPIC[0].Nama_PIC;
@@ -591,8 +835,22 @@
                     const aiBoxSdm = document.getElementById('ai-insight-sdm');
                     if (aiBoxSdm && tableData.length > 0) { document.getElementById('ai-text-sdm').innerHTML = `Terdata <b>${tableData.length}</b> entitas/individu kepemilikan alat (Tools Inventory). Lakukan audit kelayakan setiap kuartal guna menunjang produktivitas tim.`; aiBoxSdm.classList.remove('hidden'); }
                 }
+                // ==========================================
+                // LOGIKA FALLBACK (TERMASUK DROPDOWN PM TARGET)
+                // ==========================================
                 else if (['kpi', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya', 'pm-target', 'pm-curvas', 'asset-service', 'asset-depresiasi', 'asset-sewa'].includes(currentView)) { 
-                    let k = currentView.includes('aging') ? 'pjb-aging' : (currentView.includes('pm') ? 'pm-target' : (currentView.includes('asset') ? 'asset-kut' : currentView)); let arr = data[k] || []; 
+                    let k = currentView.includes('aging') ? 'pjb-aging' : (currentView.includes('pm') ? 'pm-target' : (currentView.includes('asset') ? 'asset-kut' : currentView)); 
+                    let arr = data[k] || []; 
+                    
+                    // PENAMBAHAN FUNGSI FILTER UNTUK PM-TARGET (AGAR DROPDOWN BERFUNGSI)
+                    if (currentView === 'pm-target') {
+                        updateDropdownOptions('filter-pm-target-bulan', arr, ['bulan', 'month', 'periode'], 'Bulan');
+                        const fB = document.getElementById('filter-pm-target-bulan').value;
+                        if (fB !== 'ALL') {
+                            arr = arr.filter(d => extractStringValue(d, ['bulan', 'month', 'periode']) === fB);
+                        }
+                    }
+
                     if (arr.length > 0) {
                         let limit = currentView.includes('aging') ? 100 : 50;
                         buildTable(`table-${currentView}`, Object.keys(arr[0]).slice(0, 8), arr, limit); // slice to prevent giant tables
@@ -604,7 +862,7 @@
         function renderSvaCharts(tbD, tB, tP, tNI) { 
             let mD = {}; tbD.forEach(t => { let b = t.Bulan || '-'; if (!mD[b]) mD[b] = { R: 0, B: 0, NI: 0 }; mD[b].R += (t.Revenue || 0); mD[b].B += (t.Biaya || 0); mD[b].NI += (t.Net_Income || 0); }); let lbs = Object.keys(mD); 
             if(charts['sva_line']) charts['sva_line'].destroy(); const ctxL = document.getElementById('chart-sva-finance-line'); 
-            if (ctxL) { let ctx = ctxL.getContext('2d'); let gradRev = ctx.createLinearGradient(0,0,0,400); gradRev.addColorStop(0, '#4f46e5'); gradRev.addColorStop(1, '#312e81'); charts['sva_line'] = new Chart(ctx, { type: 'bar', data: { labels: lbs, datasets: [{ label: 'Rev', data: lbs.map(b => mD[b].R), backgroundColor: gradRev, borderRadius: 6}, { label: 'Biaya', data: lbs.map(b => mD[b].B), backgroundColor: '#f43f5e', borderRadius: 6}, { label: 'Net Income', data: lbs.map(b => mD[b].NI), backgroundColor: '#10b981', borderRadius: 6}] }, options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } } }}); }
+            if (ctxL) { let ctx = ctxL.getContext('2d'); charts['sva_line'] = new Chart(ctx, { type: 'bar', data: { labels: lbs, datasets: [{ label: 'Rev', data: lbs.map(b => mD[b].R), backgroundColor: '#4f46e5', borderRadius: 4}, { label: 'Biaya', data: lbs.map(b => mD[b].B), backgroundColor: '#f43f5e', borderRadius: 4}, { label: 'Net Income', data: lbs.map(b => mD[b].NI), backgroundColor: '#10b981', borderRadius: 4}] }, options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } } }}); }
             if(charts['sva_pie']) charts['sva_pie'].destroy(); const ctxP = document.getElementById('chart-sva-finance-pie'); 
             if (ctxP) charts['sva_pie'] = new Chart(ctxP, { type: 'doughnut', data: { labels: ['Biaya', 'Pengembalian', 'Net Income'], datasets: [{ data: [tB, tP, tNI], backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'], borderWidth: 0, hoverOffset: 10 }] }, options: { cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false }, legend: { position: 'bottom' } } }}); 
         }
