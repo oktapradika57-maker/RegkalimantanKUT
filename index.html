@@ -414,7 +414,7 @@
             
             <section id="view-kpi" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-indigo-500"><h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest"><i class="fa-solid fa-gauge-high mr-2"></i>Indikator Kinerja Utama (KPI)</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-kpi"></table></div></section>
             
-            <!-- SIMONA (DIPERBARUI MENGGUNAKAN KOLOM P: JUMLAH) -->
+            <!-- SIMONA (FIX KOLOM P : JUMLAH) -->
             <section id="view-operational" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div class="premium-card p-6 bg-white border-l-4 border-l-amber-500 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
@@ -725,7 +725,7 @@
         }
 
         // =========================================================
-        // RENDER DATA SPREADSHEET & SIMONA UPDATE
+        // RENDER DATA SPREADSHEET
         // =========================================================
         function renderActiveView(data) {
             try {
@@ -828,12 +828,19 @@
                         return;
                     }
 
+                    // ====== MENGUNCI POSISI KOLOM SECARA FIX (INDEX) ======
+                    // Google Sheets API Index: A=0, B=1, C=2 ... P=15
                     let keys = Object.keys(arr[0] || {});
-                    let keyPeriode = keys[0];  // Kolom A
-                    let keyCluster = keys[2] || keys[1]; // Kolom C
-                    // PERBAIKAN: Mengambil data nominal dari Kolom P (Jumlah)
-                    let keyJumlah = keys[15] || keys.find(k => k.toLowerCase().includes('jumlah')) || keys[keys.length - 1]; 
+                    let keyPeriode = keys[0];  // FIX: Kolom A (Periode)
+                    let keyCluster = keys[2];  // FIX: Kolom C (Cluster)
+                    let keyJumlah  = keys[15]; // FIX: Kolom P (Jumlah)
                     let keyKategori = keys.find(k => /kategori|category|jenis|group|tipe/i.test(k)) || keys[1] || keys[3];
+                    
+                    // Fallback keamanan jika sheet ternyata terpotong (kurang dari 16 kolom)
+                    if (!keyJumlah) {
+                        keyJumlah = keys.find(k => k.toLowerCase().includes('jumlah')) || keys[keys.length - 1];
+                    }
+                    if (!keyCluster) keyCluster = keys[1];
 
                     // Populate dropdown filter
                     updateDropdownOptions('filter-simona-periode', arr, [keyPeriode], 'Periode');
@@ -857,7 +864,7 @@
                         let cVal = d[keyCluster] || '-';
                         let catVal = d[keyKategori] || 'Lainnya';
                         
-                        // PARSE DARI KOLOM P (Jumlah)
+                        // PARSE MURNI DARI KOLOM P (Jumlah)
                         let jumlahVal = parseFlexibleNumber(d[keyJumlah]);
 
                         totalNominal += jumlahVal;
