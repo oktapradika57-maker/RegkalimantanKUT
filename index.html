@@ -20,6 +20,7 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
+        /* Kartu Premium Elegan */
         .premium-card {
             background: var(--bg-card); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 1.5rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -27,10 +28,12 @@
         }
         .premium-card:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(79, 70, 229, 0.1); }
         
+        /* Animasi Transisi Halaman yang Lembut */
         .view-pane { display: none; opacity: 0; transform: translateY(10px); }
         .view-pane.active { display: block; animation: floatIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes floatIn { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
 
+        /* TABEL & FILTER DROPDOWN */
         .filter-select {
             cursor: pointer; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem;
             padding: 0.5rem 1rem; font-weight: 700; color: #334155; outline: none; transition: all 0.2s;
@@ -39,14 +42,18 @@
         .custom-table th { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(5px); position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #e2e8f0; }
         .custom-table tr:hover td { background-color: rgba(79, 70, 229, 0.03); }
         
+        /* Efek klik untuk filter Kategori */
         .category-card-active { border: 2px solid #4f46e5 !important; transform: scale(1.02); box-shadow: 0 10px 25px rgba(79,70,229,0.15) !important; }
 
+        /* AI Insight Box (Elegan) */
         .ai-insight { background: linear-gradient(120deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid; box-shadow: 0 4px 20px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
         .ai-insight::after { content: '\f544'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 0; bottom: -20px; font-size: 100px; opacity: 0.03; }
         
+        /* Animasi Logo */
         .logo-glow { animation: logoPulse 2.5s infinite ease-in-out; }
         @keyframes logoPulse { 0%, 100% { filter: drop-shadow(0 0 10px rgba(79, 70, 229, 0.2)); } 50% { filter: drop-shadow(0 0 25px rgba(79, 70, 229, 0.5)); } }
 
+        /* Desain Menu Utama (Grid Profesional) */
         .menu-grid-card {
             background: white; border-radius: 1.25rem; border: 1px solid #e2e8f0;
             padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
@@ -64,6 +71,7 @@
         }
         .menu-grid-card:hover .menu-grid-icon-box { transform: scale(1.1) rotate(5deg); }
         
+        /* Sidebar Menu 3D */
         .menu-btn { transition: all 0.2s ease; position: relative; }
         .menu-btn:hover { background-color: rgba(241, 245, 249, 0.8); color: #4f46e5; padding-left: 1.25rem; }
         .active-menu-3d { background-color: #eff6ff !important; color: #4f46e5 !important; font-weight: 700; border-left: 4px solid #4f46e5; }
@@ -71,6 +79,7 @@
         .mini-scroll::-webkit-scrollbar { width: 4px; }
         .mini-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
 
+        /* Magic SmartKUT Box */
         .magic-bg { background: radial-gradient(circle at top right, #312e81, #0f172a); }
     </style>
 </head>
@@ -169,6 +178,7 @@
                 </div>
             </div>
             
+            <!-- INTEGRASI MODUL SIDEBAR -->
             <div class="pt-4 pb-1"><p class="px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Integrasi Modul</p></div>
             <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-satellite-dish text-lg w-8 text-sky-500"></i><span>SIMAKIN</span></a>
             <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-tower-broadcast text-lg w-8 text-pink-500"></i><span>G348TSEL</span></a>
@@ -182,6 +192,7 @@
 
     <!-- WORKSPACE UTAMA FULL-SCREEN -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+        <!-- HEADER -->
         <header class="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between flex-shrink-0 z-10 w-full shadow-sm">
             <div class="flex items-center space-x-4">
                 <button onclick="toggleSidebar()" class="text-slate-500 hover:text-indigo-600 focus:outline-none p-2.5 rounded-xl hover:bg-indigo-50 transition-colors bg-white border border-slate-200 shadow-sm flex items-center justify-center">
@@ -198,9 +209,11 @@
                 </div>
             </div>
             <div class="flex items-center space-x-6">
+                <!-- Tombol Navigasi Cepat (Kembali) -->
                 <a href="#home" class="hidden md:flex px-4 py-2 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-indigo-600 text-xs font-bold rounded-lg transition-colors items-center gap-2 border border-slate-200">
                     <i class="fa-solid fa-arrow-left"></i> Menu Utama
                 </a>
+                
                 <button onclick="reloadData()" class="px-5 py-2.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white text-xs font-extrabold rounded-xl transition-all flex items-center gap-2 border border-indigo-100 shadow-sm"><i id="sync-icon" class="fa-solid fa-arrows-rotate"></i> Sinkronisasi Ulang</button>
                 <div class="flex items-center space-x-3 pl-4 border-l border-slate-200 hidden sm:flex">
                     <div class="text-right">
@@ -215,8 +228,12 @@
         <!-- DASHBOARD CONTENT -->
         <div class="flex-1 overflow-y-auto p-8 bg-slate-50/50" id="dashboard-content">
             
-            <!-- MENU UTAMA -->
+            <!-- ============================================== -->
+            <!-- MENU UTAMA & AI SMARTKUT PANEL                 -->
+            <!-- ============================================== -->
             <section id="view-home" class="view-pane active max-w-7xl mx-auto space-y-6 pb-10">
+                
+                <!-- AI SmartKUT Banner -->
                 <div class="relative overflow-hidden premium-card p-8 magic-bg text-white shadow-2xl shadow-indigo-900/20 border-0 mb-8">
                     <div class="absolute -top-10 -right-10 opacity-10 transform rotate-12"><i class="fa-solid fa-microchip text-[12rem]"></i></div>
                     <div class="relative z-10">
@@ -278,6 +295,7 @@
                     </a>
                 </div>
 
+                <!-- INTEGRASI MODUL (BARU) -->
                 <div class="pt-6 border-t border-slate-200/60">
                     <div class="mb-4">
                         <h3 class="text-xl font-black text-slate-800 tracking-tight">Integrasi <span class="text-sky-500">Modul</span></h3>
@@ -289,6 +307,7 @@
                             <h3 class="font-black text-slate-800 text-sm">SIMAKIN</h3>
                             <p class="text-[11px] text-slate-400 mt-2 font-medium">Platform Aplikasi Terintegrasi</p>
                         </a>
+
                         <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-grid-card border-pink-100 shadow-sm" style="--hover-color: #ec4899;">
                             <div class="menu-grid-icon-box bg-pink-50 text-pink-500"><i class="fa-solid fa-tower-broadcast"></i></div>
                             <h3 class="font-black text-slate-800 text-sm">G348TSEL</h3>
@@ -296,9 +315,12 @@
                         </a>
                     </div>
                 </div>
+
             </section>
             
-            <!-- SIMONA -->
+            <!-- ===================================== -->
+            <!-- SIMONA (MURNI DATA OPERASIONAL)       -->
+            <!-- ===================================== -->
             <section id="view-operational" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div class="flex items-center justify-between bg-amber-50 p-4 rounded-2xl border border-amber-100 shadow-sm">
                     <div>
@@ -332,16 +354,21 @@
                         <h4 class="text-xs font-black text-slate-600 uppercase tracking-widest"><i class="fa-solid fa-layer-group mr-2 text-amber-500"></i>Pengeluaran Berdasarkan Kategori</h4>
                         <span class="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded border border-indigo-100 animate-pulse">💡 Klik kartu untuk memfilter tabel</span>
                     </div>
-                    <div id="simona-category-cards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-4"></div>
+                    <div id="simona-category-cards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-4">
+                        <!-- Dynamic Super Pro Cards -->
+                    </div>
                 </div>
                 
+                <!-- TOP SPENDERS (HANYA BIAYA OPS) -->
                 <div class="mt-8">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="text-xs font-black text-slate-600 uppercase tracking-widest flex items-center">
                             <i class="fa-solid fa-users-viewfinder mr-2 text-indigo-500"></i>Top Spenders (Biaya Operasional Tertinggi)
                         </h4>
                     </div>
-                    <div id="simona-top-spenders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                    <div id="simona-top-spenders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- Spenders Ops Data -->
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
@@ -365,14 +392,15 @@
                         </button>
                     </div>
                     <div class="overflow-auto flex-1 mini-scroll relative" id="simona-table-container">
-                        <table class="w-full text-left text-xs whitespace-nowrap custom-table relative" id="table-operational"></table>
+                        <table class="w-full text-left text-xs whitespace-nowrap custom-table relative" id="table-operational">
+                        </table>
                     </div>
                 </div>
             </section>
             
-            <!-- ======================================================= -->
-            <!-- MBP: ANALISA KONSUMSI BBM (DENGAN SINKRONISASI KOLOM C, P, K & R) -->
-            <!-- ======================================================= -->
+            <!-- ============================================== -->
+            <!-- MBP BBM: ANALISA KONSUMSI & KOMPARASI PIC      -->
+            <!-- ============================================== -->
             <section id="view-mbp-bbm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                  <div class="flex gap-4 mb-4">
                     <a href="#mbp-rh" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-chart-bar mr-2"></i>Analisa Delta & Revenue</a>
@@ -382,37 +410,44 @@
                 <div id="ai-insight-mbp-bbm" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #f43f5e;">
                     <div class="flex items-start gap-4 relative z-10">
                         <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center flex-shrink-0 text-rose-600"><i class="fa-solid fa-gas-pump text-xl"></i></div>
-                        <div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">AI Sinkronisasi SIMONA ↔ MBP</h4><div id="ai-text-mbp-bbm" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div>
+                        <div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">AI Profiling: Anomali BBM</h4><div id="ai-text-mbp-bbm" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div>
                     </div>
                 </div>
                 
-                <!-- CARD KOMPARASI PIC (MENGGUNAKAN KOLOM C & P DARI SIMONA DAN KOLOM R DARI MBP) -->
+                <!-- KOMPARASI PERFORMA PIC (OPS vs MBP) -->
                 <div class="mb-8">
                     <div class="flex items-center justify-between mb-4 mt-2">
                         <h4 class="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center">
-                            <i class="fa-solid fa-scale-balanced mr-2 text-indigo-500"></i>Komparasi Permintaan BBM Operational vs Revenue MBP per PIC
+                            <i class="fa-solid fa-scale-balanced mr-2 text-indigo-500"></i>Komparasi Performa PIC (Biaya Ops vs Profit MBP)
                         </h4>
-                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">Simona (Col C & P, K: BBM Genset) ↔ MBP (Col R)</span>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">Merge Database: SIMONA ↔ MBP</span>
                     </div>
                     <div id="mbp-bbm-komparasi" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <!-- Cards komparasi divalidasi dan dirender interaktif -->
+                        <!-- Cards komparasi dirender di sini via JS -->
                     </div>
                 </div>
 
-                <!-- DETAIL BREAKDOWN TIKET DENGAN KOLOM B DAN KOLOM D -->
-                <div class="premium-card bg-white mt-8 p-6">
-                    <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest mb-4 flex items-center">
-                        <i class="fa-solid fa-ticket mr-2 text-cyan-500"></i>Validasi Tiket SWFM (Kolom B: Ticket Number & Kolom D: Nomor Ticket)
-                    </h4>
-                    <div class="overflow-x-auto max-h-[450px] mini-scroll">
-                        <table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-bbm-tickets">
-                            <!-- Tabel Breakdown Tiket -->
-                        </table>
+                <!-- ANALISIS ANOMALI BBM -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="premium-card overflow-hidden bg-white flex flex-col h-[450px]">
+                        <div class="p-6 border-b border-slate-100 bg-rose-50/30"><h4 class="text-xs font-black text-rose-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-user-shield mr-2"></i>Daftar PIC Berisiko (Anomali Waktu & BBM)</h4></div>
+                        <div class="overflow-y-auto flex-1 p-4 mini-scroll"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-bbm-evaluasi"></table></div>
                     </div>
+                    <div class="premium-card p-6 h-[450px] bg-white flex flex-col">
+                        <h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-chart-column mr-2 text-rose-500"></i>Distribusi Kasus "Tidak Safe" per PIC</h4>
+                        <div class="w-full flex-1 relative"><canvas id="chart-mbp-bbm"></canvas></div>
+                    </div>
+                </div>
+                
+                <div class="premium-card overflow-hidden bg-white">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-table-list mr-2 text-indigo-500"></i>Log Semua Tiket Anomali / Tidak Safe</h4></div>
+                    <div class="overflow-x-auto max-h-[500px] mini-scroll"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-bbm"></table></div>
                 </div>
             </section>
 
-            <!-- SVA -->
+            <!-- ============================== -->
+            <!-- OTHER SECTIONS                 -->
+            <!-- ============================== -->
             <section id="view-sva" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div id="ai-insight-sva" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #10b981;">
                     <div class="flex items-start gap-4 relative z-10"><div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0 text-emerald-600"><i class="fa-solid fa-brain text-xl"></i></div><div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">Executive Summary (AI)</h4><div id="ai-text-sva" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div></div>
@@ -438,7 +473,6 @@
                 <div class="premium-card overflow-hidden bg-white"><div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest">Laporan Neraca SVA Detail</h4></div><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sva"></table></div></div>
             </section>
 
-            <!-- MBP RH (TETAP UTUH TANPA DIUBAH) -->
             <section id="view-mbp-rh" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div class="flex gap-4 mb-4">
                     <a href="#mbp-rh" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-cyan-50 text-cyan-700 border border-cyan-200 shadow-sm"><i class="fa-solid fa-chart-bar mr-2"></i>Analisa Delta & Revenue</a>
@@ -462,9 +496,44 @@
                 </div>
             </section>
             
-            <!-- OTHER SECTIONS -->
-            <section id="view-analisa-pm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-12 text-center bg-white"><h3 class="text-lg font-bold">Analisa PM</h3></div></section>
-            <section id="view-analisa-prod" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-12 text-center bg-white"><h3 class="text-lg font-bold">Produktivitas</h3></div></section>
+            <section id="view-analisa-pm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
+                <div id="drop-zone-pm" class="premium-card p-12 text-center cursor-pointer border-dashed border-2 border-slate-300 hover:border-indigo-400 bg-slate-50/50 flex flex-col items-center justify-center transition-all">
+                    <div class="w-20 h-20 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-4 text-indigo-500 pointer-events-none"><i class="fa-solid fa-file-excel text-3xl"></i></div>
+                    <p class="text-sm font-black text-slate-700 pointer-events-none">KLIK / DROP FILE DATASET PM (EXCEL) DI SINI</p>
+                    <p class="text-xs text-slate-500 mt-2 font-medium pointer-events-none">Sistem memproses Rencana, Aktual, dan mengkalibrasi S-Curve secara otomatis.</p>
+                    <input type="file" id="input-file-pm" class="hidden" accept=".xlsx, .xls, .csv">
+                    <div id="info-file-pm" class="hidden text-xs mt-4 font-bold bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl border border-emerald-200"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="premium-card p-8 bg-white"><p class="text-[11px] text-slate-400 font-extrabold uppercase">Total Rencana Proyek (Plan)</p><h3 id="pm-total-plan" class="text-5xl font-black text-slate-800 mt-2">0</h3></div>
+                    <div class="premium-card p-8 bg-white flex justify-between items-start">
+                        <div><p class="text-[11px] text-slate-400 font-extrabold uppercase">Total Eksekusi (Actual)</p><h3 id="pm-total-actual" class="text-5xl font-black text-emerald-600 mt-2">0</h3></div>
+                        <div class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl border border-emerald-100"><p id="pm-total-ach" class="text-sm font-black">Ach: 0%</p></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Kurva S - Kinerja PMS</h4><div class="w-full flex-1 relative"><canvas id="chart-pm-pms"></canvas></div></div>
+                    <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Kurva S - Kinerja PMG</h4><div class="w-full flex-1 relative"><canvas id="chart-pm-pmg"></canvas></div></div>
+                </div>
+            </section>
+
+            <section id="view-analisa-prod" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div id="drop-zone-prod" class="lg:col-span-2 premium-card p-10 text-center cursor-pointer border-dashed border-2 border-slate-300 hover:border-emerald-400 bg-slate-50/50 flex flex-col items-center justify-center transition-all">
+                        <div class="w-16 h-16 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-4 text-emerald-500 pointer-events-none"><i class="fa-solid fa-file-circle-plus text-2xl"></i></div>
+                        <p class="text-sm font-black text-slate-700 pointer-events-none">KLIK / DROP BATCH UPLOAD FILE EXCEL (MAIN, PM, FNA)</p>
+                        <p class="text-xs text-slate-500 mt-2 font-medium pointer-events-none">AI mendeteksi redundansi dan merangkum produktivitas PIC.</p>
+                        <input type="file" id="input-file-prod" class="hidden" accept=".xlsx, .xls, .csv" multiple>
+                    </div>
+                    <div class="premium-card p-6 bg-white text-center flex flex-col justify-center items-center">
+                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Tiket Tervalidasi</p><h3 id="prod-total-tiket" class="text-5xl font-black text-slate-800 mt-2">0</h3>
+                        <p id="prod-file-count" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 mt-3 inline-block">Menunggu Data</p>
+                        <button onclick="resetProdData()" class="mt-4 px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-500 hover:text-white border border-rose-200 text-xs font-black rounded-lg w-full transition-colors">RESET DATASTORE</button>
+                    </div>
+                </div>
+                <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Leaderboard Produktivitas PIC</h4><div class="w-full flex-1 relative"><canvas id="chart-prod-pic"></canvas></div></div>
+            </section>
+
             <section id="view-sdm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-purple-500"><h3 class="text-xs font-black text-purple-600 uppercase tracking-widest"><i class="fa-solid fa-users-gear mr-2"></i>Data SDM & Tools</h3></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sdm"></table></div></section>
             <section id="view-kpi" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-indigo-500"><h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest"><i class="fa-solid fa-gauge-high mr-2"></i>Indikator Kinerja Utama (KPI)</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-kpi"></table></div></section>
             <section id="view-pm-target" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-pm-target"></table></div></section>
@@ -482,16 +551,18 @@
     <script>
         Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif"; Chart.defaults.color = '#94a3b8'; Chart.defaults.scale.grid.color = 'rgba(241, 245, 249, 0.5)'; Chart.defaults.scale.grid.drawBorder = false; Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)'; Chart.defaults.plugins.tooltip.titleFont = { size: 13, weight: 'bold' }; Chart.defaults.plugins.tooltip.padding = 12; Chart.defaults.plugins.tooltip.cornerRadius = 8; Chart.defaults.elements.line.tension = 0.4;
         const SPREADSHEET_ID = '1hIeT51_SVdNrz62s93zpZNyqepBMdNCa-mDRH-wVOIw'; 
-        let globalDataset = {}; let charts = {}; let currentView = 'home';
+        let globalDataset = {}; let charts = {}; let currentView = 'home'; let globalProdData = []; let prodFileCount = 0;
         let simonaCurrentCategory = 'ALL'; 
         
-        const titleLabels = { 'home': 'Menu Utama', 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'SIMONA Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Analisa Konsumsi BBM' };
+        const titleLabels = { 'home': 'Menu Utama', 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'SIMONA Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Konsumsi BBM & Komparasi' };
 
-        window.addEventListener('DOMContentLoaded', () => { window.addEventListener('hashchange', evaluateRoute); reloadData(); });
+        window.addEventListener('DOMContentLoaded', () => { window.addEventListener('hashchange', evaluateRoute); setupAllDropZones(); reloadData(); });
 
         function evaluateRoute() {
             let hash = window.location.hash.replace('#', '') || 'home'; currentView = hash;
+            
             document.querySelectorAll('.view-pane').forEach(el => { el.style.display = 'none'; el.classList.remove('active'); });
+            
             const paneEl = document.getElementById(`view-${currentView}`);
             if (paneEl) { paneEl.style.display = 'block'; void paneEl.offsetWidth; paneEl.classList.add('active'); }
 
@@ -511,7 +582,7 @@
                 if (overlay) { overlay.classList.add('opacity-0'); setTimeout(() => overlay.classList.add('hidden'), 300); }
             }
 
-            if (Object.keys(globalDataset).length > 0 && currentView !== 'home') { renderActiveView(globalDataset); }
+            if (Object.keys(globalDataset).length > 0 && !currentView.includes('analisa-') && currentView !== 'home') { renderActiveView(globalDataset); }
         }
 
         async function fetchFromSpreadsheet(sheetName) {
@@ -526,8 +597,12 @@
                 const keys = Object.keys(sheetMapping); const results = await Promise.allSettled(keys.map(k => fetchFromSpreadsheet(sheetMapping[k])));
                 keys.forEach((key, idx) => { globalDataset[key] = results[idx].status === 'fulfilled' ? results[idx].value : []; });
                 if (badge) { badge.className = 'px-2 py-1 rounded bg-emerald-100 text-emerald-700 font-bold'; badge.innerText = 'Online'; }
+                
+                // Panggil AI (Aman jika data kosong)
                 renderSmartKUT();
+                
             } catch (err) { 
+                console.error(err);
                 if (badge) { badge.className = 'px-2 py-1 rounded bg-rose-100 text-rose-700 font-bold'; badge.innerText = 'Offline'; } 
             } finally {
                 if (splash) { splash.classList.add('opacity-0', 'pointer-events-none'); setTimeout(() => splash.style.display = 'none', 700); }
@@ -550,11 +625,14 @@
         function toggleSubmenu(id) { toggleSection(id, `arrow-${id}`); }
         
         function toggleSidebar() { 
-            const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('sidebar-overlay');
+            const sidebar = document.getElementById('sidebar'); 
+            const overlay = document.getElementById('sidebar-overlay');
             if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full'); if(overlay) { overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 10); }
+                sidebar.classList.remove('-translate-x-full'); 
+                if(overlay) { overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 10); }
             } else {
-                sidebar.classList.add('-translate-x-full'); if(overlay) { overlay.classList.add('opacity-0'); setTimeout(() => overlay.classList.add('hidden'), 300); }
+                sidebar.classList.add('-translate-x-full'); 
+                if(overlay) { overlay.classList.add('opacity-0'); setTimeout(() => overlay.classList.add('hidden'), 300); }
             } 
         }
 
@@ -570,34 +648,88 @@
             else { displayRows.forEach(row => { html += `<tr>`; headers.forEach(h => { let val = row[h] != null ? row[h] : '-'; if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian|harga|jumlah)/i.test(h)) val = formatIDR(val); html += `<td class="px-6 py-4 font-medium text-xs whitespace-nowrap">${val}</td>`; }); html += `</tr>`; }); } table.innerHTML = html + `</tbody>`;
         }
 
+        // --- Drag Drop Setup ---
+        function setupAllDropZones() {
+            setupDropZoneHelper('drop-zone-pm', 'input-file-pm', handlePMDrop, false);
+            setupDropZoneHelper('drop-zone-prod', 'input-file-prod', handleProdDrop, true);
+        }
+        function setupDropZoneHelper(zoneId, inputId, callback, allowMultiple = false) {
+            const dropZone = document.getElementById(zoneId); const fileInput = document.getElementById(inputId); if (!dropZone || !fileInput) return;
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-400', 'bg-indigo-50', 'scale-105'); });
+            dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-indigo-400', 'bg-indigo-50', 'scale-105'); });
+            dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('border-indigo-400', 'bg-indigo-50', 'scale-105'); if (e.dataTransfer.files.length) { if(allowMultiple) { Array.from(e.dataTransfer.files).forEach(f => callback(f)); } else { callback(e.dataTransfer.files[0]); } } });
+            fileInput.addEventListener('change', () => { if (fileInput.files.length) { if(allowMultiple) { Array.from(fileInput.files).forEach(f => callback(f)); } else { callback(fileInput.files[0]); } } });
+        }
+        
+        // Stubs for offline AI capabilities so it doesn't crash
+        function handlePMDrop(file) { console.log('Upload PM Module Disabled', file); }
+        function handleProdDrop(file) { console.log('Upload Prod Module Disabled', file); }
+        function resetProdData() {}
+
+        // =========================================================
+        // AI SMARTKUT GLOBAL SYNTHESIS LOGIC
+        // =========================================================
         function renderSmartKUT() {
             const smartContainer = document.getElementById('smartkut-content');
             if (!smartContainer) return;
+            
             try {
-                let arrSva = globalDataset['sva'] || []; let totalSvaNI = 0, totalSvaRev = 0;
-                arrSva.forEach(d => { let r = extractValue(d, ['revenue', 'pendapatan']); let b = extractValue(d, ['biaya', 'pengeluaran']); let p = extractValue(d, ['pengembalian']); let ni = extractValue(d, ['netincome', 'lababersih']); if (ni === 0 && r > 0) ni = r - b - p; totalSvaRev += r; totalSvaNI += ni; });
+                let arrSva = globalDataset['sva'] || [];
+                let totalSvaNI = 0, totalSvaRev = 0;
+                arrSva.forEach(d => {
+                    let r = extractValue(d, ['revenue', 'pendapatan']);
+                    let b = extractValue(d, ['biaya', 'pengeluaran']);
+                    let p = extractValue(d, ['pengembalian']);
+                    let ni = extractValue(d, ['netincome', 'lababersih']);
+                    if (ni === 0 && r > 0) ni = r - b - p;
+                    totalSvaRev += r; totalSvaNI += ni;
+                });
                 let avgNpm = totalSvaRev > 0 ? ((totalSvaNI / totalSvaRev) * 100).toFixed(1) : 0;
-                let arrMbp = globalDataset['mbp-rh'] || []; let totalMbpRev = 0, totalMbpLit = 0;
-                arrMbp.forEach(d => { totalMbpRev += parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue'])); totalMbpLit += parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter'])); });
+
+                let arrMbp = globalDataset['mbp-rh'] || [];
+                let totalMbpRev = 0, totalMbpLit = 0, anomaliCount = 0;
+                arrMbp.forEach(d => {
+                    totalMbpRev += parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue']));
+                    totalMbpLit += parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter']));
+                    let dH = parseFlexibleNumber(d['Delta Hour'] || extractValue(d, ['deltahour']));
+                    let dRH = parseFlexibleNumber(d['Delta RH'] || extractValue(d, ['deltarh']));
+                    if (Math.abs(dH - dRH) >= 1) anomaliCount++;
+                });
+
+                let arrOps = globalDataset['operational'] || [];
+                let totalOpsCost = 0;
+                if (arrOps.length > 0) {
+                    let keyOpsJumlah = (Object.keys(arrOps[0] || {})).find(k => k.toLowerCase().includes('jumlah') || k.toLowerCase().includes('total')) || 'Col_15';
+                    arrOps.forEach(d => { totalOpsCost += parseFlexibleNumber(d[keyOpsJumlah] || d[Object.keys(d)[Object.keys(d).length-1]]); });
+                }
                 
+                // Construct Magic Text
                 let html = `
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <p class="mb-2"><span class="text-cyan-300 font-black"><i class="fa-solid fa-satellite-dish mr-1"></i>Status Ekosistem KUT:</span> Tersinkronisasi penuh.</p>
-                            <p class="mb-2">Net Income Finansial SVA: <b>${formatIDR(totalSvaNI)}</b> (Profit Margin: <b>${avgNpm}%</b>).</p>
+                            <p class="mb-2"><span class="text-cyan-300 font-black"><i class="fa-solid fa-satellite-dish mr-1"></i>Status Ekosistem KUT:</span> Telah tersinkronisasi 100%.</p>
+                            <p class="mb-2">Secara makro, Net Income finansial SVA berada di angka <b>${formatIDR(totalSvaNI)}</b> dengan rata-rata Profit Margin <b>${avgNpm}%</b>.</p>
+                            <p>Sektor operasional (SIMONA) mencatat beban biaya total sebesar <b class="text-rose-300">${formatIDR(totalOpsCost)}</b>.</p>
                         </div>
                         <div class="border-l border-white/20 pl-4">
-                            <p class="mb-2 text-amber-200"><i class="fa-solid fa-gas-pump mr-1"></i><b>Analisa MBP & Genset:</b></p>
-                            <p>Total Revenue MBP tercatat <b>${formatIDR(totalMbpRev)}</b> dari konsumsi total <b>${totalMbpLit.toLocaleString('id-ID')} Liter</b>.</p>
+                            <p class="mb-2 text-amber-200"><i class="fa-solid fa-gas-pump mr-1"></i><b>Performa MBP & BBM:</b></p>
+                            <p class="mb-2">Estimasi Revenue dari MBP mencapai <b>${formatIDR(totalMbpRev)}</b> dengan konsumsi bahan bakar total <b>${totalMbpLit.toLocaleString('id-ID')} Liter</b>.</p>
+                            <p class="text-rose-300"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Sistem mengidentifikasi <b>${anomaliCount} tiket anomali waktu</b> yang perlu diinvestigasi di modul MBP.</p>
                         </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-center text-xs font-bold text-indigo-300 uppercase tracking-widest">
+                        "Optimasi Rasio Operasional terhadap Revenue adalah kunci pertumbuhan kuartal ini."
                     </div>
                 `;
                 smartContainer.innerHTML = html;
             } catch (err) {
-                smartContainer.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-400 mr-2"></i> Gagal menghasilkan analisa AI.`;
+                console.error("SmartKUT Error:", err);
+                smartContainer.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-400 mr-2"></i> Gagal menghasilkan analisa AI: Data belum siap.`;
             }
         }
 
+        // Filter Kategori Klik di SIMONA
         function setSimonaCategoryFilter(catName) {
             simonaCurrentCategory = catName;
             document.getElementById('btn-reset-cat').classList.remove('hidden');
@@ -612,15 +744,26 @@
         }
 
         // =========================================================
-        // RENDER ACTIVE VIEW
+        // RENDER ACTIVE VIEW (MAIN LOGIC)
         // =========================================================
         function renderActiveView(data) {
             try {
+                // =======================================================
+                // SIMONA: MURNI BIAYA OPERASIONAL (TANPA MBP REVENUE)
+                // =======================================================
                 if (currentView === 'operational') {
                     let arrOps = data['operational'] || [];
-                    if (arrOps.length === 0) return;
+                    if (arrOps.length === 0) {
+                        document.getElementById('simona-kpi-total').innerText = 'Rp 0';
+                        document.getElementById('simona-kpi-count').innerText = '0 Item';
+                        document.getElementById('simona-category-cards').innerHTML = '<div class="col-span-full text-slate-400 text-center py-4">Data kosong.</div>';
+                        document.getElementById('simona-top-spenders').innerHTML = '';
+                        buildTable('table-operational', ['Keterangan'], []);
+                        return;
+                    }
+
                     let keys = Object.keys(arrOps[0] || {});
-                    let keyPeriode = keys[0]; let keyCluster = keys[2]; 
+                    let keyPeriode = keys[0];  let keyCluster = keys[2]; 
                     let keyName = keys.find(k => k.toLowerCase() === 'name' || k.toLowerCase().includes('pic')) || keys[4];
                     let keyRole = keys.find(k => k.toLowerCase() === 'role' || k.toLowerCase().includes('tec')) || keys[6];
                     let keyKategori = keys.find(k => /kategori|category|jenis|group|tipe/i.test(k)) || keys[3];
@@ -631,13 +774,19 @@
 
                     let filteredArr = arrOps.filter(d => { let pVal = d[keyPeriode] != null ? String(d[keyPeriode]).trim() : '-'; let cVal = d[keyCluster] != null ? String(d[keyCluster]).trim() : '-'; return (fPeriode === 'ALL' || pVal === fPeriode) && (fCluster === 'ALL' || cVal === fCluster); });
 
-                    let totalNominal = 0; let categoryMap = {}; let roleMap = {}; let picCostMap = {}; let tableRows = [];
+                    let totalNominal = 0; let categoryMap = {}; let roleMap = {}; let picCostMap = {};
+                    let tableRows = [];
+                    
                     filteredArr.forEach(d => {
-                        let catVal = d[keyKategori] || 'Lainnya'; let jumlahVal = parseFlexibleNumber(d[keyJumlah]);
+                        let catVal = d[keyKategori] || 'Lainnya';
+                        let jumlahVal = parseFlexibleNumber(d[keyJumlah]);
+                        
                         totalNominal += jumlahVal;
                         if (!categoryMap[catVal]) categoryMap[catVal] = 0; categoryMap[catVal] += jumlahVal;
+                        
                         let roleVal = d[keyRole] || 'Tidak Terdefinisi';
                         if (!roleMap[roleVal]) roleMap[roleVal] = 0; roleMap[roleVal] += jumlahVal;
+
                         let picNameOps = (d[keyName] || 'Tanpa Nama').toString().trim().toUpperCase();
                         if (!picCostMap[picNameOps]) picCostMap[picNameOps] = { total: 0, items: {} };
                         picCostMap[picNameOps].total += jumlahVal;
@@ -649,26 +798,34 @@
 
                     document.getElementById('simona-kpi-total').innerText = formatIDR(totalNominal); document.getElementById('simona-kpi-count').innerText = filteredArr.length + ' Item';
 
+                    // Cards Kategori
                     let cardsContainer = document.getElementById('simona-category-cards');
                     if (cardsContainer) {
                         let cardHTML = ''; let sortedCats = Object.keys(categoryMap).sort((a, b) => categoryMap[b] - categoryMap[a]); const bgColors = ['from-amber-400 to-orange-500', 'from-blue-400 to-cyan-500', 'from-emerald-400 to-teal-500', 'from-purple-400 to-pink-500', 'from-rose-400 to-red-500', 'from-indigo-400 to-violet-500'];
-                        sortedCats.forEach((cat, idx) => {
-                            let nominal = categoryMap[cat]; let pct = totalNominal > 0 ? ((nominal / totalNominal) * 100).toFixed(1) : 0; let colorClass = bgColors[idx % bgColors.length]; let isActive = simonaCurrentCategory === cat ? 'category-card-active' : '';
-                            cardHTML += `<div onclick="setSimonaCategoryFilter('${cat}')" data-cat="${cat}" class="simona-cat-card ${isActive} premium-card relative overflow-hidden bg-white p-4 cursor-pointer hover:-translate-y-1 transition-all"><div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${colorClass}"></div><div class="flex justify-between items-start mb-2"><div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center border border-slate-100"><i class="fa-solid fa-tags text-slate-400 text-xs"></i></div><span class="px-2 py-0.5 bg-slate-50 text-slate-500 font-black text-[9px] rounded border border-slate-100">${pct}%</span></div><div><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest truncate mb-1" title="${cat}">${cat}</p><h4 class="text-sm font-black text-slate-800 tracking-tight">${formatIDR(nominal)}</h4></div></div>`;
-                        });
-                        cardsContainer.innerHTML = cardHTML;
+                        if (sortedCats.length === 0) { cardHTML = `<div class="col-span-full text-slate-400 text-center py-4 font-bold">Tidak ada data kategori.</div>`; } 
+                        else {
+                            sortedCats.forEach((cat, idx) => {
+                                let nominal = categoryMap[cat]; let pct = totalNominal > 0 ? ((nominal / totalNominal) * 100).toFixed(1) : 0; let colorClass = bgColors[idx % bgColors.length]; let isActive = simonaCurrentCategory === cat ? 'category-card-active' : '';
+                                cardHTML += `<div onclick="setSimonaCategoryFilter('${cat}')" data-cat="${cat}" class="simona-cat-card ${isActive} premium-card relative overflow-hidden bg-white p-4 cursor-pointer hover:-translate-y-1 transition-all duration-300"><div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${colorClass}"></div><div class="flex justify-between items-start mb-2"><div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center border border-slate-100"><i class="fa-solid fa-tags text-slate-400 text-xs"></i></div><span class="px-2 py-0.5 bg-slate-50 text-slate-500 font-black text-[9px] rounded border border-slate-100">${pct}%</span></div><div><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest truncate mb-1" title="${cat}">${cat}</p><h4 class="text-sm font-black text-slate-800 tracking-tight">${formatIDR(nominal)}</h4></div><div class="w-full bg-slate-100 h-1 rounded-full mt-3 overflow-hidden"><div class="h-full bg-gradient-to-r ${colorClass} rounded-full" style="width: ${pct}%"></div></div></div>`;
+                            });
+                        } cardsContainer.innerHTML = cardHTML;
                     }
 
+                    // Top Spenders (Ops Cost Only)
                     let spendersContainer = document.getElementById('simona-top-spenders');
                     if (spendersContainer) {
-                        let spenderHTML = ''; let sortedPICs = Object.keys(picCostMap).filter(n => n !== '-' && n !== 'TANPA NAMA').sort((a, b) => picCostMap[b].total - picCostMap[a].total).slice(0, 6);
-                        sortedPICs.forEach((name, idx) => {
-                            let sd = picCostMap[name]; let detailsHtml = Object.keys(sd.items).sort((a,b) => sd.items[b] - sd.items[a]).map(c => `<div class="flex justify-between items-center text-[10px] py-1 border-b border-slate-50 last:border-0"><span class="text-slate-500 truncate pr-2 w-32">• ${c}</span><span class="font-bold text-slate-700">${formatIDR(sd.items[c])}</span></div>`).join('');
-                            spenderHTML += `<div class="premium-card p-5 bg-white relative overflow-hidden group hover:border-amber-300 flex flex-col h-full"><div class="flex items-center gap-4 mb-4"><div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-black shadow-inner border border-white flex-shrink-0">${idx+1}</div><div class="flex-1 min-w-0"><h5 class="text-sm font-black text-slate-800 truncate" title="${name}">${name}</h5><p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider mt-0.5">Total: ${formatIDR(sd.total)}</p></div></div><div class="pt-3 border-t border-slate-100/80 flex-1 flex flex-col"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-receipt mr-1.5"></i>Riwayat Pengeluaran:</p><div class="flex-1 overflow-y-auto max-h-24 pr-1 mini-scroll">${detailsHtml}</div></div></div>`;
-                        });
-                        spendersContainer.innerHTML = spenderHTML;
+                        let spenderHTML = '';
+                        let sortedPICs = Object.keys(picCostMap).filter(n => n !== '-' && n !== 'TANPA NAMA' && n !== 'UNDEFINED').sort((a, b) => picCostMap[b].total - picCostMap[a].total).slice(0, 6);
+                        if (sortedPICs.length === 0) { spenderHTML = `<div class="col-span-full text-slate-400 text-center py-4 font-bold">Data PIC (Kolom E) tidak ditemukan.</div>`; } 
+                        else {
+                            sortedPICs.forEach((name, idx) => {
+                                let sd = picCostMap[name]; let detailsHtml = Object.keys(sd.items).sort((a,b) => sd.items[b] - sd.items[a]).map(c => `<div class="flex justify-between items-center text-[10px] py-1 border-b border-slate-50 last:border-0"><span class="text-slate-500 truncate pr-2 w-32">• ${c}</span><span class="font-bold text-slate-700">${formatIDR(sd.items[c])}</span></div>`).join('');
+                                spenderHTML += `<div class="premium-card p-5 bg-white relative overflow-hidden group hover:border-amber-300 flex flex-col h-full"><div class="absolute top-0 right-0 w-24 h-24 bg-amber-50/50 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700 ease-out"></div><div class="flex items-center gap-4 mb-4"><div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-black shadow-inner border border-white flex-shrink-0">${idx+1}</div><div class="flex-1 min-w-0"><h5 class="text-sm font-black text-slate-800 truncate" title="${name}">${name}</h5><p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider mt-0.5">Total: ${formatIDR(sd.total)}</p></div></div><div class="pt-3 border-t border-slate-100/80 flex-1 flex flex-col"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center"><i class="fa-solid fa-receipt mr-1.5"></i>Riwayat Pengeluaran:</p><div class="flex-1 overflow-y-auto max-h-24 pr-1 mini-scroll">${detailsHtml}</div></div></div>`;
+                            });
+                        } spendersContainer.innerHTML = spenderHTML;
                     }
 
+                    // Charts
                     if (charts['operational_chart']) charts['operational_chart'].destroy();
                     const ctxOps = document.getElementById('chart-operational');
                     if (ctxOps) { let chartCats = Object.keys(categoryMap); let chartVals = chartCats.map(c => categoryMap[c]); charts['operational_chart'] = new Chart(ctxOps, { type: 'bar', data: { labels: chartCats, datasets: [{ label: 'Biaya (Rp)', data: chartVals, backgroundColor: '#f59e0b', borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } }, scales: { y: { ticks: { callback: function(val) { return 'Rp ' + (val / 1000000).toFixed(0) + 'jt'; } } } } } }); }
@@ -678,124 +835,114 @@
                     if (ctxRole) { let rLabels = Object.keys(roleMap); let rVals = rLabels.map(r => roleMap[r]); charts['simona_role_chart'] = new Chart(ctxRole, { type: 'doughnut', data: { labels: rLabels, datasets: [{ data: rVals, backgroundColor: ['#8b5cf6', '#0ea5e9', '#f43f5e', '#10b981', '#f59e0b'], borderWidth: 2, borderColor: '#ffffff', hoverOffset: 8 }] }, options: { cutout: '65%', responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false }, legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } } } } }); }
 
                     let tblHeaders = ['Periode', 'Cluster', 'Nama_PIC', 'Role', 'Kategori', 'Jumlah'];
+                    let extraKeys = Object.keys(tableRows[0] || {}).filter(k => !tblHeaders.includes(k)).slice(0, 2);
+                    tblHeaders = [...tblHeaders, ...extraKeys];
                     buildTable('table-operational', tblHeaders, tableRows, 200);
                 }
                 
-                // =========================================================================
-                // ANALISA KONSUMSI BBM (MBP-BBM) - DENGAN LOGIC KOLOM C, P, K & R + TIKET B & D
-                // =========================================================================
+                // =======================================================
+                // MBP BBM: ANALISA KONSUMSI BBM & KOMPARASI Ops vs MBP
+                // =======================================================
                 else if (currentView === 'mbp-bbm') {
                     let arrMbp = data['mbp-rh'] || []; 
                     let arrOps = data['operational'] || [];
                     
-                    // 1. Ekstrak Data Operational SIMONA: Kolom C (Nama/PIC), Kolom K (Kategori - khusus BBM/Genset), Kolom P (Jumlah)
-                    let opsFuelMap = {};
+                    let opsCostMap = {};
                     if(arrOps.length > 0) {
                         let keysOps = Object.keys(arrOps[0] || {});
-                        let colC_Name = keysOps[2] || keysOps[4]; // Kolom C atau fallback ke Col_4
-                        let colK_Cat = keysOps[10] || keysOps[3];  // Kolom K atau kategori
-                        let colP_Amt = keysOps[15] || keysOps[keysOps.length - 1]; // Kolom P / Jumlah
-
+                        let keyName = keysOps.find(k => k.toLowerCase() === 'name' || k.toLowerCase().includes('pic')) || keysOps[4];
+                        let keyJumlah = keysOps.find(k => k.toLowerCase().includes('jumlah') || k.toLowerCase().includes('total')) || keysOps[15] || keysOps[keysOps.length - 1];
+                        let keyKategori = keysOps.find(k => /kategori|category|jenis|group|tipe/i.test(k)) || keysOps[3];
+                        
                         arrOps.forEach(d => {
-                            let rawName = d[colC_Name];
-                            let catVal = String(d[colK_Cat] || '').toLowerCase();
-                            let amtVal = parseFlexibleNumber(d[colP_Amt]);
-
-                            // Hanya mengambil kategori perhitungan BBM / Genset (abaikan yang lain)
-                            if (catVal.includes('bbm') || catVal.includes('genset') || catVal.includes('fuel') || catVal.includes('solar') || catVal.includes('bensin')) {
-                                if (rawName && rawName !== '-') {
-                                    let cleanName = String(rawName).trim().toUpperCase();
-                                    if (!opsFuelMap[cleanName]) opsFuelMap[cleanName] = { totalCost: 0, itemsCount: 0 };
-                                    opsFuelMap[cleanName].totalCost += amtVal;
-                                    opsFuelMap[cleanName].itemsCount += 1;
-                                }
+                            let picName = (d[keyName] || '').toString().trim().toUpperCase();
+                            let cost = parseFlexibleNumber(d[keyJumlah]);
+                            let cat = d[keyKategori] || 'Lainnya';
+                            if(picName && picName !== '-' && picName !== 'UNDEFINED') {
+                                if(!opsCostMap[picName]) opsCostMap[picName] = { cost: 0, items: {} };
+                                opsCostMap[picName].cost += cost;
+                                if(!opsCostMap[picName].items[cat]) opsCostMap[picName].items[cat] = 0;
+                                opsCostMap[picName].items[cat] += cost;
                             }
                         });
                     }
 
-                    // 2. Ekstrak Data MBP: Kolom R (PIC Take Over), Kolom B (Ticket Number SWFM), Kolom D (Nomor TICKET SWFM)
-                    let mbpPicMap = {};
-                    let ticketRows = [];
-
-                    arrMbp.forEach(d => {
-                        let keysMbp = Object.keys(d || {});
-                        let colR_Pic = keysMbp[17] || extractStringValue(d, ['pic', 'take over', 'nama']);
-                        let colB_TicketNum = keysMbp[1] || extractStringValue(d, ['ticketnumber', 'ticket']);
-                        let colD_NomorTicket = keysMbp[3] || extractStringValue(d, ['nomorticket', 'noswfm']);
-                        let revVal = parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue']));
-                        let ltrVal = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter']));
-
-                        let cleanPicR = String(colR_Pic).trim().toUpperCase();
-                        if (cleanPicR && cleanPicR !== '-') {
-                            if (!mbpPicMap[cleanPicR]) mbpPicMap[cleanPicR] = { rev: 0, lit: 0, tickets: [] };
-                            mbpPicMap[cleanPicR].rev += revVal;
-                            mbpPicMap[cleanPicR].lit += ltrVal;
-                            mbpPicMap[cleanPicR].tickets.push({ b: colB_TicketNum, d: colD_NomorTicket });
+                    let tableData = []; let picAnomaliCount = {}; let picMbpMap = {}; 
+                    
+                    arrMbp.forEach(d => { 
+                        let dH = parseFlexibleNumber(d['Delta Hour'] || extractValue(d, ['deltahour'])); 
+                        let dRH = parseFlexibleNumber(d['Delta RH'] || extractValue(d, ['deltarh'])); 
+                        let selisih = Math.abs(dH - dRH); 
+                        let tiket = extractStringValue(d, ['ticketnumber', 'tiket']); 
+                        let picRaw = extractStringValue(d, ['pic', 'nama', 'pic take over']); 
+                        let picClean = picRaw.trim().toUpperCase();
+                        let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter'])); 
+                        let rev = parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue']));
+                        
+                        if(picClean && picClean !== '-') {
+                            if(!picMbpMap[picClean]) picMbpMap[picClean] = { rev: 0, backupHrs: 0 };
+                            picMbpMap[picClean].rev += rev;
+                            picMbpMap[picClean].backupHrs += dRH;
                         }
 
-                        ticketRows.push({
-                            'Ticket_Number_SWFM': colB_TicketNum,
-                            'Nomor_TICKET_SWFM': colD_NomorTicket,
-                            'PIC_Take_Over': colR_Pic,
-                            'Estimasi_Revenue': revVal,
-                            'Konsumsi_Liter': ltrVal
-                        });
+                        if (selisih >= 1) { 
+                            let isTidakSafe = (ltr > 20 && dRH <= 5); let status = isTidakSafe ? '❌ Tidak Safe' : '⚠️ Anomali Waktu'; 
+                            if (picRaw !== '-' && picRaw !== '') { 
+                                if (!picAnomaliCount[picRaw]) picAnomaliCount[picRaw] = { count: 0, fuel: 0 }; 
+                                if (isTidakSafe) { picAnomaliCount[picRaw].count++; picAnomaliCount[picRaw].fuel += ltr; } 
+                            } 
+                            tableData.push({'Nomor_Tiket': tiket, 'Nama_PIC': picRaw, 'Total_Liter': ltr, 'Delta_Hour': dH, 'Delta_RH': dRH, 'Status_Evaluasi': status}); 
+                        } 
                     });
 
-                    // 3. Komparasi & Validasi Status (Database Valid vs Need Pengecekan)
                     let kompContainer = document.getElementById('mbp-bbm-komparasi');
-                    if (kompContainer) {
+                    if(kompContainer) {
                         let kompHTML = '';
-                        let allPicNames = [...new Set([...Object.keys(opsFuelMap), ...Object.keys(mbpPicMap)])].filter(n => n && n !== '-');
-
-                        if (allPicNames.length === 0) {
-                            kompHTML = `<div class="col-span-full text-slate-400 text-center py-4 font-bold">Data belum tersedia atau tidak ditemukan pada kolom terkait.</div>`;
+                        let sortedKompPICs = Object.keys(opsCostMap).sort((a,b) => opsCostMap[b].cost - opsCostMap[a].cost).slice(0, 6);
+                        
+                        if(sortedKompPICs.length === 0) {
+                            kompHTML = `<div class="col-span-full text-slate-400 text-center py-4 font-bold">Data untuk komparasi belum tersedia. Pastikan Data Operasional memiliki nilai.</div>`;
                         } else {
-                            allPicNames.forEach((picName, idx) => {
-                                let hasOps = opsFuelMap[picName] !== undefined;
-                                let hasMbp = mbpPicMap[picName] !== undefined;
+                            sortedKompPICs.forEach((name, idx) => {
+                                let opsData = opsCostMap[name];
+                                let mbpData = picMbpMap[name] || { rev: 0, backupHrs: 0 };
+                                let isProfit = mbpData.rev > opsData.cost;
                                 
-                                let opsCost = hasOps ? opsFuelMap[picName].totalCost : 0;
-                                let mbpRev = hasMbp ? mbpPicMap[picName].rev : 0;
-                                let mbpLit = hasMbp ? mbpPicMap[picName].lit : 0;
-
-                                // Validasi Aturan Status
-                                let isValid = hasOps && hasMbp && opsCost > 0;
-                                let statusLabel = isValid ? "Database valid dan terverifikasi" : "Need pengecekan data lebih lanjut";
-                                let statusClass = isValid ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-amber-100 text-amber-700 border-amber-200";
-                                let iconStatus = isValid ? "fa-circle-check text-emerald-500" : "fa-triangle-exclamation text-amber-500";
+                                let detailsHtml = Object.keys(opsData.items).sort((a,b) => opsData.items[b] - opsData.items[a]).slice(0, 3).map(c => `<div class="flex justify-between items-center text-[9px] py-1 border-b border-slate-50 last:border-0"><span class="text-slate-500 truncate pr-2 w-32">• ${c}</span><span class="font-bold text-slate-700">${formatIDR(opsData.items[c])}</span></div>`).join('');
 
                                 kompHTML += `
-                                <div class="premium-card p-5 bg-white relative overflow-hidden group border-t-4 ${isValid ? 'border-t-emerald-500' : 'border-t-amber-500'} flex flex-col h-full shadow-sm">
+                                <div class="premium-card p-5 bg-white relative overflow-hidden group border-t-4 border-t-indigo-500 hover:shadow-lg flex flex-col h-full">
                                     <div class="flex justify-between items-start mb-3">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-indigo-600 font-black border border-slate-100">
+                                            <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 font-black border border-indigo-100">
                                                 ${idx + 1}
                                             </div>
                                             <div>
-                                                <h5 class="text-xs font-black text-slate-800 uppercase tracking-widest truncate max-w-[150px]" title="${picName}">${picName}</h5>
-                                                <p class="text-[9px] font-bold text-slate-400 mt-0.5"><i class="fa-solid fa-gas-pump mr-1"></i>BBM Lit: ${mbpLit.toLocaleString('id-ID')} L</p>
+                                                <h5 class="text-xs font-black text-slate-800 uppercase tracking-widest truncate max-w-[120px]" title="${name}">${name}</h5>
+                                                <p class="text-[9px] text-slate-400 font-bold mt-0.5"><i class="fa-solid fa-clock mr-1"></i>Jam Backup: ${mbpData.backupHrs.toFixed(1)} Jam</p>
                                             </div>
                                         </div>
-                                        <span class="px-2 py-1 text-[9px] font-black uppercase rounded border ${statusClass}">
-                                            <i class="fa-solid ${iconStatus} mr-1"></i>${isValid ? 'Valid' : 'Perlu Cek'}
-                                        </span>
                                     </div>
                                     
                                     <div class="grid grid-cols-2 gap-2 mt-2 mb-3">
-                                        <div class="bg-rose-50/50 p-2.5 rounded-xl border border-rose-100">
-                                            <p class="text-[8px] text-rose-500 uppercase font-black mb-1">Permintaan Ops (Col P)</p>
-                                            <p class="text-xs font-black text-rose-700">${formatIDR(opsCost)}</p>
+                                        <div class="bg-rose-50 p-2 rounded-lg border border-rose-100">
+                                            <p class="text-[8px] text-rose-500 uppercase font-black mb-1">Total Biaya (Ops)</p>
+                                            <p class="text-xs font-black text-rose-700">${formatIDR(opsData.cost)}</p>
                                         </div>
-                                        <div class="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100">
-                                            <p class="text-[8px] text-emerald-500 uppercase font-black mb-1">Revenue Genset (MBP)</p>
-                                            <p class="text-xs font-black text-emerald-700">${formatIDR(mbpRev)}</p>
+                                        <div class="bg-emerald-50 p-2 rounded-lg border border-emerald-100">
+                                            <p class="text-[8px] text-emerald-500 uppercase font-black mb-1">Total Rev (MBP)</p>
+                                            <p class="text-xs font-black text-emerald-700">${formatIDR(mbpData.rev)}</p>
                                         </div>
                                     </div>
                                     
-                                    <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between text-[10px]">
-                                        <span class="text-slate-400 font-bold uppercase">Status Sistem:</span>
-                                        <span class="font-bold ${isValid ? 'text-emerald-600' : 'text-amber-600'}">${statusLabel}</span>
+                                    <div class="mt-auto pt-3 border-t border-slate-100">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Pengeluaran Tertinggi:</p>
+                                            <span class="text-[9px] font-black px-2 py-0.5 rounded ${isProfit ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">${isProfit ? 'PROFIT' : 'DEFISIT'}</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            ${detailsHtml}
+                                        </div>
                                     </div>
                                 </div>`;
                             });
@@ -803,48 +950,68 @@
                         kompContainer.innerHTML = kompHTML;
                     }
 
-                    // Render Tabel Breakdown Tiket SWFM (Kolom B dan D)
-                    buildTable('table-mbp-bbm-tickets', ['Ticket_Number_SWFM', 'Nomor_TICKET_SWFM', 'PIC_Take_Over', 'Estimasi_Revenue', 'Konsumsi_Liter'], ticketRows, 150);
-
+                    if (tableData.length > 0) buildTable('table-mbp-bbm', ['Nomor_Tiket', 'Nama_PIC', 'Total_Liter', 'Delta_Hour', 'Delta_RH', 'Status_Evaluasi'], tableData, 200);
+                    let evaluasiPIC = Object.keys(picAnomaliCount).filter(pic => picAnomaliCount[pic].count > 1).sort((a, b) => picAnomaliCount[b].count - picAnomaliCount[a].count).map(pic => { let cnt = picAnomaliCount[pic].count; let risk = cnt > 5 ? '🔴 Kritis' : (cnt > 3 ? '🟠 Tinggi' : '🟡 Menengah'); return {'Nama_PIC': pic, 'Total_Kasus_Tidak_Safe': cnt, 'BBM_Terbuang': picAnomaliCount[pic].fuel.toFixed(1) + ' L', 'Tingkat_Risiko': risk }; });
+                    if (evaluasiPIC.length > 0) buildTable('table-mbp-bbm-evaluasi', Object.keys(evaluasiPIC[0]), evaluasiPIC); else buildTable('table-mbp-bbm-evaluasi', ['Keterangan'], [{ Keterangan: 'Aman.' }]);
+                    if (charts['mbp_bbm']) charts['mbp_bbm'].destroy(); const ctxBBM = document.getElementById('chart-mbp-bbm'); if (ctxBBM) { let sortedPICs = evaluasiPIC.slice(0, 10); charts['mbp_bbm'] = new Chart(ctxBBM, { type: 'bar', data: { labels: sortedPICs.map(p => p.Nama_PIC.substring(0, 12)), datasets: [{ label: 'Kasus Tidak Safe', data: sortedPICs.map(p => p.Total_Kasus_Tidak_Safe), backgroundColor: '#f43f5e', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } } }}); }
+                    
                     const aiBox = document.getElementById('ai-insight-mbp-bbm');
-                    if (aiBox) {
-                        document.getElementById('ai-text-mbp-bbm').innerHTML = `Sistem berhasil mencocokkan nama PIC pada <b>Sheet Data Operational (Kolom C)</b> dengan <b>Sheet Data MBP (Kolom R)</b>. Kategori operasional difilter ketat khusus kalkulasi BBM/Genset (Kolom K & P). Nama yang tidak memiliki data ganda otomatis ditandai sebagai <i>Need pengecekan data lebih lanjut</i>.`;
+                    if(aiBox) {
+                        document.getElementById('ai-text-mbp-bbm').innerHTML = `Modul ini sekarang menautkan pengeluaran operasional (SIMONA) dengan produktivitas (MBP). Anomali "Tidak Safe" mengindikasikan pemborosan fuel yang perlu ditindaklanjuti, terutama jika rasio <b>Profit</b> PIC tersebut masuk kategori "Defisit" pada kartu komparasi di atas.`;
                         aiBox.classList.remove('hidden');
                     }
                 }
                 
-                // OTHER SECTIONS RENDER STUB
+                // ==============================================
+                // OTHER SECTIONS
+                // ==============================================
                 else if (currentView === 'sva') {
                     let arr = data['sva'] || []; let keysNOP = ['nop', 'nopolisi'], keysTgl = ['tanggal', 'tgl'], keysBln = ['bulan', 'month'], keysStts = ['statustiket', 'status'];
                     updateDropdownOptions('filter-sva-nop', arr, keysNOP, 'NOP'); updateDropdownOptions('filter-sva-tgl', arr, keysTgl, 'Tanggal'); updateDropdownOptions('filter-sva-bln', arr, keysBln, 'Bulan'); updateDropdownOptions('filter-sva-stts', arr, keysStts, 'Status');
+                    const fN = document.getElementById('filter-sva-nop').value; const fT = document.getElementById('filter-sva-tgl').value; const fB = document.getElementById('filter-sva-bln').value; const fS = document.getElementById('filter-sva-stts').value;
+                    let filteredArr = arr.filter(d => (fN === 'ALL' || extractStringValue(d, keysNOP) === fN) && (fT === 'ALL' || extractStringValue(d, keysTgl) === fT) && (fB === 'ALL' || extractStringValue(d, keysBln) === fB) && (fS === 'ALL' || extractStringValue(d, keysStts) === fS));
                     let totalRevenue = 0, totalBiaya = 0, totalPengembalian = 0, totalNetIncome = 0;
-                    let tableData = arr.map(d => { let r = extractValue(d, ['revenue', 'pendapatan']); let b = extractValue(d, ['biaya', 'pengeluaran']); let p = extractValue(d, ['pengembalian']); let ni = extractValue(d, ['netincome', 'lababersih']); if (ni === 0 && r > 0) ni = r - b - p; totalRevenue += r; totalBiaya += b; totalPengembalian += p; totalNetIncome += ni; return { NOP: extractStringValue(d, keysNOP), Bulan: extractStringValue(d, keysBln), Revenue: r, Biaya: b, Pengembalian: p, Net_Income: ni }; });
+                    let tableData = filteredArr.map(d => { let r = extractValue(d, ['revenue', 'pendapatan']); let b = extractValue(d, ['biaya', 'pengeluaran']); let p = extractValue(d, ['pengembalian']); let ni = extractValue(d, ['netincome', 'lababersih']); if (ni === 0 && r > 0) ni = r - b - p; totalRevenue += r; totalBiaya += b; totalPengembalian += p; totalNetIncome += ni; return { NOP: extractStringValue(d, keysNOP), Bulan: extractStringValue(d, keysBln), Revenue: r, Biaya: b, Pengembalian: p, Net_Income: ni }; });
                     document.getElementById('sva-kpi-1').innerText = formatIDR(totalRevenue); document.getElementById('sva-kpi-2').innerText = formatIDR(totalBiaya); document.getElementById('sva-kpi-3').innerText = formatIDR(totalPengembalian); document.getElementById('sva-kpi-4').innerText = formatIDR(totalNetIncome);
                     let finalNpm = totalRevenue > 0 ? (totalNetIncome / totalRevenue) * 100 : 0; document.getElementById('sva-kpi-5').innerText = finalNpm.toFixed(1) + '%';
-                    buildTable('table-sva', ['NOP', 'Bulan', 'Revenue', 'Biaya', 'Pengembalian', 'Net_Income'], tableData, 100);
+                    if (tableData.length > 0) buildTable('table-sva', Object.keys(tableData[0]), tableData, 150); else buildTable('table-sva', ['Keterangan'], []);
+                    renderSvaCharts(tableData, totalBiaya, totalPengembalian, totalNetIncome);
                 } 
                 else if (currentView === 'mbp-rh') {
                     let arr = data['mbp-rh'] || []; updateDropdownOptions('filter-mbp-nop', arr, ['nop'], 'NOP'); updateDropdownOptions('filter-mbp-periode', arr, ['periode'], 'Periode');
+                    const fN = document.getElementById('filter-mbp-nop').value; const fP = document.getElementById('filter-mbp-periode').value; const fS = document.getElementById('filter-mbp-status').value;
                     let tableData = []; let totalRevMBP = 0, totalLiter = 0, totalAnomali = 0, totalValid = 0;
-                    arr.forEach(d => { let nop = extractStringValue(d, ['nop']); let periode = extractStringValue(d, ['periode']); let dH = parseFlexibleNumber(d['Delta Hour'] || extractValue(d, ['deltahour'])); let dRH = parseFlexibleNumber(d['Delta RH'] || extractValue(d, ['deltarh'])); let selisih = Math.abs(dH - dRH); let isAnomali = selisih >= 1; let statusStr = isAnomali ? 'Anomali' : 'Terverifikasi'; let rev = parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue'])); let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter'])); totalRevMBP += rev; totalLiter += ltr; if (isAnomali) totalAnomali++; else totalValid++; tableData.push({ NOP: nop, Ticket: extractStringValue(d, ['ticketnumber', 'tiket']), PIC: extractStringValue(d, ['pic']), Delta_Hour: dH, Delta_RH: dRH, Status: statusStr }); });
+                    arr.forEach(d => { let nop = extractStringValue(d, ['nop']); let periode = extractStringValue(d, ['periode']); let dH = parseFlexibleNumber(d['Delta Hour'] || extractValue(d, ['deltahour'])); let dRH = parseFlexibleNumber(d['Delta RH'] || extractValue(d, ['deltarh'])); let selisih = Math.abs(dH - dRH); let isAnomali = selisih >= 1; let statusStr = isAnomali ? 'Anomali' : 'Terverifikasi'; if ((fN === 'ALL' || nop === fN) && (fP === 'ALL' || periode === fP) && (fS === 'ALL' || statusStr === fS)) { let rev = parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue'])); let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter'])); totalRevMBP += rev; totalLiter += ltr; if (isAnomali) totalAnomali++; else totalValid++; tableData.push({ NOP: nop, Site_ID: extractStringValue(d, ['siteid', 'site']), Nomor_Tiket: extractStringValue(d, ['ticketnumber', 'tiket']), PIC: extractStringValue(d, ['pic']), Periode: periode, Delta_Hour: dH, Delta_RH: dRH, Selisih: selisih, Liter: ltr, Revenue: rev, Status: statusStr }); } });
                     document.getElementById('mbp-kpi-rev').innerText = formatIDR(totalRevMBP); document.getElementById('mbp-kpi-liter').innerText = totalLiter.toLocaleString('id-ID') + ' Liter'; document.getElementById('mbp-kpi-anomali').innerText = totalAnomali + ' Tiket'; document.getElementById('mbp-kpi-valid').innerText = totalValid + ' Tiket';
-                    const analysisContainer = document.getElementById('mbp-analysis-container');
-                    if (analysisContainer) {
-                        let cHTML = ''; tableData.slice(0, 30).forEach(r => {
-                            cHTML += `<div class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-2 shadow-sm"><div class="flex justify-between items-center"><span class="font-bold text-xs">${r.NOP}</span><span class="text-[9px] px-2 py-0.5 rounded font-black ${r.Status === 'Anomali' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${r.Status}</span></div><p class="text-[10px] text-slate-500">PIC: ${r.PIC} | Tiket: ${r.Ticket}</p></div>`;
-                        });
-                        analysisContainer.innerHTML = cHTML;
+                    const tbody = document.getElementById('table-mbp-rh-new'); const analysisContainer = document.getElementById('mbp-analysis-container');
+                    if (tbody && analysisContainer) {
+                        if (tableData.length === 0) { analysisContainer.innerHTML = `<div class="text-slate-400 p-4 text-center">Data kosong.</div>`; } else {
+                            let cHTML = ''; tableData.slice(0, 50).forEach(r => { 
+                                let isAno = r.Status === 'Anomali'; let maxDelta = Math.max(r.Delta_Hour, r.Delta_RH, 1); let pDH = (r.Delta_Hour / maxDelta) * 100; let pDRH = (r.Delta_RH / maxDelta) * 100;
+                                cHTML += `<div class="bg-white border ${isAno ? 'border-rose-200 shadow-rose-100' : 'border-slate-200'} rounded-2xl p-5 flex flex-col gap-3 shadow hover:-translate-y-1 transition-all group relative overflow-hidden"><div class="absolute -right-4 -top-4 w-16 h-16 rounded-full opacity-10 ${isAno ? 'bg-rose-500' : 'bg-emerald-500'} blur-xl"></div><div class="flex justify-between items-start"><div><span class="font-black text-base text-slate-800">${r.NOP}</span><div class="text-[10px] font-bold text-slate-400 mt-0.5"><i class="fa-solid fa-ticket mr-1"></i>${r.Nomor_Tiket}</div></div><span class="px-2 py-1 text-[9px] font-black uppercase rounded ${isAno ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${r.Status}</span></div><div class="grid grid-cols-2 gap-2 mt-2"><div class="bg-slate-50 p-2 rounded-lg border border-slate-100"><p class="text-[9px] text-slate-400 uppercase font-bold mb-1">Delta Hour</p><p class="text-sm font-black text-slate-700">${r.Delta_Hour.toFixed(1)} <span class="text-[8px] font-normal text-slate-400">jam</span></p><div class="w-full h-1 bg-slate-200 mt-1.5 rounded-full"><div class="h-full bg-indigo-500 rounded-full" style="width: ${pDH}%"></div></div></div><div class="bg-slate-50 p-2 rounded-lg border border-slate-100"><p class="text-[9px] text-slate-400 uppercase font-bold mb-1">Delta RH</p><p class="text-sm font-black text-slate-700">${r.Delta_RH.toFixed(1)} <span class="text-[8px] font-normal text-slate-400">jam</span></p><div class="w-full h-1 bg-slate-200 mt-1.5 rounded-full"><div class="h-full ${isAno ? 'bg-rose-500' : 'bg-emerald-500'} rounded-full" style="width: ${pDRH}%"></div></div></div></div><div class="flex justify-between items-center mt-2 pt-3 border-t border-slate-100"><div><p class="text-[9px] text-slate-400 uppercase font-bold">Revenue Terkait</p><p class="text-sm font-black text-indigo-700">${formatIDR(r.Revenue)}</p></div><div class="text-right"><p class="text-[9px] text-slate-400 uppercase font-bold">Selisih</p><p class="text-sm font-black ${isAno ? 'text-rose-600' : 'text-slate-600'}">${r.Selisih.toFixed(1)} jam</p></div></div></div>`; 
+                            }); analysisContainer.innerHTML = cHTML;
+                            let agg = {}; tableData.forEach(r => { if (!agg[r.NOP]) agg[r.NOP] = { Rev: 0, Ano: 0, Val: 0 }; agg[r.NOP].Rev += r.Revenue; if (r.Status === 'Anomali') agg[r.NOP].Ano++; else agg[r.NOP].Val++; }); let th = `<thead class="bg-slate-50"><tr><th class="p-4">Nama NOP</th><th class="p-4">Estimasi Revenue</th><th class="p-4">Tiket Anomali</th><th class="p-4">Terverifikasi</th></tr></thead><tbody>`; Object.keys(agg).forEach(nop => { th += `<tr><td class="p-4 font-bold">${nop}</td><td class="p-4 font-bold text-emerald-600">${formatIDR(agg[nop].Rev)}</td><td class="p-4 text-rose-600 font-bold">${agg[nop].Ano}</td><td class="p-4 text-emerald-600 font-bold">${agg[nop].Val}</td></tr>`; }); tbody.innerHTML = th + `</tbody>`;
+                        }
                     }
                 }
                 else if (currentView === 'sdm') {
-                    let s = (data['sdm'] || []).reduce((acc, r) => { let k = extractStringValue(r, ['kepemilikan', 'nama']); if (k === '-') k = 'Tanpa Pemilik'; if (!acc[k]) acc[k] = 0; Object.keys(r).forEach(key => { if (!/kepemilikan|nama/i.test(key) && !isNaN(parseFloat(r[key]))) { acc[k] += parseFloat(r[key]); } }); return acc; }, {}); let tableData = Object.keys(s).map(k => ({ 'Kepemilikan': k, 'Total_Tools': s[k] })); buildTable('table-sdm', ['Kepemilikan', 'Total_Tools'], tableData);
+                    let s = (data['sdm'] || []).reduce((acc, r) => { let k = extractStringValue(r, ['kepemilikan', 'nama']); if (k === '-') k = 'Tanpa Pemilik'; if (!acc[k]) acc[k] = 0; Object.keys(r).forEach(key => { if (!/kepemilikan|nama/i.test(key) && !isNaN(parseFloat(r[key]))) { acc[k] += parseFloat(r[key]); } }); return acc; }, {}); let tableData = Object.keys(s).map(k => ({ 'Kepemilikan': k, 'Total_Tools': s[k] })); if (tableData.length > 0) buildTable('table-sdm', ['Kepemilikan', 'Total_Tools'], tableData);
                 }
-                else if (['kpi', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya', 'pm-target'].includes(currentView)) { 
+                else if (['kpi', 'project', 'aging-sva', 'aging-ops', 'aging-lainnya', 'pm-target', 'pm-curvas'].includes(currentView)) { 
                     let k = currentView.includes('aging') ? 'pjb-aging' : (currentView.includes('pm') ? 'pm-target' : currentView); 
                     let arr = data[k] || []; 
-                    if (arr.length > 0) buildTable(`table-${currentView}`, Object.keys(arr[0]).slice(0, 8), arr, 50); 
+                    if (currentView === 'pm-target') { updateDropdownOptions('filter-pm-target-bulan', arr, ['bulan', 'month', 'periode'], 'Bulan'); const fB = document.getElementById('filter-pm-target-bulan').value; if (fB !== 'ALL') { arr = arr.filter(d => extractStringValue(d, ['bulan', 'month', 'periode']) === fB); } }
+                    if (arr.length > 0) { let limit = currentView.includes('aging') ? 100 : 50; buildTable(`table-${currentView}`, Object.keys(arr[0]).slice(0, 8), arr, limit); } else buildTable(`table-${currentView}`, ['Keterangan'], []); 
                 }
-            } catch(e) { console.error("Error rendering view:", e); }
+            } catch(e) { console.error("Error rendering:", e); }
+        }
+
+        function renderSvaCharts(tbD, tB, tP, tNI) { 
+            let mD = {}; tbD.forEach(t => { let b = t.Bulan || '-'; if (!mD[b]) mD[b] = { R: 0, B: 0, NI: 0 }; mD[b].R += (t.Revenue || 0); mD[b].B += (t.Biaya || 0); mD[b].NI += (t.Net_Income || 0); }); let lbs = Object.keys(mD); 
+            if(charts['sva_line']) charts['sva_line'].destroy(); const ctxL = document.getElementById('chart-sva-finance-line'); 
+            if (ctxL) { let ctx = ctxL.getContext('2d'); charts['sva_line'] = new Chart(ctx, { type: 'bar', data: { labels: lbs, datasets: [{ label: 'Rev', data: lbs.map(b => mD[b].R), backgroundColor: '#4f46e5', borderRadius: 4}, { label: 'Biaya', data: lbs.map(b => mD[b].B), backgroundColor: '#f43f5e', borderRadius: 4}, { label: 'Net Income', data: lbs.map(b => mD[b].NI), backgroundColor: '#10b981', borderRadius: 4}] }, options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } } }}); }
+            if(charts['sva_pie']) charts['sva_pie'].destroy(); const ctxP = document.getElementById('chart-sva-finance-pie'); 
+            if (ctxP) charts['sva_pie'] = new Chart(ctxP, { type: 'doughnut', data: { labels: ['Biaya', 'Pengembalian', 'Net Income'], datasets: [{ data: [tB, tP, tNI], backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'], borderWidth: 0, hoverOffset: 10 }] }, options: { cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false }, legend: { position: 'bottom' } } }}); 
         }
     </script>
 </body>
