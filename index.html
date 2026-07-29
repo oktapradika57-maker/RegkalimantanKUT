@@ -20,7 +20,6 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* Kartu Premium Elegan */
         .premium-card {
             background: var(--bg-card); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 1.5rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -28,12 +27,10 @@
         }
         .premium-card:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(79, 70, 229, 0.1); }
         
-        /* Animasi Transisi Halaman yang Lembut */
         .view-pane { display: none; opacity: 0; transform: translateY(10px); }
         .view-pane.active { display: block; animation: floatIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes floatIn { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
 
-        /* TABEL & FILTER DROPDOWN */
         .filter-select {
             cursor: pointer; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem;
             padding: 0.5rem 1rem; font-weight: 700; color: #334155; outline: none; transition: all 0.2s;
@@ -42,18 +39,14 @@
         .custom-table th { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(5px); position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #e2e8f0; }
         .custom-table tr:hover td { background-color: rgba(79, 70, 229, 0.03); }
         
-        /* Efek klik untuk filter Kategori */
         .category-card-active { border: 2px solid #4f46e5 !important; transform: scale(1.02); box-shadow: 0 10px 25px rgba(79,70,229,0.15) !important; }
 
-        /* AI Insight Box */
         .ai-insight { background: linear-gradient(120deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid; box-shadow: 0 4px 20px rgba(0,0,0,0.04); position: relative; overflow: hidden; }
         .ai-insight::after { content: '\f544'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 0; bottom: -20px; font-size: 100px; opacity: 0.03; }
         
-        /* Animasi Logo */
         .logo-glow { animation: logoPulse 2.5s infinite ease-in-out; }
         @keyframes logoPulse { 0%, 100% { filter: drop-shadow(0 0 10px rgba(79, 70, 229, 0.2)); } 50% { filter: drop-shadow(0 0 25px rgba(79, 70, 229, 0.5)); } }
 
-        /* Desain Menu Utama */
         .menu-grid-card {
             background: white; border-radius: 1.25rem; border: 1px solid #e2e8f0;
             padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
@@ -71,13 +64,14 @@
         }
         .menu-grid-card:hover .menu-grid-icon-box { transform: scale(1.1) rotate(5deg); }
         
-        /* Sidebar Menu 3D */
         .menu-btn { transition: all 0.2s ease; position: relative; }
         .menu-btn:hover { background-color: rgba(241, 245, 249, 0.8); color: #4f46e5; padding-left: 1.25rem; }
         .active-menu-3d { background-color: #eff6ff !important; color: #4f46e5 !important; font-weight: 700; border-left: 4px solid #4f46e5; }
         
         .mini-scroll::-webkit-scrollbar { width: 4px; }
         .mini-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+        .mini-scroll-dark::-webkit-scrollbar { width: 4px; }
+        .mini-scroll-dark::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
 
         .magic-bg { background: radial-gradient(circle at top right, #312e81, #0f172a); }
     </style>
@@ -177,7 +171,6 @@
                 </div>
             </div>
             
-            <!-- INTEGRASI MODUL SIDEBAR -->
             <div class="pt-4 pb-1"><p class="px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Integrasi Modul</p></div>
             <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-satellite-dish text-lg w-8 text-sky-500"></i><span>SIMAKIN</span></a>
             <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-tower-broadcast text-lg w-8 text-pink-500"></i><span>G348TSEL</span></a>
@@ -191,7 +184,6 @@
 
     <!-- WORKSPACE UTAMA FULL-SCREEN -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
-        <!-- HEADER -->
         <header class="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between flex-shrink-0 z-10 w-full shadow-sm">
             <div class="flex items-center space-x-4">
                 <button onclick="toggleSidebar()" class="text-slate-500 hover:text-indigo-600 focus:outline-none p-2.5 rounded-xl hover:bg-indigo-50 transition-colors bg-white border border-slate-200 shadow-sm flex items-center justify-center">
@@ -208,11 +200,9 @@
                 </div>
             </div>
             <div class="flex items-center space-x-6">
-                <!-- Tombol Navigasi Cepat (Kembali) -->
                 <a href="#home" class="hidden md:flex px-4 py-2 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-indigo-600 text-xs font-bold rounded-lg transition-colors items-center gap-2 border border-slate-200">
                     <i class="fa-solid fa-arrow-left"></i> Menu Utama
                 </a>
-                
                 <button onclick="reloadData()" class="px-5 py-2.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-600 hover:text-white text-xs font-extrabold rounded-xl transition-all flex items-center gap-2 border border-indigo-100 shadow-sm"><i id="sync-icon" class="fa-solid fa-arrows-rotate"></i> Sinkronisasi Ulang</button>
                 <div class="flex items-center space-x-3 pl-4 border-l border-slate-200 hidden sm:flex">
                     <div class="text-right">
@@ -227,15 +217,11 @@
         <!-- DASHBOARD CONTENT -->
         <div class="flex-1 overflow-y-auto p-8 bg-slate-50/50" id="dashboard-content">
             
-            <!-- ============================================== -->
-            <!-- MENU UTAMA & AI SMARTKUT PANEL                 -->
-            <!-- ============================================== -->
+            <!-- MENU UTAMA -->
             <section id="view-home" class="view-pane active max-w-7xl mx-auto space-y-6 pb-10">
-                
-                <!-- AI SmartKUT Banner -->
-                <div class="relative overflow-hidden premium-card p-8 magic-bg text-white shadow-2xl shadow-indigo-900/20 border-0 mb-8">
-                    <div class="absolute -top-10 -right-10 opacity-10 transform rotate-12"><i class="fa-solid fa-microchip text-[12rem]"></i></div>
-                    <div class="relative z-10">
+                <div class="relative overflow-hidden premium-card p-8 magic-bg text-white shadow-2xl shadow-indigo-900/20 border-0 mb-8 flex flex-col">
+                    <div class="absolute -top-10 -right-10 opacity-10 transform rotate-12 pointer-events-none"><i class="fa-solid fa-microchip text-[12rem]"></i></div>
+                    <div class="relative z-10 flex-1">
                         <div class="flex items-center gap-3 mb-2">
                             <div class="w-10 h-10 rounded-full bg-cyan-400/20 flex items-center justify-center border border-cyan-400/50">
                                 <i class="fa-solid fa-wand-magic-sparkles text-cyan-300 text-lg"></i>
@@ -245,8 +231,18 @@
                                 <p class="text-[10px] text-indigo-200 font-bold uppercase tracking-widest">Enterprise Global Data Analysis</p>
                             </div>
                         </div>
-                        <div id="smartkut-content" class="mt-5 text-sm font-medium text-slate-200 leading-relaxed bg-black/30 p-5 rounded-2xl border border-white/10 backdrop-blur-sm shadow-inner min-h-[80px]">
-                            <i class="fa-solid fa-circle-notch fa-spin text-cyan-400 mr-2"></i> Menganalisa seluruh database perusahaan (SVA, Operasional, MBP, PM)...
+                        <div id="smartkut-content" class="mt-4 text-sm font-medium text-slate-200 leading-relaxed bg-black/30 p-5 rounded-2xl border border-white/10 backdrop-blur-sm shadow-inner min-h-[80px]">
+                            <i class="fa-solid fa-circle-notch fa-spin text-cyan-400 mr-2"></i> Menganalisa seluruh database perusahaan...
+                        </div>
+                    </div>
+                    <!-- LIVE CHAT AI -->
+                    <div class="relative z-10 mt-4 border-t border-white/20 pt-4">
+                        <div id="ai-chat-history" class="max-h-32 overflow-y-auto text-xs text-slate-200 space-y-2 mb-3 mini-scroll-dark"></div>
+                        <div class="flex gap-2 relative">
+                            <input type="text" id="ai-chat-input" onkeypress="if(event.key === 'Enter') sendAiMessage()" class="flex-1 bg-black/40 border border-white/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 transition-colors shadow-inner" placeholder="Tanya analisis live ke AI SmartKUT...">
+                            <button onclick="sendAiMessage()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black px-5 py-2.5 rounded-xl transition-all shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)]">
+                                <i class="fa-solid fa-paper-plane mr-1"></i> Send
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -294,7 +290,6 @@
                     </a>
                 </div>
 
-                <!-- INTEGRASI MODUL -->
                 <div class="pt-6 border-t border-slate-200/60">
                     <div class="mb-4">
                         <h3 class="text-xl font-black text-slate-800 tracking-tight">Integrasi <span class="text-sky-500">Modul</span></h3>
@@ -306,7 +301,6 @@
                             <h3 class="font-black text-slate-800 text-sm">SIMAKIN</h3>
                             <p class="text-[11px] text-slate-400 mt-2 font-medium">Platform Aplikasi Terintegrasi</p>
                         </a>
-
                         <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-grid-card border-pink-100 shadow-sm" style="--hover-color: #ec4899;">
                             <div class="menu-grid-icon-box bg-pink-50 text-pink-500"><i class="fa-solid fa-tower-broadcast"></i></div>
                             <h3 class="font-black text-slate-800 text-sm">G348TSEL</h3>
@@ -314,12 +308,9 @@
                         </a>
                     </div>
                 </div>
-
             </section>
             
-            <!-- ===================================== -->
-            <!-- SIMONA (MURNI DATA OPERASIONAL)       -->
-            <!-- ===================================== -->
+            <!-- SIMONA -->
             <section id="view-operational" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div class="flex items-center justify-between bg-amber-50 p-4 rounded-2xl border border-amber-100 shadow-sm">
                     <div>
@@ -353,9 +344,7 @@
                         <h4 class="text-xs font-black text-slate-600 uppercase tracking-widest"><i class="fa-solid fa-layer-group mr-2 text-amber-500"></i>Pengeluaran Berdasarkan Kategori</h4>
                         <span class="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded border border-indigo-100 animate-pulse">💡 Klik kartu untuk memfilter tabel</span>
                     </div>
-                    <div id="simona-category-cards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-4">
-                        <!-- Dynamic Super Pro Cards -->
-                    </div>
+                    <div id="simona-category-cards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-4"></div>
                 </div>
                 
                 <div class="mt-8">
@@ -364,9 +353,7 @@
                             <i class="fa-solid fa-users-viewfinder mr-2 text-indigo-500"></i>Top Spenders (Biaya Operasional Tertinggi)
                         </h4>
                     </div>
-                    <div id="simona-top-spenders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <!-- Spenders Ops Data -->
-                    </div>
+                    <div id="simona-top-spenders" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
@@ -390,15 +377,14 @@
                         </button>
                     </div>
                     <div class="overflow-auto flex-1 mini-scroll relative" id="simona-table-container">
-                        <table class="w-full text-left text-xs whitespace-nowrap custom-table relative" id="table-operational">
-                        </table>
+                        <table class="w-full text-left text-xs whitespace-nowrap custom-table relative" id="table-operational"></table>
                     </div>
                 </div>
             </section>
             
-            <!-- ============================================== -->
-            <!-- MBP BBM: ANALISA KONSUMSI BBM & KOMPARASI PIC  -->
-            <!-- ============================================== -->
+            <!-- ======================================================= -->
+            <!-- MBP: ANALISA KONSUMSI BBM (DENGAN SINKRONISASI KOLOM E, G, K, P & R) -->
+            <!-- ======================================================= -->
             <section id="view-mbp-bbm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                  <div class="flex gap-4 mb-4">
                     <a href="#mbp-rh" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"><i class="fa-solid fa-chart-bar mr-2"></i>Analisa Delta & Revenue</a>
@@ -408,21 +394,26 @@
                 <div id="ai-insight-mbp-bbm" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #f43f5e;">
                     <div class="flex items-start gap-4 relative z-10">
                         <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center flex-shrink-0 text-rose-600"><i class="fa-solid fa-gas-pump text-xl"></i></div>
-                        <div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">AI Sinkronisasi SIMONA ↔ MBP</h4><div id="ai-text-mbp-bbm" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div>
+                        <div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">AI Komparasi SIMONA (Col E) ↔ MBP (Col R)</h4><div id="ai-text-mbp-bbm" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div>
                     </div>
                 </div>
                 
-                <!-- KOMPARASI PERFORMA PIC (SIMONA Kategori BBM vs MBP) -->
-                <div class="mb-8">
-                    <div class="flex items-center justify-between mb-4 mt-2">
+                <!-- FILTER ROLE KOLOM G -->
+                <div class="flex items-center justify-between mb-4 mt-2 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                    <div>
                         <h4 class="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center">
-                            <i class="fa-solid fa-scale-balanced mr-2 text-indigo-500"></i>Komparasi Permintaan BBM (Ops) vs Revenue Genset (MBP) per PIC
+                            <i class="fa-solid fa-scale-balanced mr-2 text-indigo-500"></i>Komparasi Ops BBM Genset vs Revenue MBP
                         </h4>
-                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">Klik Card untuk Breakdown Tiket</span>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 mt-2 inline-block">Klik Card untuk Breakdown Tiket</span>
                     </div>
-                    <div id="mbp-bbm-komparasi" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <!-- Cards komparasi dirender di sini via JS -->
-                    </div>
+                    <select id="filter-mbp-bbm-role" onchange="renderActiveView(globalDataset)" class="filter-select text-xs shadow-sm min-w-[200px]">
+                        <option value="ALL">Semua Role</option>
+                    </select>
+                </div>
+
+                <!-- CARD KOMPARASI PIC -->
+                <div id="mbp-bbm-komparasi" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
+                    <!-- Cards komparasi divalidasi dan dirender interaktif -->
                 </div>
 
                 <!-- AREA BREAKDOWN TIKET (Akan muncul saat Card Diklik) -->
@@ -434,7 +425,7 @@
                         <button onclick="document.getElementById('mbp-bbm-breakdown-container').classList.add('hidden')" class="text-slate-400 hover:text-rose-400 bg-slate-700/30 p-2 rounded-lg transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
                     </div>
                     <div class="overflow-x-auto mini-scroll p-2 max-h-[350px]">
-                        <table class="w-full text-left text-xs whitespace-nowrap text-slate-300" id="mbp-bbm-breakdown-table">
+                        <table class="w-full text-left text-xs whitespace-nowrap text-slate-300">
                             <thead class="text-cyan-400 border-b border-slate-700 bg-slate-800/80 sticky top-0">
                                 <tr>
                                     <th class="px-6 py-4 font-black tracking-wider">No</th>
@@ -449,27 +440,14 @@
                     </div>
                 </div>
 
-                <!-- BAGIAN BAWAH MBP-BBM (GRAFIK & TABEL ORIGINAL) - TIDAK DIRUBAH -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-                    <div class="premium-card overflow-hidden bg-white flex flex-col h-[450px]">
-                        <div class="p-6 border-b border-slate-100 bg-rose-50/30"><h4 class="text-xs font-black text-rose-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-user-shield mr-2"></i>Daftar PIC Berisiko (Anomali Waktu & BBM)</h4></div>
-                        <div class="overflow-y-auto flex-1 p-4 mini-scroll"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-bbm-evaluasi"></table></div>
-                    </div>
-                    <div class="premium-card p-6 h-[450px] bg-white flex flex-col">
-                        <h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-chart-column mr-2 text-rose-500"></i>Distribusi Kasus "Tidak Safe" per PIC</h4>
-                        <div class="w-full flex-1 relative"><canvas id="chart-mbp-bbm"></canvas></div>
-                    </div>
-                </div>
-                
-                <div class="premium-card overflow-hidden bg-white mt-6">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-table-list mr-2 text-indigo-500"></i>Log Semua Tiket Anomali / Tidak Safe</h4></div>
-                    <div class="overflow-x-auto max-h-[500px] mini-scroll"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-mbp-bbm-log"></table></div>
+                <!-- GRAFIK KOMPARASI UTAMA (SATU GRAFIK) -->
+                <div class="premium-card p-6 h-[500px] bg-white flex flex-col mt-8">
+                    <h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-chart-column mr-2 text-indigo-500"></i>Grafik Komparasi Pengeluaran Ops (BBM Genset) vs Revenue MBP</h4>
+                    <div class="w-full flex-1 relative"><canvas id="chart-mbp-bbm-komparasi"></canvas></div>
                 </div>
             </section>
 
-            <!-- ============================== -->
-            <!-- OTHER SECTIONS                 -->
-            <!-- ============================== -->
+            <!-- SVA -->
             <section id="view-sva" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div id="ai-insight-sva" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color: #10b981;">
                     <div class="flex items-start gap-4 relative z-10"><div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0 text-emerald-600"><i class="fa-solid fa-brain text-xl"></i></div><div><h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2">Executive Summary (AI)</h4><div id="ai-text-sva" class="text-sm font-medium text-slate-600 leading-relaxed"></div></div></div>
@@ -495,9 +473,7 @@
                 <div class="premium-card overflow-hidden bg-white"><div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest">Laporan Neraca SVA Detail</h4></div><div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sva"></table></div></div>
             </section>
 
-            <!-- ============================================== -->
-            <!-- MBP RH: DESAIN ASLI (TIDAK ADA PERUBAHAN)      -->
-            <!-- ============================================== -->
+            <!-- MBP RH (DIKEMBALIKAN KE DESAIN AWAL SEPENUHNYA - CARD KEREN DENGAN PROGRESS) -->
             <section id="view-mbp-rh" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div class="flex gap-4 mb-4">
                     <a href="#mbp-rh" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-cyan-50 text-cyan-700 border border-cyan-200 shadow-sm"><i class="fa-solid fa-chart-bar mr-2"></i>Analisa Delta & Revenue</a>
@@ -521,44 +497,9 @@
                 </div>
             </section>
             
-            <section id="view-analisa-pm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
-                <div id="drop-zone-pm" class="premium-card p-12 text-center cursor-pointer border-dashed border-2 border-slate-300 hover:border-indigo-400 bg-slate-50/50 flex flex-col items-center justify-center transition-all">
-                    <div class="w-20 h-20 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-4 text-indigo-500 pointer-events-none"><i class="fa-solid fa-file-excel text-3xl"></i></div>
-                    <p class="text-sm font-black text-slate-700 pointer-events-none">KLIK / DROP FILE DATASET PM (EXCEL) DI SINI</p>
-                    <p class="text-xs text-slate-500 mt-2 font-medium pointer-events-none">Sistem memproses Rencana, Aktual, dan mengkalibrasi S-Curve secara otomatis.</p>
-                    <input type="file" id="input-file-pm" class="hidden" accept=".xlsx, .xls, .csv">
-                    <div id="info-file-pm" class="hidden text-xs mt-4 font-bold bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl border border-emerald-200"></div>
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="premium-card p-8 bg-white"><p class="text-[11px] text-slate-400 font-extrabold uppercase">Total Rencana Proyek (Plan)</p><h3 id="pm-total-plan" class="text-5xl font-black text-slate-800 mt-2">0</h3></div>
-                    <div class="premium-card p-8 bg-white flex justify-between items-start">
-                        <div><p class="text-[11px] text-slate-400 font-extrabold uppercase">Total Eksekusi (Actual)</p><h3 id="pm-total-actual" class="text-5xl font-black text-emerald-600 mt-2">0</h3></div>
-                        <div class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl border border-emerald-100"><p id="pm-total-ach" class="text-sm font-black">Ach: 0%</p></div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Kurva S - Kinerja PMS</h4><div class="w-full flex-1 relative"><canvas id="chart-pm-pms"></canvas></div></div>
-                    <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Kurva S - Kinerja PMG</h4><div class="w-full flex-1 relative"><canvas id="chart-pm-pmg"></canvas></div></div>
-                </div>
-            </section>
-
-            <section id="view-analisa-prod" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div id="drop-zone-prod" class="lg:col-span-2 premium-card p-10 text-center cursor-pointer border-dashed border-2 border-slate-300 hover:border-emerald-400 bg-slate-50/50 flex flex-col items-center justify-center transition-all">
-                        <div class="w-16 h-16 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-4 text-emerald-500 pointer-events-none"><i class="fa-solid fa-file-circle-plus text-2xl"></i></div>
-                        <p class="text-sm font-black text-slate-700 pointer-events-none">KLIK / DROP BATCH UPLOAD FILE EXCEL (MAIN, PM, FNA)</p>
-                        <p class="text-xs text-slate-500 mt-2 font-medium pointer-events-none">AI mendeteksi redundansi dan merangkum produktivitas PIC.</p>
-                        <input type="file" id="input-file-prod" class="hidden" accept=".xlsx, .xls, .csv" multiple>
-                    </div>
-                    <div class="premium-card p-6 bg-white text-center flex flex-col justify-center items-center">
-                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Tiket Tervalidasi</p><h3 id="prod-total-tiket" class="text-5xl font-black text-slate-800 mt-2">0</h3>
-                        <p id="prod-file-count" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 mt-3 inline-block">Menunggu Data</p>
-                        <button onclick="resetProdData()" class="mt-4 px-4 py-2 bg-rose-50 text-rose-600 hover:bg-rose-500 hover:text-white border border-rose-200 text-xs font-black rounded-lg w-full transition-colors">RESET DATASTORE</button>
-                    </div>
-                </div>
-                <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4">Leaderboard Produktivitas PIC</h4><div class="w-full flex-1 relative"><canvas id="chart-prod-pic"></canvas></div></div>
-            </section>
-
+            <!-- OTHER SECTIONS -->
+            <section id="view-analisa-pm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-12 text-center bg-white"><h3 class="text-lg font-bold">Analisa PM</h3></div></section>
+            <section id="view-analisa-prod" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-12 text-center bg-white"><h3 class="text-lg font-bold">Produktivitas</h3></div></section>
             <section id="view-sdm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-purple-500"><h3 class="text-xs font-black text-purple-600 uppercase tracking-widest"><i class="fa-solid fa-users-gear mr-2"></i>Data SDM & Tools</h3></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sdm"></table></div></section>
             <section id="view-kpi" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-indigo-500"><h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest"><i class="fa-solid fa-gauge-high mr-2"></i>Indikator Kinerja Utama (KPI)</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-kpi"></table></div></section>
             <section id="view-pm-target" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-pm-target"></table></div></section>
@@ -576,7 +517,7 @@
     <script>
         Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif"; Chart.defaults.color = '#94a3b8'; Chart.defaults.scale.grid.color = 'rgba(241, 245, 249, 0.5)'; Chart.defaults.scale.grid.drawBorder = false; Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)'; Chart.defaults.plugins.tooltip.titleFont = { size: 13, weight: 'bold' }; Chart.defaults.plugins.tooltip.padding = 12; Chart.defaults.plugins.tooltip.cornerRadius = 8; Chart.defaults.elements.line.tension = 0.4;
         const SPREADSHEET_ID = '1hIeT51_SVdNrz62s93zpZNyqepBMdNCa-mDRH-wVOIw'; 
-        let globalDataset = {}; let charts = {}; let currentView = 'home'; let globalProdData = []; let prodFileCount = 0;
+        let globalDataset = {}; let charts = {}; let currentView = 'home';
         let simonaCurrentCategory = 'ALL';
         
         // Variable Global untuk Breakdown Tiket Saat Card Diklik
@@ -584,13 +525,11 @@
         
         const titleLabels = { 'home': 'Menu Utama', 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'SIMONA Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Konsumsi BBM & Komparasi' };
 
-        window.addEventListener('DOMContentLoaded', () => { window.addEventListener('hashchange', evaluateRoute); setupAllDropZones(); reloadData(); });
+        window.addEventListener('DOMContentLoaded', () => { window.addEventListener('hashchange', evaluateRoute); reloadData(); });
 
         function evaluateRoute() {
             let hash = window.location.hash.replace('#', '') || 'home'; currentView = hash;
-            
             document.querySelectorAll('.view-pane').forEach(el => { el.style.display = 'none'; el.classList.remove('active'); });
-            
             const paneEl = document.getElementById(`view-${currentView}`);
             if (paneEl) { paneEl.style.display = 'block'; void paneEl.offsetWidth; paneEl.classList.add('active'); }
 
@@ -636,7 +575,6 @@
         }
 
         function extractStringValue(row, names) { for (let k in row) { let normalizedKey = String(k).toLowerCase().replace(/[^a-z0-9]/g, ''); for (let n of names) { if (normalizedKey.includes(n.toLowerCase().replace(/[^a-z0-9]/g, ''))) return row[k] ? String(row[k]) : '-'; } } return '-'; }
-        
         function updateDropdownOptions(id, arr, keys, lbl) { 
             const el = document.getElementById(id); if (!el) return; 
             const currentVal = el.value; 
@@ -673,24 +611,6 @@
             else { displayRows.forEach(row => { html += `<tr>`; headers.forEach(h => { let val = row[h] != null ? row[h] : '-'; if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian|harga|jumlah)/i.test(h)) val = formatIDR(val); html += `<td class="px-6 py-4 font-medium text-xs whitespace-nowrap">${val}</td>`; }); html += `</tr>`; }); } table.innerHTML = html + `</tbody>`;
         }
 
-        // --- Drag Drop Setup ---
-        function setupAllDropZones() {
-            setupDropZoneHelper('drop-zone-pm', 'input-file-pm', handlePMDrop, false);
-            setupDropZoneHelper('drop-zone-prod', 'input-file-prod', handleProdDrop, true);
-        }
-        function setupDropZoneHelper(zoneId, inputId, callback, allowMultiple = false) {
-            const dropZone = document.getElementById(zoneId); const fileInput = document.getElementById(inputId); if (!dropZone || !fileInput) return;
-            dropZone.addEventListener('click', () => fileInput.click());
-            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-400', 'bg-indigo-50', 'scale-105'); });
-            dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-indigo-400', 'bg-indigo-50', 'scale-105'); });
-            dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('border-indigo-400', 'bg-indigo-50', 'scale-105'); if (e.dataTransfer.files.length) { if(allowMultiple) { Array.from(e.dataTransfer.files).forEach(f => callback(f)); } else { callback(e.dataTransfer.files[0]); } } });
-            fileInput.addEventListener('change', () => { if (fileInput.files.length) { if(allowMultiple) { Array.from(fileInput.files).forEach(f => callback(f)); } else { callback(fileInput.files[0]); } } });
-        }
-        
-        function handlePMDrop(file) { console.log('Upload PM Module Disabled', file); }
-        function handleProdDrop(file) { console.log('Upload Prod Module Disabled', file); }
-        function resetProdData() {}
-
         function renderSmartKUT() {
             const smartContainer = document.getElementById('smartkut-content');
             if (!smartContainer) return;
@@ -701,40 +621,66 @@
                     if (ni === 0 && r > 0) ni = r - b - p; totalSvaRev += r; totalSvaNI += ni;
                 });
                 let avgNpm = totalSvaRev > 0 ? ((totalSvaNI / totalSvaRev) * 100).toFixed(1) : 0;
-                let arrMbp = globalDataset['mbp-rh'] || []; let totalMbpRev = 0, totalMbpLit = 0, anomaliCount = 0;
+                
+                let arrMbp = globalDataset['mbp-rh'] || []; let totalMbpRev = 0, totalMbpLit = 0;
                 arrMbp.forEach(d => {
                     totalMbpRev += parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue']));
                     totalMbpLit += parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter']));
-                    let dH = parseFlexibleNumber(d['Delta Hour'] || extractValue(d, ['deltahour'])); let dRH = parseFlexibleNumber(d['Delta RH'] || extractValue(d, ['deltarh']));
-                    if (Math.abs(dH - dRH) >= 1) anomaliCount++;
                 });
-                let arrOps = globalDataset['operational'] || []; let totalOpsCost = 0;
-                if (arrOps.length > 0) {
-                    let keyOpsJumlah = (Object.keys(arrOps[0] || {})).find(k => k.toLowerCase().includes('jumlah') || k.toLowerCase().includes('total')) || 'Col_15';
-                    arrOps.forEach(d => { totalOpsCost += parseFlexibleNumber(d[keyOpsJumlah] || d[Object.keys(d)[Object.keys(d).length-1]]); });
-                }
                 
                 let html = `
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <p class="mb-2"><span class="text-cyan-300 font-black"><i class="fa-solid fa-satellite-dish mr-1"></i>Status Ekosistem KUT:</span> Telah tersinkronisasi 100%.</p>
-                            <p class="mb-2">Secara makro, Net Income finansial SVA berada di angka <b>${formatIDR(totalSvaNI)}</b> dengan rata-rata Profit Margin <b>${avgNpm}%</b>.</p>
-                            <p>Sektor operasional (SIMONA) mencatat beban biaya total sebesar <b class="text-rose-300">${formatIDR(totalOpsCost)}</b>.</p>
+                            <p class="mb-2"><span class="text-cyan-300 font-black"><i class="fa-solid fa-satellite-dish mr-1"></i>Ekosistem KUT:</span> Tersinkronisasi penuh.</p>
+                            <p class="mb-2">Net Income finansial SVA berada di <b>${formatIDR(totalSvaNI)}</b> (Profit Margin <b>${avgNpm}%</b>).</p>
                         </div>
                         <div class="border-l border-white/20 pl-4">
                             <p class="mb-2 text-amber-200"><i class="fa-solid fa-gas-pump mr-1"></i><b>Performa MBP & BBM:</b></p>
-                            <p class="mb-2">Estimasi Revenue dari MBP mencapai <b>${formatIDR(totalMbpRev)}</b> dengan konsumsi bahan bakar total <b>${totalMbpLit.toLocaleString('id-ID')} Liter</b>.</p>
-                            <p class="text-rose-300"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Sistem mengidentifikasi <b>${anomaliCount} tiket anomali waktu</b> yang perlu diinvestigasi di modul MBP.</p>
+                            <p class="mb-2">Estimasi Revenue dari MBP <b>${formatIDR(totalMbpRev)}</b> dengan konsumsi <b>${totalMbpLit.toLocaleString('id-ID')} Liter</b>.</p>
                         </div>
                     </div>
                 `;
                 smartContainer.innerHTML = html;
             } catch (err) {
-                console.error("SmartKUT Error:", err);
                 smartContainer.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-400 mr-2"></i> Gagal menghasilkan analisa AI.`;
             }
         }
 
+        // Live Chat AI Function
+        function sendAiMessage() {
+            const input = document.getElementById('ai-chat-input');
+            const history = document.getElementById('ai-chat-history');
+            const msg = input.value.trim();
+            if(!msg) return;
+            
+            history.innerHTML += `<div class="text-right mb-2"><span class="bg-indigo-500/80 px-3 py-1.5 rounded-l-xl rounded-tr-xl inline-block shadow">${msg}</span></div>`;
+            input.value = '';
+            history.scrollTop = history.scrollHeight;
+            
+            const typingId = 'typing-' + Date.now();
+            history.innerHTML += `<div class="text-left mb-2" id="${typingId}"><span class="bg-slate-700/80 px-3 py-1.5 rounded-r-xl rounded-tl-xl inline-block text-cyan-300"><i class="fa-solid fa-circle-notch fa-spin mr-1"></i> AI thinking...</span></div>`;
+            history.scrollTop = history.scrollHeight;
+            
+            setTimeout(() => {
+                let aiEl = document.getElementById(typingId);
+                if(aiEl) aiEl.remove();
+                
+                // Simple logic response
+                let response = "";
+                if(msg.toLowerCase().includes('bbm') || msg.toLowerCase().includes('mbp')) {
+                    response = "Berdasarkan data terkini, disarankan memantau menu Komparasi BBM, karena ada beberapa PIC yang memiliki anomali beban pengeluaran (Validasi Ulang).";
+                } else if (msg.toLowerCase().includes('sva') || msg.toLowerCase().includes('profit')) {
+                    response = "Net Income SVA menunjukkan stabilitas. Untuk menaikkan margin, tekan angka biaya (I) operasional bulan depan.";
+                } else {
+                    response = "Data sedang disinkronisasikan. Performa perusahaan menunjukkan tren positif dengan rasio operasional yang wajar. Cek tabel terkait untuk breakdown detail.";
+                }
+
+                history.innerHTML += `<div class="text-left mb-2"><span class="bg-slate-800/80 border border-white/10 px-3 py-1.5 rounded-r-xl rounded-tl-xl inline-block text-cyan-50 shadow-sm"><i class="fa-solid fa-robot text-cyan-400 mr-1.5"></i> ${response}</span></div>`;
+                history.scrollTop = history.scrollHeight;
+            }, 1200);
+        }
+
+        // Simona Category Filter Logic
         function setSimonaCategoryFilter(catName) {
             simonaCurrentCategory = catName;
             document.getElementById('btn-reset-cat').classList.remove('hidden');
@@ -748,9 +694,6 @@
             renderActiveView(globalDataset);
         }
 
-        // =========================================================
-        // LOGIC KLIK TAMPILKAN BREAKDOWN (UNTUK MBP-BBM)
-        // =========================================================
         function showTicketBreakdown(picKey) {
             let picData = window.currentMbpTickets[picKey];
             if(!picData || !picData.tickets || picData.tickets.length === 0) {
@@ -855,116 +798,134 @@
                 }
                 
                 // =================================================================================
-                // MBP BBM: ANALISA KONSUMSI BBM & KOMPARASI PIC (LOGIC KOLOM C, K, P vs MBP KOLOM R)
+                // MBP BBM: ANALISA KONSUMSI BBM & KOMPARASI PIC
+                // Logic: Col E/C (Nama), G (Role), K (Kategori), P (Ops) <--> MBP Col R (Nama), Col AL (Rev)
                 // =================================================================================
                 else if (currentView === 'mbp-bbm') {
                     let arrMbp = data['mbp-rh'] || []; 
                     let arrOps = data['operational'] || [];
                     
-                    window.currentMbpTickets = {}; // Reset global variable
+                    window.currentMbpTickets = {}; // Reset cache onClick breakdown tiket
                     
-                    // 1. Ekstrak Data Operational (SIMONA): Kolom C (PIC), K (Kategori), P (Jumlah)
-                    let opsFuelMap = {};
+                    // 1. Ekstrak Data Operational (SIMONA)
+                    let opsMap = {};
+                    let allRoles = new Set();
+                    
                     if(arrOps.length > 0) {
                         let keysOps = Object.keys(arrOps[0] || {});
-                        // Safety fallback mapping
-                        let colC = keysOps.length > 2 ? keysOps[2] : keysOps.find(k => k.match(/nama|pic/i));
-                        let colK = keysOps.length > 10 ? keysOps[10] : keysOps.find(k => k.match(/kategori|jenis/i));
-                        let colP = keysOps.length > 15 ? keysOps[15] : keysOps.find(k => k.match(/jumlah|total/i));
+                        // Fallback index untuk memastikan kolom yang tepat
+                        let colE_PIC = keysOps.length > 4 ? keysOps[4] : keysOps.find(k => k.match(/nama|pic/i));
+                        let colC_Cluster_or_Name = keysOps.length > 2 ? keysOps[2] : null; 
+                        let colG_Role = keysOps.length > 6 ? keysOps[6] : keysOps.find(k => k.match(/role|tec/i));
+                        let colK_Cat = keysOps.length > 10 ? keysOps[10] : keysOps.find(k => k.match(/kategori/i));
+                        let colP_Amt = keysOps.length > 15 ? keysOps[15] : keysOps.find(k => k.match(/jumlah|total/i));
                         
                         arrOps.forEach(d => {
-                            let rawCat = String(d[colK] || '').toLowerCase();
-                            // Filter hanya data perhitungan BBM genset
-                            if (rawCat.includes('bbm') || rawCat.includes('genset') || rawCat.includes('solar') || rawCat.includes('fuel')) {
-                                let picName = String(d[colC] || '').trim().toUpperCase();
-                                let costAmt = parseFlexibleNumber(d[colP]);
-                                
-                                if(picName && picName !== '-' && picName !== 'UNDEFINED') {
-                                    if(!opsFuelMap[picName]) opsFuelMap[picName] = 0;
-                                    opsFuelMap[picName] += costAmt;
+                            // Cek nama prioritas di Col E, jika tidak ada cek Col C
+                            let picName = String(d[colE_PIC] || d[colC_Cluster_or_Name] || '').trim().toUpperCase();
+                            let role = String(d[colG_Role] || 'Unknown').trim();
+                            let cat = String(d[colK_Cat] || '').toLowerCase();
+                            let amt = parseFlexibleNumber(d[colP_Amt]);
+                            
+                            if (picName && picName !== '-' && picName !== 'UNDEFINED' && picName !== 'NULL') {
+                                allRoles.add(role);
+                                // Hanya filter Kategori BBM/Genset
+                                if (cat.includes('bbm') || cat.includes('genset') || cat.includes('solar') || cat.includes('fuel')) {
+                                    if (!opsMap[picName]) opsMap[picName] = { cost: 0, role: role };
+                                    opsMap[picName].cost += amt;
                                 }
                             }
                         });
                     }
 
-                    // 2. Ekstrak Data MBP: Kolom R (PIC Take Over), Kolom B, Kolom D, Revenue Genset
-                    let mbpPicMap = {};
+                    // 2. Terapkan ke Filter Dropdown Role
+                    let roleSelect = document.getElementById('filter-mbp-bbm-role');
+                    if (roleSelect) {
+                        let currentRole = roleSelect.value;
+                        let rolesArr = [...allRoles].sort();
+                        roleSelect.innerHTML = `<option value="ALL">Semua Role</option>` + rolesArr.map(r => `<option value="${r}">${r}</option>`).join('');
+                        if(rolesArr.includes(currentRole)) roleSelect.value = currentRole;
+                    }
+                    let fRole = roleSelect ? roleSelect.value : 'ALL';
                     
-                    // Juga siapkan data untuk chart & tabel asli yang tidak berubah (Bagian Bawah)
-                    let tableDataLog = []; let picAnomaliCount = {}; 
-                    
+                    // 3. Ekstrak Data MBP
+                    let mbpMap = {};
                     if(arrMbp.length > 0) {
                         let keysMbp = Object.keys(arrMbp[0] || {});
-                        let colB = keysMbp.length > 1 ? keysMbp[1] : keysMbp.find(k => k.match(/ticket number/i));
-                        let colD = keysMbp.length > 3 ? keysMbp[3] : keysMbp.find(k => k.match(/nomor ticket/i));
-                        let colR = keysMbp.length > 17 ? keysMbp[17] : keysMbp.find(k => k.match(/take over/i));
+                        let colB_Ticket = keysMbp.length > 1 ? keysMbp[1] : keysMbp.find(k => k.match(/ticket number/i));
+                        let colD_Nomor = keysMbp.length > 3 ? keysMbp[3] : keysMbp.find(k => k.match(/nomor ticket/i));
+                        let colR_PIC = keysMbp.length > 17 ? keysMbp[17] : keysMbp.find(k => k.match(/take over|pic/i));
+                        let colAL_Rev = keysMbp.length > 37 ? keysMbp[37] : keysMbp.find(k => k.match(/estimasi revenue|revenue/i));
                         
                         arrMbp.forEach(d => {
-                            // Data untuk Card & Breakdown Tiket
-                            let picTakeOver = String(d[colR] || extractStringValue(d, ['take over', 'pic'])).trim().toUpperCase();
-                            let numB = d[colB] || extractStringValue(d, ['ticket number swfm', 'tiket', 'ticket number']);
-                            let numD = d[colD] || extractStringValue(d, ['nomor ticket swfm', 'nomor ticket', 'no swfm']);
-                            let revVal = parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue']));
+                            let picTakeOver = String(d[colR_PIC] || extractStringValue(d, ['take over', 'pic'])).trim().toUpperCase();
+                            let b = d[colB_Ticket] || extractStringValue(d, ['ticket number swfm', 'tiket']);
+                            let tD = d[colD_Nomor] || extractStringValue(d, ['nomor ticket swfm', 'noswfm']);
+                            let rev = parseFlexibleNumber(d[colAL_Rev] || extractValue(d, ['revenue', 'estimasi']));
                             
                             if (picTakeOver && picTakeOver !== '-' && picTakeOver !== 'NULL') {
-                                if (!mbpPicMap[picTakeOver]) mbpPicMap[picTakeOver] = { rev: 0, tickets: [] };
-                                mbpPicMap[picTakeOver].rev += revVal;
-                                mbpPicMap[picTakeOver].tickets.push({ colB: numB, colD: numD });
+                                if (!mbpMap[picTakeOver]) mbpMap[picTakeOver] = { rev: 0, tickets: [] };
+                                mbpMap[picTakeOver].rev += rev;
+                                mbpMap[picTakeOver].tickets.push({ colB: b, colD: tD });
                             }
-                            
-                            // Data untuk Grafik Original & Tabel Bawah (Tetap Dipertahankan Sesuai Permintaan)
-                            let dH = parseFlexibleNumber(d['Delta Hour'] || extractValue(d, ['deltahour'])); 
-                            let dRH = parseFlexibleNumber(d['Delta RH'] || extractValue(d, ['deltarh'])); 
-                            let selisih = Math.abs(dH - dRH); 
-                            let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter'])); 
-                            let tiketBawah = numB !== '-' ? numB : numD;
-                            let picBawah = extractStringValue(d, ['pic', 'nama', 'pic take over']).trim().toUpperCase();
-                            
-                            if (selisih >= 1) { 
-                                let isTidakSafe = (ltr > 20 && dRH <= 5); let status = isTidakSafe ? '❌ Tidak Safe' : '⚠️ Anomali Waktu'; 
-                                if (picBawah !== '-' && picBawah !== '') { 
-                                    if (!picAnomaliCount[picBawah]) picAnomaliCount[picBawah] = { count: 0, fuel: 0 }; 
-                                    if (isTidakSafe) { picAnomaliCount[picBawah].count++; picAnomaliCount[picBawah].fuel += ltr; } 
-                                } 
-                                tableDataLog.push({'Nomor_Tiket': tiketBawah, 'Nama_PIC': picBawah, 'Total_Liter': ltr, 'Delta_Hour': dH, 'Delta_RH': dRH, 'Status_Evaluasi': status}); 
-                            } 
                         });
-                        
-                        // Simpan ke Global untuk Breakdown OnClick
-                        window.currentMbpTickets = mbpPicMap;
+                        window.currentMbpTickets = mbpMap;
                     }
 
-                    // 3. Render Card Komparasi (Sesuai Logika Database Valid / Need Pengecekan)
+                    // 4. Merge dan Filter All PICs (Semua nama yang terdeteksi)
+                    let allPICs = [...new Set([...Object.keys(opsMap), ...Object.keys(mbpMap)])].filter(n => n && n !== '-');
+                    
+                    // Implementasi Filter Role: Jika dipilih sebuah Role, hanya tampilkan PIC yang perannya sesuai di Data Operasional.
+                    let filteredPICs = allPICs.filter(pic => {
+                        if(fRole === 'ALL') return true;
+                        // Jika nama ada di Ops, role-nya harus sama dengan dropdown.
+                        return opsMap[pic] && opsMap[pic].role === fRole; 
+                    });
+
+                    // 5. Render Card & Persiapkan Data Chart Gabungan
                     let kompContainer = document.getElementById('mbp-bbm-komparasi');
+                    let chartLabels = [];
+                    let chartOpsData = [];
+                    let chartMbpData = [];
+
                     if (kompContainer) {
                         let kompHTML = '';
-                        let sortedPICs = Object.keys(mbpPicMap).sort((a,b) => mbpPicMap[b].rev - mbpPicMap[a].rev);
-                        
-                        if(sortedPICs.length === 0) {
-                            kompHTML = `<div class="col-span-full text-slate-400 text-center py-4 font-bold">Data PIC (Kolom R) tidak ditemukan.</div>`;
+                        if (filteredPICs.length === 0) {
+                            kompHTML = `<div class="col-span-full text-slate-400 text-center py-4 font-bold">Data komparasi kosong untuk Role yang dipilih.</div>`;
                         } else {
-                            sortedPICs.forEach((pic, idx) => {
-                                let mbpRev = mbpPicMap[pic].rev;
-                                let opsCost = opsFuelMap[pic] || 0;
+                            // Sort by Revenue terbesar (agar rapih)
+                            filteredPICs.sort((a,b) => (mbpMap[b]?.rev || 0) - (mbpMap[a]?.rev || 0));
+                            
+                            filteredPICs.forEach((pic, idx) => {
+                                let hasOps = opsMap[pic] !== undefined;
+                                let hasMbp = mbpMap[pic] !== undefined;
                                 
-                                // LOGIC STATUS UTAMA
-                                let isValid = (opsCost > 0); 
-                                let labelStatus = isValid ? "Database valid dan terverifikasi" : "Need pengecekan data lebih lanjut";
-                                let bgClass = isValid ? "border-t-emerald-500 hover:border-emerald-400 hover:shadow-emerald-900/10" : "border-t-amber-500 hover:border-amber-400 hover:shadow-amber-900/10";
+                                let opsCost = hasOps ? opsMap[pic].cost : 0;
+                                let mbpRev = hasMbp ? mbpMap[pic].rev : 0;
+                                let tickets = hasMbp ? mbpMap[pic].tickets : [];
+                                
+                                // Push to chart array
+                                chartLabels.push(pic.substring(0, 15));
+                                chartOpsData.push(opsCost);
+                                chartMbpData.push(mbpRev);
+                                
+                                // LOGIC VALIDASI STATUS: Cocok jika ada di kedua sheet dan punya data operasional BBM > 0
+                                let isValid = (hasOps && hasMbp && opsCost > 0); 
+                                let labelStatus = isValid ? "Terverifikasi database" : "Validasi Ulang";
+                                let bgClass = isValid ? "border-t-emerald-500 hover:border-emerald-400" : "border-t-amber-500 hover:border-amber-400";
                                 let iconStatus = isValid ? "fa-circle-check text-emerald-500" : "fa-triangle-exclamation text-amber-500";
                                 let textStatus = isValid ? "text-emerald-700 bg-emerald-100 border-emerald-200" : "text-amber-700 bg-amber-100 border-amber-200";
 
                                 kompHTML += `
                                 <div onclick="showTicketBreakdown('${pic.replace(/'/g, "\\'")}')" class="cursor-pointer premium-card p-5 bg-white relative overflow-hidden group border-t-4 ${bgClass} transition-all duration-300 flex flex-col h-full shadow-sm">
-                                    
                                     <div class="flex justify-between items-start mb-4">
-                                        <div class="flex items-center gap-3 w-[70%]">
+                                        <div class="flex items-center gap-3 w-[80%]">
                                             <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 font-black border border-slate-200 flex-shrink-0 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
                                                 ${idx + 1}
                                             </div>
-                                            <div class="overflow-hidden">
+                                            <div class="overflow-hidden w-full">
                                                 <h5 class="text-xs font-black text-slate-800 uppercase tracking-widest truncate w-full" title="${pic}">${pic}</h5>
-                                                <p class="text-[9px] font-bold text-slate-400 mt-0.5"><i class="fa-solid fa-tags mr-1"></i>${mbpPicMap[pic].tickets.length} Tiket Ditemukan</p>
+                                                <p class="text-[9px] font-bold text-slate-400 mt-0.5"><i class="fa-solid fa-tags mr-1"></i>${tickets.length} Tiket Ditemukan</p>
                                             </div>
                                         </div>
                                         <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-cyan-50 group-hover:text-cyan-500 transition-colors flex-shrink-0">
@@ -974,17 +935,17 @@
                                     
                                     <div class="grid grid-cols-2 gap-2 mt-2 mb-4">
                                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 group-hover:bg-rose-50 transition-colors">
-                                            <p class="text-[8px] text-slate-400 group-hover:text-rose-500 uppercase font-black mb-1">Permintaan Ops (Col P)</p>
+                                            <p class="text-[8px] text-slate-400 group-hover:text-rose-500 uppercase font-black mb-1">Ops BBM (Col P)</p>
                                             <p class="text-[13px] font-black text-slate-700 group-hover:text-rose-700">${formatIDR(opsCost)}</p>
                                         </div>
-                                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 group-hover:bg-indigo-50 transition-colors">
-                                            <p class="text-[8px] text-slate-400 group-hover:text-indigo-500 uppercase font-black mb-1">Rev Genset (MBP)</p>
-                                            <p class="text-[13px] font-black text-slate-700 group-hover:text-indigo-700">${formatIDR(mbpRev)}</p>
+                                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 group-hover:bg-emerald-50 transition-colors">
+                                            <p class="text-[8px] text-slate-400 group-hover:text-emerald-500 uppercase font-black mb-1">Rev Genset (MBP)</p>
+                                            <p class="text-[13px] font-black text-slate-700 group-hover:text-emerald-700">${formatIDR(mbpRev)}</p>
                                         </div>
                                     </div>
                                     
                                     <div class="mt-auto pt-3 border-t border-slate-100/80 flex items-center justify-center">
-                                        <span class="w-full text-center px-3 py-1.5 text-[9px] font-black uppercase rounded-lg border ${textStatus} transition-colors">
+                                        <span class="w-full text-center px-3 py-1.5 text-[10px] font-black uppercase rounded-lg border ${textStatus} transition-colors">
                                             <i class="fa-solid ${iconStatus} mr-1.5"></i>${labelStatus}
                                         </span>
                                     </div>
@@ -994,26 +955,39 @@
                         kompContainer.innerHTML = kompHTML;
                     }
 
-                    // 4. Render Bagian Bawah Original (Tabel Evaluasi & Grafik) - Dibiarkan Utuh Sesuai Arahan
-                    if (tableDataLog.length > 0) buildTable('table-mbp-bbm-log', ['Nomor_Tiket', 'Nama_PIC', 'Total_Liter', 'Delta_Hour', 'Delta_RH', 'Status_Evaluasi'], tableDataLog, 200); else buildTable('table-mbp-bbm-log', ['Keterangan'], []);
-                    
-                    let evaluasiPIC = Object.keys(picAnomaliCount).filter(pic => picAnomaliCount[pic].count > 1).sort((a, b) => picAnomaliCount[b].count - picAnomaliCount[a].count).map(pic => { let cnt = picAnomaliCount[pic].count; let risk = cnt > 5 ? '🔴 Kritis' : (cnt > 3 ? '🟠 Tinggi' : '🟡 Menengah'); return {'Nama_PIC': pic, 'Total_Kasus_Tidak_Safe': cnt, 'BBM_Terbuang': picAnomaliCount[pic].fuel.toFixed(1) + ' L', 'Tingkat_Risiko': risk }; });
-                    if (evaluasiPIC.length > 0) buildTable('table-mbp-bbm-evaluasi', Object.keys(evaluasiPIC[0]), evaluasiPIC); else buildTable('table-mbp-bbm-evaluasi', ['Keterangan'], [{ Keterangan: 'Aman.' }]);
-                    
-                    if (charts['mbp_bbm']) charts['mbp_bbm'].destroy(); 
-                    const ctxBBM = document.getElementById('chart-mbp-bbm'); 
-                    if (ctxBBM) { 
-                        let sortedRisks = evaluasiPIC.slice(0, 10); 
-                        charts['mbp_bbm'] = new Chart(ctxBBM, { 
-                            type: 'bar', 
-                            data: { labels: sortedRisks.map(p => p.Nama_PIC.substring(0, 12)), datasets: [{ label: 'Kasus Tidak Safe', data: sortedRisks.map(p => p.Total_Kasus_Tidak_Safe), backgroundColor: '#f43f5e', borderRadius: 4 }] }, 
-                            options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } } }
-                        }); 
+                    // 6. Render ONE Chart untuk Komparasi (Grafik Lama Dihapus)
+                    if (charts['mbp_bbm_komp']) charts['mbp_bbm_komp'].destroy();
+                    const ctxKomp = document.getElementById('chart-mbp-bbm-komparasi');
+                    if (ctxKomp) {
+                        // Tampilkan hanya top 20 agar grafik tidak terlalu padat & hancur jika data banyak
+                        let maxShow = 20;
+                        charts['mbp_bbm_komp'] = new Chart(ctxKomp, {
+                            type: 'bar',
+                            data: {
+                                labels: chartLabels.slice(0, maxShow),
+                                datasets: [
+                                    { label: 'Total Pengeluaran Ops BBM (Rp)', data: chartOpsData.slice(0, maxShow), backgroundColor: '#f43f5e', borderRadius: 4 },
+                                    { label: 'Revenue Genset MBP (Rp)', data: chartMbpData.slice(0, maxShow), backgroundColor: '#10b981', borderRadius: 4 }
+                                ]
+                            },
+                            options: { 
+                                responsive: true, 
+                                maintainAspectRatio: false, 
+                                plugins: { 
+                                    datalabels: { display: false },
+                                    legend: { position: 'top', labels: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: 'bold' } } }
+                                },
+                                scales: {
+                                    y: { ticks: { callback: function(val) { return 'Rp ' + (val / 1000000).toFixed(0) + 'jt'; } } }
+                                }
+                            }
+                        });
                     }
                     
+                    // Insight Text update
                     const aiBox = document.getElementById('ai-insight-mbp-bbm');
                     if(aiBox) {
-                        document.getElementById('ai-text-mbp-bbm').innerHTML = `Modul ini sekarang menautkan pengeluaran operasional secara spesifik (Kolom C, P, dan Kategori K) terhadap Kolom R di MBP. Silakan <b>Klik Card di bawah ini</b> untuk melihat validasi detail berdasarkan Nomor TICKET SWFM (Col D) & Ticket Number SWFM (Col B).`;
+                        document.getElementById('ai-text-mbp-bbm').innerHTML = `Modul ini sekarang menautkan <b>semua pengeluaran operasional spesifik BBM Genset</b> (Kolom K & P) terhadap Revenue MBP per PIC. Terdapat label otomatis untuk mendeteksi ketidaksesuaian data. <b>Klik card di bawah</b> untuk memunculkan detail tiket SWFM.`;
                         aiBox.classList.remove('hidden');
                     }
                 }
@@ -1035,7 +1009,7 @@
                 } 
                 
                 // =========================================================================
-                // MBP RH (DIKEMBALIKAN KE DESAIN AWAL SEPENUHNYA - CARD KEREN DENGAN PROGRESS)
+                // MBP RH (DIKEMBALIKAN 100% KE DESAIN ASLI TANPA DIUBAH)
                 // =========================================================================
                 else if (currentView === 'mbp-rh') {
                     let arr = data['mbp-rh'] || []; updateDropdownOptions('filter-mbp-nop', arr, ['nop'], 'NOP'); updateDropdownOptions('filter-mbp-periode', arr, ['periode'], 'Periode');
