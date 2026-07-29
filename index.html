@@ -414,12 +414,12 @@
             
             <section id="view-kpi" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-indigo-500"><h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest"><i class="fa-solid fa-gauge-high mr-2"></i>Indikator Kinerja Utama (KPI)</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-kpi"></table></div></section>
             
-            <!-- SIMONA (DIPERBARUI DENGAN FILTER PERIODE, CLUSTER, HARGA, & DETAIL CARDS KATEGORI) -->
+            <!-- SIMONA (DIPERBARUI MENGGUNAKAN KOLOM P: JUMLAH) -->
             <section id="view-operational" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 <div class="premium-card p-6 bg-white border-l-4 border-l-amber-500 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
                         <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest"><i class="fa-solid fa-gears mr-2 text-amber-500"></i>SIMONA - System Monitoring Operational Kalimantan</h3>
-                        <p class="text-xs text-slate-400 font-medium mt-1">Monitoring pengeluaran operasional berdasarkan Periode (Col A), Cluster (Col C), dan Harga (Col O).</p>
+                        <p class="text-xs text-slate-400 font-medium mt-1">Monitoring pengeluaran operasional berdasarkan Periode (Col A), Cluster (Col C), dan Jumlah (Col P).</p>
                     </div>
                     <div class="flex items-center gap-3 flex-wrap">
                         <select id="filter-simona-periode" onchange="renderActiveView(globalDataset)" class="filter-select text-xs"><option value="ALL">Semua Periode</option></select>
@@ -432,7 +432,7 @@
                 <!-- KPI SUMMARY -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div class="premium-card p-6 bg-white border-b-4 border-b-amber-500">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Nominal Pengeluaran (Harga)</p>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Nominal Pengeluaran (Jumlah)</p>
                         <h3 id="simona-kpi-total" class="text-3xl font-black text-amber-600 mt-1">Rp 0</h3>
                     </div>
                     <div class="premium-card p-6 bg-white border-b-4 border-b-indigo-500">
@@ -569,7 +569,7 @@
             let html = `<thead><tr>`; headers.forEach(h => { html += `<th class="px-6 py-4 text-[10px] font-black uppercase text-slate-500 tracking-wider">${h.replace(/_/g, ' ')}</th>`; }); html += `</tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
             const displayRows = limit ? rowsList.slice(0, limit) : rowsList;
             if (displayRows.length === 0) { html += `<tr><td colspan="${headers.length}" class="px-6 py-12 text-center text-slate-400 font-bold"><i class="fa-solid fa-folder-open text-2xl mb-2 block"></i> Data Kosong</td></tr>`; } 
-            else { displayRows.forEach(row => { html += `<tr>`; headers.forEach(h => { let val = row[h] != null ? row[h] : '-'; if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian|harga)/i.test(h)) val = formatIDR(val); html += `<td class="px-6 py-4 font-medium text-xs whitespace-nowrap">${val}</td>`; }); html += `</tr>`; }); } table.innerHTML = html + `</tbody>`;
+            else { displayRows.forEach(row => { html += `<tr>`; headers.forEach(h => { let val = row[h] != null ? row[h] : '-'; if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian|harga|jumlah)/i.test(h)) val = formatIDR(val); html += `<td class="px-6 py-4 font-medium text-xs whitespace-nowrap">${val}</td>`; }); html += `</tr>`; }); } table.innerHTML = html + `</tbody>`;
         }
 
         // =========================================================
@@ -831,7 +831,8 @@
                     let keys = Object.keys(arr[0] || {});
                     let keyPeriode = keys[0];  // Kolom A
                     let keyCluster = keys[2] || keys[1]; // Kolom C
-                    let keyJumlah = keys[15] || keys[keys.length - 1]; // Kolom P (Jumlah)
+                    // PERBAIKAN: Mengambil data nominal dari Kolom P (Jumlah)
+                    let keyJumlah = keys[15] || keys.find(k => k.toLowerCase().includes('jumlah')) || keys[keys.length - 1]; 
                     let keyKategori = keys.find(k => /kategori|category|jenis|group|tipe/i.test(k)) || keys[1] || keys[3];
 
                     // Populate dropdown filter
@@ -855,17 +856,19 @@
                         let pVal = d[keyPeriode] || '-';
                         let cVal = d[keyCluster] || '-';
                         let catVal = d[keyKategori] || 'Lainnya';
-                        let hargaVal = parseFlexibleNumber(d[keyHarga]);
+                        
+                        // PARSE DARI KOLOM P (Jumlah)
+                        let jumlahVal = parseFlexibleNumber(d[keyJumlah]);
 
-                        totalNominal += hargaVal;
+                        totalNominal += jumlahVal;
                         if (!categoryMap[catVal]) categoryMap[catVal] = 0;
-                        categoryMap[catVal] += hargaVal;
+                        categoryMap[catVal] += jumlahVal;
 
                         return {
                             'Periode': pVal,
                             'Cluster': cVal,
                             'Kategori': catVal,
-                            'Harga': hargaVal,
+                            'Jumlah': jumlahVal,
                             ...d
                         };
                     });
@@ -919,7 +922,7 @@
                             data: {
                                 labels: chartCats,
                                 datasets: [{
-                                    label: 'Total Harga (Rp)',
+                                    label: 'Total Jumlah (Rp)',
                                     data: chartVals,
                                     backgroundColor: '#eab308',
                                     borderRadius: 6
