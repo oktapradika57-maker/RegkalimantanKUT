@@ -94,10 +94,10 @@
         </div>
     </div>
 
-    <!-- OVERLAY SIDEBAR (TAMPILAN BARU GELAP SAAT MENU DIBUKA) -->
+    <!-- OVERLAY SIDEBAR (TAMPILAN GELAP SAAT MENU DIBUKA) -->
     <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/60 z-[50] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm cursor-pointer"></div>
 
-    <!-- SIDEBAR (OFF-CANVAS DRAWER - DIHILANGKAN DARI WORKSPACE DEFAULT) -->
+    <!-- SIDEBAR (OFF-CANVAS DRAWER) -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white text-slate-600 flex flex-col h-full z-[60] transform -translate-x-full transition-transform duration-300 shadow-[10px_0_40px_rgba(0,0,0,0.15)]">
         <div class="p-6 h-24 flex items-center justify-between border-b border-slate-100 bg-slate-50/50">
             <a href="#home" class="block transition-transform hover:scale-105">
@@ -178,15 +178,13 @@
 
     <!-- WORKSPACE UTAMA FULL-SCREEN -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
-        <!-- HEADER (DIPERBARUI DENGAN LOGO DI DALAM WORKSPACE) -->
+        <!-- HEADER -->
         <header class="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between flex-shrink-0 z-10 w-full shadow-sm">
             <div class="flex items-center space-x-4">
-                <!-- TOMBOL BUKA SIDEBAR -->
                 <button onclick="toggleSidebar()" class="text-slate-500 hover:text-indigo-600 focus:outline-none p-2.5 rounded-xl hover:bg-indigo-50 transition-colors bg-white border border-slate-200 shadow-sm flex items-center justify-center">
                     <i class="fa-solid fa-bars text-lg"></i>
                 </button>
                 <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
-                <!-- LOGO KUT DI HEADER WORKSPACE -->
                 <a href="#home">
                     <img src="koperasi-jasa-konstruksi-tower-event-organizer-network-monitoring-telekomunikasi-kisel-group-logo-kut.webp" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'" alt="Logo KUT" class="h-9 w-auto object-contain hidden sm:block hover:scale-105 transition-transform">
                 </a>
@@ -211,7 +209,7 @@
         <!-- DASHBOARD CONTENT -->
         <div class="flex-1 overflow-y-auto p-8 bg-slate-50/50" id="dashboard-content">
             
-            <!-- MENU UTAMA (DENGAN PENAMBAHAN SIMAKIN & SIMONA) -->
+            <!-- MENU UTAMA -->
             <section id="view-home" class="view-pane active max-w-7xl mx-auto space-y-8 pb-10">
                 <div class="mb-8">
                     <h1 class="text-3xl font-black text-slate-800 tracking-tight">Enterprise Analytics <span class="text-indigo-600">Hub</span></h1>
@@ -243,14 +241,14 @@
                         <p class="text-[11px] text-slate-400 mt-2 font-medium">Evaluasi Take Over & Kinerja SDM</p>
                     </a>
                     
-                    <!-- SIMONA (Sebelumnya Operational) -->
+                    <!-- SIMONA -->
                     <a href="#operational" class="menu-grid-card" style="--hover-color: #eab308;">
                         <div class="menu-grid-icon-box bg-yellow-50 text-yellow-500"><i class="fa-solid fa-gears"></i></div>
                         <h3 class="font-black text-slate-800 text-sm">SIMONA</h3>
                         <p class="text-[11px] text-slate-400 mt-2 font-medium">System Monitoring Operational Kalimantan</p>
                     </a>
                     
-                    <!-- SIMAKIN (Menu Baru dengan Link Eksternal) -->
+                    <!-- SIMAKIN -->
                     <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-grid-card" style="--hover-color: #0ea5e9;">
                         <div class="menu-grid-icon-box bg-sky-50 text-sky-500"><i class="fa-solid fa-satellite-dish"></i></div>
                         <h3 class="font-black text-slate-800 text-sm">SIMAKIN</h3>
@@ -411,20 +409,55 @@
                 <div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-analisa-prod"></table></div>
             </section>
 
-            <!-- SDM, KPI, SIMONA -->
+            <!-- SDM & KPI -->
             <section id="view-sdm" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div id="ai-insight-sdm" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color:#8b5cf6;"><h4 class="text-sm font-black text-slate-800 mb-2">AI Summary SDM</h4><div id="ai-text-sdm" class="text-sm text-slate-600"></div></div><div class="premium-card p-6 bg-white border-l-4 border-l-purple-500"><h3 class="text-xs font-black text-purple-600 uppercase tracking-widest"><i class="fa-solid fa-users-gear mr-2"></i>Data SDM & Tools</h3></div><div class="premium-card overflow-x-auto bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-sdm"></table></div></section>
             
             <section id="view-kpi" class="view-pane space-y-6 max-w-7xl mx-auto pb-10"><div class="premium-card p-6 bg-white border-l-4 border-l-indigo-500"><h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest"><i class="fa-solid fa-gauge-high mr-2"></i>Indikator Kinerja Utama (KPI)</h3></div><div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-kpi"></table></div></section>
             
-            <!-- SIMONA -->
+            <!-- SIMONA (DIPERBARUI DENGAN FILTER PERIODE, CLUSTER, HARGA, & DETAIL CARDS KATEGORI) -->
             <section id="view-operational" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
-                <div class="premium-card p-6 bg-white border-l-4 border-l-amber-500">
-                    <h3 class="text-xs font-black text-amber-600 uppercase tracking-widest"><i class="fa-solid fa-gears mr-2"></i>SIMONA - System Monitoring Operational</h3>
+                <div class="premium-card p-6 bg-white border-l-4 border-l-amber-500 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest"><i class="fa-solid fa-gears mr-2 text-amber-500"></i>SIMONA - System Monitoring Operational Kalimantan</h3>
+                        <p class="text-xs text-slate-400 font-medium mt-1">Monitoring pengeluaran operasional berdasarkan Periode (Col A), Cluster (Col C), dan Harga (Col O).</p>
+                    </div>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <select id="filter-simona-periode" onchange="renderActiveView(globalDataset)" class="filter-select text-xs"><option value="ALL">Semua Periode</option></select>
+                        <select id="filter-simona-cluster" onchange="renderActiveView(globalDataset)" class="filter-select text-xs"><option value="ALL">Semua Cluster</option></select>
+                    </div>
                 </div>
+
                 <div id="ai-insight-ops" class="ai-insight p-6 rounded-2xl hidden" style="border-left-color:#f59e0b;"><h4 class="text-sm font-black text-slate-800 mb-2">AI Operational Insight</h4><div id="ai-text-ops" class="text-sm text-slate-600"></div></div>
-                <div class="grid grid-cols-2 gap-6"><div class="premium-card p-6 bg-white border-b-4 border-b-emerald-500"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total U</p><h3 id="ops-kpi-u" class="text-2xl font-black text-emerald-600 mt-1">0</h3></div><div class="premium-card p-6 bg-white border-b-4 border-b-indigo-500"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total V</p><h3 id="ops-kpi-v" class="text-2xl font-black text-indigo-700 mt-1">0</h3></div></div>
-                <div class="premium-card p-6 h-[400px] bg-white flex flex-col"><div class="w-full flex-1 relative"><canvas id="chart-operational"></canvas></div></div>
-                <div class="premium-card overflow-hidden bg-white"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-operational"></table></div>
+                
+                <!-- KPI SUMMARY -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="premium-card p-6 bg-white border-b-4 border-b-amber-500">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Nominal Pengeluaran (Harga)</p>
+                        <h3 id="simona-kpi-total" class="text-3xl font-black text-amber-600 mt-1">Rp 0</h3>
+                    </div>
+                    <div class="premium-card p-6 bg-white border-b-4 border-b-indigo-500">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Item / Record Operasional</p>
+                        <h3 id="simona-kpi-count" class="text-3xl font-black text-indigo-700 mt-1">0 Item</h3>
+                    </div>
+                </div>
+
+                <!-- DETAIL CARD KATEGORI -->
+                <div>
+                    <h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-layer-group mr-2 text-amber-500"></i>Detail Pengeluaran Berdasarkan Kategori</h4>
+                    <div id="simona-category-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <!-- Dynamic Cards Rendered Here -->
+                    </div>
+                </div>
+
+                <div class="premium-card p-6 h-[400px] bg-white flex flex-col">
+                    <h4 class="text-xs font-black text-slate-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-column mr-2 text-amber-500"></i>Grafik Distribusi Biaya per Kategori</h4>
+                    <div class="w-full flex-1 relative"><canvas id="chart-operational"></canvas></div>
+                </div>
+
+                <div class="premium-card overflow-hidden bg-white">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/80"><h4 class="text-xs font-black text-slate-700 uppercase tracking-widest">Tabel Data Operasional SIMONA</h4></div>
+                    <div class="overflow-x-auto"><table class="w-full text-left text-xs whitespace-nowrap custom-table" id="table-operational"></table></div>
+                </div>
             </section>
             
             <section id="view-pm-target" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
@@ -453,7 +486,6 @@
 
         window.addEventListener('DOMContentLoaded', () => { window.addEventListener('hashchange', evaluateRoute); setupAllDropZones(); reloadData(); });
 
-        // LOGIKA PENUTUPAN OTOMATIS SIDEBAR SAAT MENU DIKLIK
         function evaluateRoute() {
             let hash = window.location.hash.replace('#', '') || 'home'; currentView = hash;
             
@@ -471,7 +503,6 @@
             }
             document.getElementById('breadcrumb-current').innerText = titleLabels[currentView] || 'Portal Utama';
             
-            // Auto close drawer menu when an item is selected
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
@@ -486,7 +517,7 @@
         }
 
         async function fetchFromSpreadsheet(sheetName) {
-            try { let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&headers=1`; if (['data SVA', 'SDM', 'data MBP'].includes(sheetName)) url += '&range=A:AZ'; const response = await fetch(url); if (!response.ok) return []; const text = await response.text(); const startIdx = text.indexOf('{'); const endIdx = text.lastIndexOf('}') + 1; if (startIdx === -1 || endIdx === 0) return []; const json = JSON.parse(text.substring(startIdx, endIdx)); let cols = json.table.cols.map((c, i) => c && c.label ? c.label.trim() : `Col_${i}`); let rows = json.table.rows; let isHeaderMissing = cols.every(c => c.startsWith('Col_') || c === ''); if (isHeaderMissing && rows && rows.length > 0) { cols = rows[0].c.map((c, i) => c && c.v ? String(c.v).trim() : cols[i]); rows.shift(); } return rows.map(r => { let obj = {}; if (r && r.c) r.c.forEach((cell, i) => { let key = cols[i] || `Col_${i}`; obj[key] = cell ? cell.v : null; }); return obj; }); } catch(e) { return []; }
+            try { let url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&headers=1`; if (['data SVA', 'SDM', 'data MBP', 'data Operational'].includes(sheetName)) url += '&range=A:AZ'; const response = await fetch(url); if (!response.ok) return []; const text = await response.text(); const startIdx = text.indexOf('{'); const endIdx = text.lastIndexOf('}') + 1; if (startIdx === -1 || endIdx === 0) return []; const json = JSON.parse(text.substring(startIdx, endIdx)); let cols = json.table.cols.map((c, i) => c && c.label ? c.label.trim() : `Col_${i}`); let rows = json.table.rows; let isHeaderMissing = cols.every(c => c.startsWith('Col_') || c === ''); if (isHeaderMissing && rows && rows.length > 0) { cols = rows[0].c.map((c, i) => c && c.v ? String(c.v).trim() : cols[i]); rows.shift(); } return rows.map(r => { let obj = {}; if (r && r.c) r.c.forEach((cell, i) => { let key = cols[i] || `Col_${i}`; obj[key] = cell ? cell.v : null; }); return obj; }); } catch(e) { return []; }
         }
 
         async function reloadData() {
@@ -517,25 +548,15 @@
         function toggleSection(containerId, arrowId) { const c = document.getElementById(containerId); const a = document.getElementById(arrowId); if (c) c.classList.toggle('hidden'); if (a) a.classList.toggle('rotate-180'); }
         function toggleSubmenu(id) { toggleSection(id, `arrow-${id}`); }
         
-        // LOGIKA BARU UNTUK OFF-CANVAS SIDEBAR (DRAWER MENU)
         function toggleSidebar() { 
             const sidebar = document.getElementById('sidebar'); 
             const overlay = document.getElementById('sidebar-overlay');
-            
             if (sidebar.classList.contains('-translate-x-full')) {
-                // Tampilkan Menu
                 sidebar.classList.remove('-translate-x-full'); 
-                if(overlay) {
-                    overlay.classList.remove('hidden');
-                    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-                }
+                if(overlay) { overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 10); }
             } else {
-                // Sembunyikan Menu
                 sidebar.classList.add('-translate-x-full'); 
-                if(overlay) {
-                    overlay.classList.add('opacity-0');
-                    setTimeout(() => overlay.classList.add('hidden'), 300);
-                }
+                if(overlay) { overlay.classList.add('opacity-0'); setTimeout(() => overlay.classList.add('hidden'), 300); }
             } 
         }
 
@@ -548,11 +569,11 @@
             let html = `<thead><tr>`; headers.forEach(h => { html += `<th class="px-6 py-4 text-[10px] font-black uppercase text-slate-500 tracking-wider">${h.replace(/_/g, ' ')}</th>`; }); html += `</tr></thead><tbody class="divide-y divide-slate-100 text-slate-700">`;
             const displayRows = limit ? rowsList.slice(0, limit) : rowsList;
             if (displayRows.length === 0) { html += `<tr><td colspan="${headers.length}" class="px-6 py-12 text-center text-slate-400 font-bold"><i class="fa-solid fa-folder-open text-2xl mb-2 block"></i> Data Kosong</td></tr>`; } 
-            else { displayRows.forEach(row => { html += `<tr>`; headers.forEach(h => { let val = row[h] != null ? row[h] : '-'; if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian)/i.test(h)) val = formatIDR(val); if (val === '❌ Tidak Safe' || val === '⚠️ Perlu Evaluasi' || val === 'VERY POOR' || val === 'ZERO' || val === '🔴 Kritis' || val === '🟠 Tinggi') { val = `<span class="inline-flex items-center text-[10px] text-rose-700 font-black bg-rose-100 px-3 py-1 rounded-full"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i>${val.replace(/❌|⚠️|🔴|🟠/g, '')}</span>`; } else if (val === '✅ Safe' || val === 'GOOD' || val === 'Terverifikasi' || val === 'Aman.') { val = `<span class="inline-flex items-center text-[10px] text-emerald-700 font-black bg-emerald-100 px-3 py-1 rounded-full"><i class="fa-solid fa-circle-check mr-1.5"></i>${val.replace('✅', '')}</span>`; } else if (val === '⚠️ Anomali Waktu' || val === 'POOR' || val === 'Anomali' || val === '🟡 Menengah') { val = `<span class="inline-flex items-center text-[10px] text-amber-700 font-black bg-amber-100 px-3 py-1 rounded-full"><i class="fa-solid fa-circle-exclamation mr-1.5"></i>${val.replace(/⚠️|🟡/g, '')}</span>`; } html += `<td class="px-6 py-4 font-medium text-xs whitespace-nowrap">${val}</td>`; }); html += `</tr>`; }); } table.innerHTML = html + `</tbody>`;
+            else { displayRows.forEach(row => { html += `<tr>`; headers.forEach(h => { let val = row[h] != null ? row[h] : '-'; if (typeof val === 'number' && /(revenue|income|laba|biaya|pengembalian|harga)/i.test(h)) val = formatIDR(val); html += `<td class="px-6 py-4 font-medium text-xs whitespace-nowrap">${val}</td>`; }); html += `</tr>`; }); } table.innerHTML = html + `</tbody>`;
         }
 
         // =========================================================
-        // FUNGSI FILE DROPZONE & AI ANALYZER
+        // DROPZONES & AI ANALYZERS
         // =========================================================
         function setupAllDropZones() {
             setupDropZoneHelper('drop-zone-pm', 'input-file-pm', handlePMDrop, false);
@@ -704,7 +725,7 @@
         }
 
         // =========================================================
-        // LOGIKA RENDER DATA SPREADSHEET
+        // RENDER DATA SPREADSHEET & SIMONA UPDATE
         // =========================================================
         function renderActiveView(data) {
             try {
@@ -798,16 +819,120 @@
                     }
                 }
                 else if (currentView === 'operational') {
-                    let arr = data['operational'] || []; let totalU = 0, totalV = 0; let tableData = arr.map(d => { let keys = Object.keys(d); let kG = keys[6] || 'Kolom_G'; let kH = keys[7] || 'Kolom_H'; let kU = keys[20] || 'Kolom_U'; let kV = keys[21] || 'Kolom_V'; let valU = parseFlexibleNumber(d[kU]); let valV = parseFlexibleNumber(d[kV]); totalU += valU; totalV += valV; return { [kG]: d[kG] || '-', [kH]: d[kH] || '-', [kU]: valU, [kV]: valV }; }); 
-                    document.getElementById('ops-kpi-u').innerText = formatIDR(totalU); document.getElementById('ops-kpi-v').innerText = formatIDR(totalV);
-                    if (tableData.length > 0) buildTable('table-operational', Object.keys(tableData[0]), tableData, 100);
-                    
+                    let arr = data['operational'] || [];
+                    if (arr.length === 0) {
+                        document.getElementById('simona-kpi-total').innerText = 'Rp 0';
+                        document.getElementById('simona-kpi-count').innerText = '0 Item';
+                        document.getElementById('simona-category-cards').innerHTML = '<div class="col-span-full text-slate-400 text-center py-4">Data kosong.</div>';
+                        buildTable('table-operational', ['Keterangan'], []);
+                        return;
+                    }
+
+                    let keys = Object.keys(arr[0] || {});
+                    let keyPeriode = keys[0];  // Kolom A
+                    let keyCluster = keys[2] || keys[1]; // Kolom C
+                    let keyHarga = keys[14] || keys[keys.length - 1]; // Kolom O (Harga)
+                    let keyKategori = keys.find(k => /kategori|category|jenis|group|tipe/i.test(k)) || keys[1] || keys[3];
+
+                    // Populate dropdown filter
+                    updateDropdownOptions('filter-simona-periode', arr, [keyPeriode], 'Periode');
+                    updateDropdownOptions('filter-simona-cluster', arr, [keyCluster], 'Cluster');
+
+                    let fPeriode = document.getElementById('filter-simona-periode').value;
+                    let fCluster = document.getElementById('filter-simona-cluster').value;
+
+                    let filteredArr = arr.filter(d => {
+                        let pVal = d[keyPeriode] != null ? String(d[keyPeriode]).trim() : '-';
+                        let cVal = d[keyCluster] != null ? String(d[keyCluster]).trim() : '-';
+                        let matchP = (fPeriode === 'ALL' || pVal === fPeriode);
+                        let matchC = (fCluster === 'ALL' || cVal === fCluster);
+                        return matchP && matchC;
+                    });
+
+                    let totalNominal = 0;
+                    let categoryMap = {};
+                    let tableRows = filteredArr.map(d => {
+                        let pVal = d[keyPeriode] || '-';
+                        let cVal = d[keyCluster] || '-';
+                        let catVal = d[keyKategori] || 'Lainnya';
+                        let hargaVal = parseFlexibleNumber(d[keyHarga]);
+
+                        totalNominal += hargaVal;
+                        if (!categoryMap[catVal]) categoryMap[catVal] = 0;
+                        categoryMap[catVal] += hargaVal;
+
+                        return {
+                            'Periode': pVal,
+                            'Cluster': cVal,
+                            'Kategori': catVal,
+                            'Harga': hargaVal,
+                            ...d
+                        };
+                    });
+
+                    document.getElementById('simona-kpi-total').innerText = formatIDR(totalNominal);
+                    document.getElementById('simona-kpi-count').innerText = filteredArr.length + ' Item';
+
+                    // Render Detail Cards per Kategori
+                    let cardsContainer = document.getElementById('simona-category-cards');
+                    if (cardsContainer) {
+                        let cardHTML = '';
+                        let sortedCats = Object.keys(categoryMap).sort((a, b) => categoryMap[b] - categoryMap[a]);
+                        if (sortedCats.length === 0) {
+                            cardHTML = `<div class="col-span-full text-slate-400 text-center py-4 font-bold">Tidak ada data kategori.</div>`;
+                        } else {
+                            sortedCats.forEach(cat => {
+                                let nominal = categoryMap[cat];
+                                let pct = totalNominal > 0 ? ((nominal / totalNominal) * 100).toFixed(1) : 0;
+                                cardHTML += `
+                                <div class="premium-card p-5 bg-white flex flex-col justify-between border-l-4 border-l-amber-500 shadow-sm">
+                                    <div>
+                                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate" title="${cat}">${cat}</p>
+                                        <h4 class="text-lg font-black text-slate-800 mt-2">${formatIDR(nominal)}</h4>
+                                    </div>
+                                    <div class="mt-4 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
+                                        <span class="font-medium">Kontribusi</span>
+                                        <span class="font-bold text-amber-600">${pct}%</span>
+                                    </div>
+                                </div>`;
+                            });
+                        }
+                        cardsContainer.innerHTML = cardHTML;
+                    }
+
+                    // Render Table & Chart
+                    buildTable('table-operational', Object.keys(tableRows[0] || {}).slice(0, 8), tableRows, 150);
+
                     const aiBoxOps = document.getElementById('ai-insight-ops');
-                    if (aiBoxOps && tableData.length > 0) {
-                        document.getElementById('ai-text-ops').innerHTML = `Analisis Data Operational menunjukkan serapan biaya kolom U sebesar <b>${formatIDR(totalU)}</b> dibandingkan kolom V sebesar <b>${formatIDR(totalV)}</b>. Perbedaan signifikan pada pos ini membutuhkan justifikasi teknis di lapangan.`;
+                    if (aiBoxOps) {
+                        document.getElementById('ai-text-ops').innerHTML = `Analisis SIMONA menampilkan total pengeluaran sebesar <b>${formatIDR(totalNominal)}</b> dari ${filteredArr.length} record operasional. Kategori pengeluaran tertinggi mendominasi penyerapan anggaran wilayah Kalimantan.`;
                         aiBoxOps.classList.remove('hidden');
                     }
-                    if (charts['operational_chart']) charts['operational_chart'].destroy(); const ctxOps = document.getElementById('chart-operational'); if (ctxOps && tableData.length > 0) { let chartData = tableData.slice(0, 30); let labelKey = Object.keys(tableData[0])[0]; let uKey = Object.keys(tableData[0])[2]; let vKey = Object.keys(tableData[0])[3]; charts['operational_chart'] = new Chart(ctxOps, { type: 'bar', data: { labels: chartData.map(d => String(d[labelKey]).substring(0,15)), datasets: [ { label: 'Kolom U', data: chartData.map(d => d[uKey]), backgroundColor: '#10b981', borderRadius: 4 }, { label: 'Kolom V', data: chartData.map(d => d[vKey]), backgroundColor: '#4f46e5', borderRadius: 4 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false } } } }); }
+
+                    if (charts['operational_chart']) charts['operational_chart'].destroy();
+                    const ctxOps = document.getElementById('chart-operational');
+                    if (ctxOps) {
+                        let chartCats = Object.keys(categoryMap);
+                        let chartVals = chartCats.map(c => categoryMap[c]);
+                        charts['operational_chart'] = new Chart(ctxOps, {
+                            type: 'bar',
+                            data: {
+                                labels: chartCats,
+                                datasets: [{
+                                    label: 'Total Harga (Rp)',
+                                    data: chartVals,
+                                    backgroundColor: '#eab308',
+                                    borderRadius: 6
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { datalabels: { display: false } },
+                                scales: { y: { ticks: { callback: function(val) { return 'Rp ' + (val / 1000000).toFixed(0) + 'jt'; } } } }
+                            }
+                        });
+                    }
                 }
                 else if (currentView === 'sdm') {
                     let s = (data['sdm'] || []).reduce((acc, r) => { let k = extractStringValue(r, ['kepemilikan', 'nama']); if (k === '-') k = 'Tanpa Pemilik'; if (!acc[k]) acc[k] = 0; Object.keys(r).forEach(key => { if (!/kepemilikan|nama/i.test(key) && !isNaN(parseFloat(r[key]))) { acc[k] += parseFloat(r[key]); } }); return acc; }, {}); let tableData = Object.keys(s).map(k => ({ 'Kepemilikan': k, 'Total_Tools': s[k] })); if (tableData.length > 0) buildTable('table-sdm', ['Kepemilikan', 'Total_Tools'], tableData);
