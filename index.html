@@ -138,8 +138,6 @@
             <a href="#sva" id="btn-sva" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-wallet text-lg w-8 text-emerald-500"></i><span>Monitoring SVA</span></a>
             <a href="#kpi" id="btn-kpi" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-gauge-high text-lg w-8 text-indigo-500"></i><span>Data KPI</span></a>
             <a href="#operational" id="btn-operational" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-gears text-lg w-8 text-amber-500"></i><span>SIMONA</span></a>
-            <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-satellite-dish text-lg w-8 text-sky-500"></i><span>SIMAKIN</span></a>
-            <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-tower-broadcast text-lg w-8 text-pink-500"></i><span>G348TSEL</span></a>
             <a href="#sdm" id="btn-sdm" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-users-gear text-lg w-8 text-purple-500"></i><span>SDM & Tools</span></a>
 
             <div class="pt-4 pb-1"><p class="px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Database & Tracking</p></div>
@@ -179,6 +177,11 @@
                     <a href="#pm-curvas" id="btn-pm-curvas" class="menu-btn block px-4 py-2.5 text-xs font-medium rounded-lg text-slate-500">Curva S Progress</a>
                 </div>
             </div>
+            
+            <!-- INTEGRASI MODUL SIDEBAR -->
+            <div class="pt-4 pb-1"><p class="px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Integrasi Modul</p></div>
+            <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-satellite-dish text-lg w-8 text-sky-500"></i><span>SIMAKIN</span></a>
+            <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-tower-broadcast text-lg w-8 text-pink-500"></i><span>G348TSEL</span></a>
         </nav>
         
         <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center text-xs">
@@ -254,7 +257,7 @@
                     <p class="text-sm font-medium text-slate-500 mt-1">Pilih modul di bawah ini untuk melihat detail analisis dari setiap departemen.</p>
                 </div>
                 
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
                     <a href="#sva" class="menu-grid-card" style="--hover-color: #10b981;">
                         <div class="menu-grid-icon-box bg-emerald-50 text-emerald-500"><i class="fa-solid fa-wallet"></i></div>
                         <h3 class="font-black text-slate-800 text-sm">Dashboard SVA</h3>
@@ -285,24 +288,34 @@
                         <p class="text-[11px] text-slate-400 mt-2 font-medium">Monitoring Pengeluaran Operasional</p>
                     </a>
                     
-                    <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-grid-card" style="--hover-color: #0ea5e9;">
-                        <div class="menu-grid-icon-box bg-sky-50 text-sky-500"><i class="fa-solid fa-satellite-dish"></i></div>
-                        <h3 class="font-black text-slate-800 text-sm">SIMAKIN</h3>
-                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Platform Aplikasi Terintegrasi</p>
-                    </a>
-
-                    <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-grid-card" style="--hover-color: #ec4899;">
-                        <div class="menu-grid-icon-box bg-pink-50 text-pink-500"><i class="fa-solid fa-tower-broadcast"></i></div>
-                        <h3 class="font-black text-slate-800 text-sm">G348TSEL</h3>
-                        <p class="text-[11px] text-slate-400 mt-2 font-medium">Dashboard Monitoring Area 348 TSEL</p>
-                    </a>
-                    
                     <a href="#kpi" class="menu-grid-card" style="--hover-color: #3b82f6;">
                         <div class="menu-grid-icon-box bg-blue-50 text-blue-500"><i class="fa-solid fa-gauge-high"></i></div>
                         <h3 class="font-black text-slate-800 text-sm">Indikator KPI</h3>
                         <p class="text-[11px] text-slate-400 mt-2 font-medium">Laporan pencapaian target utama</p>
                     </a>
                 </div>
+
+                <!-- INTEGRASI MODUL (BARU) -->
+                <div class="pt-6 border-t border-slate-200/60">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-black text-slate-800 tracking-tight">Integrasi <span class="text-sky-500">Modul</span></h3>
+                        <p class="text-xs font-medium text-slate-500 mt-1">Akses cepat ke sistem eksternal dan aplikasi operasional lainnya.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-grid-card border-sky-100 shadow-sm" style="--hover-color: #0ea5e9;">
+                            <div class="menu-grid-icon-box bg-sky-50 text-sky-500"><i class="fa-solid fa-satellite-dish"></i></div>
+                            <h3 class="font-black text-slate-800 text-sm">SIMAKIN</h3>
+                            <p class="text-[11px] text-slate-400 mt-2 font-medium">Platform Aplikasi Terintegrasi</p>
+                        </a>
+
+                        <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-grid-card border-pink-100 shadow-sm" style="--hover-color: #ec4899;">
+                            <div class="menu-grid-icon-box bg-pink-50 text-pink-500"><i class="fa-solid fa-tower-broadcast"></i></div>
+                            <h3 class="font-black text-slate-800 text-sm">G348TSEL</h3>
+                            <p class="text-[11px] text-slate-400 mt-2 font-medium">Dashboard Monitoring Area 348</p>
+                        </a>
+                    </div>
+                </div>
+
             </section>
             
             <!-- ===================================== -->
@@ -401,7 +414,7 @@
                     </div>
                 </div>
                 
-                <!-- NEW SECTION: KOMPARASI PERFORMA PIC (OPS vs MBP) -->
+                <!-- KOMPARASI PERFORMA PIC (OPS vs MBP) -->
                 <div class="mb-8">
                     <div class="flex items-center justify-between mb-4 mt-2">
                         <h4 class="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center">
@@ -414,7 +427,7 @@
                     </div>
                 </div>
 
-                <!-- ANALISIS ANOMALI BBM (ASLI) -->
+                <!-- ANALISIS ANOMALI BBM -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="premium-card overflow-hidden bg-white flex flex-col h-[450px]">
                         <div class="p-6 border-b border-slate-100 bg-rose-50/30"><h4 class="text-xs font-black text-rose-700 uppercase tracking-widest flex items-center"><i class="fa-solid fa-user-shield mr-2"></i>Daftar PIC Berisiko (Anomali Waktu & BBM)</h4></div>
@@ -585,10 +598,13 @@
                 keys.forEach((key, idx) => { globalDataset[key] = results[idx].status === 'fulfilled' ? results[idx].value : []; });
                 if (badge) { badge.className = 'px-2 py-1 rounded bg-emerald-100 text-emerald-700 font-bold'; badge.innerText = 'Online'; }
                 
-                // MENGHIDUPKAN AI SMARTKUT SETELAH DATA LOADED
+                // Panggil AI (Aman jika data kosong)
                 renderSmartKUT();
                 
-            } catch (err) { if (badge) { badge.className = 'px-2 py-1 rounded bg-rose-100 text-rose-700 font-bold'; badge.innerText = 'Offline'; } } finally {
+            } catch (err) { 
+                console.error(err);
+                if (badge) { badge.className = 'px-2 py-1 rounded bg-rose-100 text-rose-700 font-bold'; badge.innerText = 'Offline'; } 
+            } finally {
                 if (splash) { splash.classList.add('opacity-0', 'pointer-events-none'); setTimeout(() => splash.style.display = 'none', 700); }
                 if (icon) icon.classList.remove('animate-spin'); if (!window.location.hash) { window.location.hash = '#home'; } else { evaluateRoute(); }
             }
@@ -645,6 +661,11 @@
             dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('border-indigo-400', 'bg-indigo-50', 'scale-105'); if (e.dataTransfer.files.length) { if(allowMultiple) { Array.from(e.dataTransfer.files).forEach(f => callback(f)); } else { callback(e.dataTransfer.files[0]); } } });
             fileInput.addEventListener('change', () => { if (fileInput.files.length) { if(allowMultiple) { Array.from(fileInput.files).forEach(f => callback(f)); } else { callback(fileInput.files[0]); } } });
         }
+        
+        // Stubs for offline AI capabilities so it doesn't crash
+        function handlePMDrop(file) { console.log('Upload PM Module Disabled', file); }
+        function handleProdDrop(file) { console.log('Upload Prod Module Disabled', file); }
+        function resetProdData() {}
 
         // =========================================================
         // AI SMARTKUT GLOBAL SYNTHESIS LOGIC
@@ -654,7 +675,6 @@
             if (!smartContainer) return;
             
             try {
-                // 1. Ekstrak Total SVA
                 let arrSva = globalDataset['sva'] || [];
                 let totalSvaNI = 0, totalSvaRev = 0;
                 arrSva.forEach(d => {
@@ -667,7 +687,6 @@
                 });
                 let avgNpm = totalSvaRev > 0 ? ((totalSvaNI / totalSvaRev) * 100).toFixed(1) : 0;
 
-                // 2. Ekstrak Total MBP
                 let arrMbp = globalDataset['mbp-rh'] || [];
                 let totalMbpRev = 0, totalMbpLit = 0, anomaliCount = 0;
                 arrMbp.forEach(d => {
@@ -678,11 +697,12 @@
                     if (Math.abs(dH - dRH) >= 1) anomaliCount++;
                 });
 
-                // 3. Ekstrak Total Ops
                 let arrOps = globalDataset['operational'] || [];
                 let totalOpsCost = 0;
-                let keyOpsJumlah = (Object.keys(arrOps[0] || {})).find(k => k.toLowerCase().includes('jumlah') || k.toLowerCase().includes('total')) || 'Col_15';
-                arrOps.forEach(d => { totalOpsCost += parseFlexibleNumber(d[keyOpsJumlah] || d[Object.keys(d)[Object.keys(d).length-1]]); });
+                if (arrOps.length > 0) {
+                    let keyOpsJumlah = (Object.keys(arrOps[0] || {})).find(k => k.toLowerCase().includes('jumlah') || k.toLowerCase().includes('total')) || 'Col_15';
+                    arrOps.forEach(d => { totalOpsCost += parseFlexibleNumber(d[keyOpsJumlah] || d[Object.keys(d)[Object.keys(d).length-1]]); });
+                }
                 
                 // Construct Magic Text
                 let html = `
@@ -704,7 +724,8 @@
                 `;
                 smartContainer.innerHTML = html;
             } catch (err) {
-                smartContainer.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-400 mr-2"></i> Gagal menghasilkan analisa AI: Data belum lengkap.`;
+                console.error("SmartKUT Error:", err);
+                smartContainer.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-400 mr-2"></i> Gagal menghasilkan analisa AI: Data belum siap.`;
             }
         }
 
@@ -826,7 +847,6 @@
                     let arrMbp = data['mbp-rh'] || []; 
                     let arrOps = data['operational'] || [];
                     
-                    // -- 1. Parsing Operasional Data untuk total biaya per PIC --
                     let opsCostMap = {};
                     if(arrOps.length > 0) {
                         let keysOps = Object.keys(arrOps[0] || {});
@@ -847,7 +867,6 @@
                         });
                     }
 
-                    // -- 2. Parsing MBP Data (Anomali, Rev, Backup Hrs) --
                     let tableData = []; let picAnomaliCount = {}; let picMbpMap = {}; 
                     
                     arrMbp.forEach(d => { 
@@ -860,14 +879,12 @@
                         let ltr = parseFlexibleNumber(d['Liter'] || extractValue(d, ['liter'])); 
                         let rev = parseFlexibleNumber(d['Total'] || d['Estimasi Revenue'] || extractValue(d, ['revenue']));
                         
-                        // Kumpulkan Rev & Backup Hrs per PIC
                         if(picClean && picClean !== '-') {
                             if(!picMbpMap[picClean]) picMbpMap[picClean] = { rev: 0, backupHrs: 0 };
                             picMbpMap[picClean].rev += rev;
                             picMbpMap[picClean].backupHrs += dRH;
                         }
 
-                        // Anomali Evaluasi
                         if (selisih >= 1) { 
                             let isTidakSafe = (ltr > 20 && dRH <= 5); let status = isTidakSafe ? '❌ Tidak Safe' : '⚠️ Anomali Waktu'; 
                             if (picRaw !== '-' && picRaw !== '') { 
@@ -878,11 +895,9 @@
                         } 
                     });
 
-                    // -- 3. Render Komparasi Ops vs MBP --
                     let kompContainer = document.getElementById('mbp-bbm-komparasi');
                     if(kompContainer) {
                         let kompHTML = '';
-                        // Dapatkan PIC yang memiliki Ops Cost > 0
                         let sortedKompPICs = Object.keys(opsCostMap).sort((a,b) => opsCostMap[b].cost - opsCostMap[a].cost).slice(0, 6);
                         
                         if(sortedKompPICs.length === 0) {
@@ -935,7 +950,6 @@
                         kompContainer.innerHTML = kompHTML;
                     }
 
-                    // -- 4. Render Anomali Log & Charts --
                     if (tableData.length > 0) buildTable('table-mbp-bbm', ['Nomor_Tiket', 'Nama_PIC', 'Total_Liter', 'Delta_Hour', 'Delta_RH', 'Status_Evaluasi'], tableData, 200);
                     let evaluasiPIC = Object.keys(picAnomaliCount).filter(pic => picAnomaliCount[pic].count > 1).sort((a, b) => picAnomaliCount[b].count - picAnomaliCount[a].count).map(pic => { let cnt = picAnomaliCount[pic].count; let risk = cnt > 5 ? '🔴 Kritis' : (cnt > 3 ? '🟠 Tinggi' : '🟡 Menengah'); return {'Nama_PIC': pic, 'Total_Kasus_Tidak_Safe': cnt, 'BBM_Terbuang': picAnomaliCount[pic].fuel.toFixed(1) + ' L', 'Tingkat_Risiko': risk }; });
                     if (evaluasiPIC.length > 0) buildTable('table-mbp-bbm-evaluasi', Object.keys(evaluasiPIC[0]), evaluasiPIC); else buildTable('table-mbp-bbm-evaluasi', ['Keterangan'], [{ Keterangan: 'Aman.' }]);
