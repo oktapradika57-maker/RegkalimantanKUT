@@ -831,7 +831,7 @@
                     let keys = Object.keys(arr[0] || {});
                     let keyPeriode = keys[0];  // Kolom A
                     let keyCluster = keys[2] || keys[1]; // Kolom C
-                    let keyHarga = keys[15] || keys[keys.length - 1]; // Kolom P (Jumlah)
+                    let keyJumlah = keys[15] || keys[keys.length - 1]; // Kolom P (Jumlah)
                     let keyKategori = keys.find(k => /kategori|category|jenis|group|tipe/i.test(k)) || keys[1] || keys[3];
 
                     // Populate dropdown filter
