@@ -118,8 +118,8 @@
                 <div class="inline-block bg-white/10 p-4 rounded-2xl mb-4 border border-white/10 shadow-lg">
                     <img src="koperasi-jasa-konstruksi-tower-event-organizer-network-monitoring-telekomunikasi-kisel-group-logo-kut.webp" onerror="this.src='https://via.placeholder.com/150x50?text=LOGO'" alt="Logo KUT" class="h-12 w-auto object-contain brightness-0 invert">
                 </div>
-                <h2 class="text-2xl font-black text-white tracking-tight">Kinarya Utama Teknik</h2>
-                <p class="text-xs text-slate-300 mt-2 font-medium uppercase tracking-widest">Enterprise Dashboard</p>
+                <h2 class="text-2xl font-black text-white tracking-tight">KUT Enterprise System</h2>
+                <p class="text-xs text-slate-300 mt-2 font-medium uppercase tracking-widest">Authorized Access Only</p>
             </div>
 
             <div class="space-y-5">
@@ -252,6 +252,11 @@
             <div class="pt-4 pb-1"><p class="px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Integrasi Modul</p></div>
             <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-satellite-dish text-lg w-8 text-sky-500"></i><span>SIMAKIN</span></a>
             <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-tower-broadcast text-lg w-8 text-pink-500"></i><span>G348TSEL</span></a>
+            
+            <!-- TAMBAHAN MENU SIRAPI DI SIDEBAR -->
+            <a href="https://sirapi-kut.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-fire text-lg w-8 text-orange-500"></i><span>SIRAPI</span></a>
+            <!-- END TAMBAHAN MENU SIRAPI DI SIDEBAR -->
+            
         </nav>
         
         <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center text-xs">
@@ -373,7 +378,8 @@
                     <div class="mb-4">
                         <h3 class="text-xl font-black text-slate-800 tracking-tight">Integrasi <span class="text-sky-500">Modul</span></h3>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- GRID DIMODIFIKASI MENJADI 3 KOLOM AGAR SIRAPI BISA MASUK RAPI -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-grid-card border-sky-100 shadow-sm" style="--hover-color: #0ea5e9;">
                             <div class="menu-grid-icon-box bg-sky-50 text-sky-500"><i class="fa-solid fa-satellite-dish"></i></div>
                             <h3 class="font-black text-slate-800 text-sm">SIMAKIN</h3>
@@ -384,6 +390,13 @@
                             <h3 class="font-black text-slate-800 text-sm">G348TSEL</h3>
                             <p class="text-[11px] text-slate-400 mt-2 font-medium">Dashboard Monitoring Area 348</p>
                         </a>
+                        <!-- TAMBAHAN CARD MENU SIRAPI DI DASHBOARD -->
+                        <a href="https://sirapi-kut.streamlit.app/" target="_blank" class="menu-grid-card border-orange-100 shadow-sm" style="--hover-color: #f97316;">
+                            <div class="menu-grid-icon-box bg-orange-50 text-orange-500"><i class="fa-solid fa-fire"></i></div>
+                            <h3 class="font-black text-slate-800 text-sm">SIRAPI</h3>
+                            <p class="text-[11px] text-slate-400 mt-2 font-medium">Sistem Informasi Registrasi & API</p>
+                        </a>
+                        <!-- END TAMBAHAN MENU SIRAPI -->
                     </div>
                 </div>
             </section>
