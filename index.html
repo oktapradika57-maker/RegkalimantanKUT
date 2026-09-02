@@ -77,27 +77,10 @@
         @keyframes pulseAI { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
 
         /* Login Screen CSS */
-        #login-screen {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            backdrop-filter: blur(10px);
-        }
-        .login-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-        .login-input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-        .login-input:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #38bdf8;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
-        }
+        #login-screen { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); backdrop-filter: blur(10px); }
+        .login-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .login-input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; }
+        .login-input:focus { background: rgba(255, 255, 255, 0.15); border-color: #38bdf8; outline: none; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3); }
         .login-input::placeholder { color: rgba(255, 255, 255, 0.5); }
     </style>
 </head>
@@ -125,7 +108,6 @@
                 <div id="login-error" class="hidden bg-rose-500/20 border border-rose-500/50 text-rose-300 px-4 py-3 rounded-xl text-sm font-bold flex items-center gap-2">
                     <i class="fa-solid fa-triangle-exclamation"></i> Username atau Password salah!
                 </div>
-
                 <div>
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Username</label>
                     <div class="relative">
@@ -133,7 +115,6 @@
                         <input type="text" id="username-input" onkeypress="if(event.key === 'Enter') checkLogin()" class="login-input w-full rounded-xl pl-12 pr-4 py-3.5 text-sm transition-all" placeholder="Masukkan username..." autocomplete="off">
                     </div>
                 </div>
-                
                 <div>
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Password</label>
                     <div class="relative">
@@ -141,7 +122,6 @@
                         <input type="password" id="password-input" onkeypress="if(event.key === 'Enter') checkLogin()" class="login-input w-full rounded-xl pl-12 pr-4 py-3.5 text-sm transition-all" placeholder="••••••••">
                     </div>
                 </div>
-
                 <button onclick="checkLogin()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] flex justify-center items-center gap-2 mt-4 hover:-translate-y-0.5">
                     <i class="fa-solid fa-right-to-bracket"></i> Masuk Sistem
                 </button>
@@ -674,7 +654,7 @@
         const titleLabels = { 'home': 'Menu Utama', 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'SIMONA Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Konsumsi BBM & Komparasi', 'siadmin': 'SIADMIN (Task & KPI Manager)' };
 
         // ==============================================================
-        // APLIKASI SIADMIN (TASK MANAGER, REPORTING, & EXPORT EXCEL)
+        // APLIKASI SIADMIN (TASK MANAGER, KPI, & EXPORT EXCEL)
         // ==============================================================
         let currentSiadminUser = null;
         let currentSiadminRoleType = null;
@@ -794,23 +774,32 @@
         function getStartOfWeek() { let d = new Date(); d.setHours(0,0,0,0); let day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.setDate(diff)).getTime(); }
         function getStartOfMonth() { let d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1).getTime(); }
 
+        // ==========================================
+        // PROPORTIONAL KPI CALCULATION
+        // ==========================================
         function kalkulasiKPI(adminName) {
             let tasks = getSiadminTasks();
-            let pWeek = 0; let pMonth = 0; let pending = 0;
             let startW = getStartOfWeek(); let startM = getStartOfMonth();
+            let kpi = { wTarget: 0, wEarned: 0, mTarget: 0, mEarned: 0, pending: 0 };
             
             tasks.forEach(t => {
                 if (t.assignee === adminName) {
-                    if (t.status === 'pending' || t.status === 'waiting_approval' || t.status === 'revisi') {
-                        pending++;
-                    } else if (t.status === 'completed' || t.status === 'rejected') {
-                        // Jika rejected, bobotnya adalah -1. Ini otomatis terkurangi.
-                        if (t.completed_at >= startW) pWeek += parseInt(t.weight || 0);
-                        if (t.completed_at >= startM) pMonth += parseInt(t.weight || 0);
+                    if (['pending', 'waiting_approval', 'revisi'].includes(t.status)) kpi.pending++;
+                    
+                    if (t.status === 'completed' || t.status === 'rejected') {
+                        let target = parseInt(t.weight) || 0;
+                        let earned = parseFloat(t.earned) || 0;
+                        if (t.status === 'rejected') earned = -1; // penalty mutlak
+                        
+                        if (t.completed_at >= startW) { kpi.wTarget += target; kpi.wEarned += earned; }
+                        if (t.completed_at >= startM) { kpi.mTarget += target; kpi.mEarned += earned; }
                     }
                 }
             });
-            return { week: pWeek, month: pMonth, pending: pending };
+            
+            kpi.wPct = kpi.wTarget > 0 ? Math.round((kpi.wEarned / kpi.wTarget) * 100) : 0;
+            kpi.mPct = kpi.mTarget > 0 ? Math.round((kpi.mEarned / kpi.mTarget) * 100) : 0;
+            return kpi;
         }
 
         function renderSiadminFlow() {
@@ -834,15 +823,29 @@
                 } else {
                     waitingTasks.forEach(t => {
                         let presetBobot = (t.id.startsWith('T') && t.weight > 0) ? t.weight : '';
+                        let tProg = t.progress || 0;
+                        let tNote = t.notes || 'Tidak ada catatan';
+                        
                         waitingHtml += `
-                        <div class="p-4 border-b border-slate-100 bg-amber-50/30 hover:bg-amber-50 transition-colors">
+                        <div class="p-5 border-b border-slate-100 bg-amber-50/30 hover:bg-amber-50 transition-colors rounded-xl mb-3 shadow-sm border border-amber-100">
                             <h4 class="font-bold text-sm text-slate-800">${t.title}</h4>
-                            <p class="text-[10px] text-slate-500 mt-1 mb-3">Dilaporkan oleh: <b class="text-amber-600">${t.assignee}</b></p>
-                            <div class="flex gap-2 items-center">
-                                <input type="number" id="weight-${t.id}" class="w-16 h-8 text-center border border-slate-300 rounded-lg text-xs font-bold outline-none focus:border-violet-500" placeholder="Poin" title="Tentukan bobot poin" value="${presetBobot}">
-                                <button onclick="siadminAction('${t.id}', 'approve')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"><i class="fa-solid fa-check"></i> Apprv</button>
-                                <button onclick="siadminAction('${t.id}', 'revisi')" class="px-3 py-1.5 bg-amber-100 text-amber-700 hover:bg-amber-500 hover:text-white rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-rotate-left"></i> Revisi</button>
-                                <button onclick="siadminAction('${t.id}', 'reject')" class="px-3 py-1.5 bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-500 hover:text-white rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-xmark"></i> Reject (-1)</button>
+                            <p class="text-[9px] text-slate-500 mt-0.5">Dilaporkan oleh: <b class="text-amber-600">${t.assignee}</b></p>
+                            
+                            <div class="flex items-center gap-2 mt-2 mb-3">
+                                <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded text-[10px] font-black">Progress: ${tProg}%</span>
+                                <span class="bg-white border border-slate-200 px-2 py-0.5 rounded text-[10px] font-medium text-slate-500"><i class="fa-solid fa-comment-dots mr-1"></i> ${tNote}</span>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2 items-center justify-between border-t border-slate-200/60 pt-3">
+                                <div class="flex items-center gap-2">
+                                    <label class="text-[10px] font-bold text-slate-500 uppercase">Target Bobot Max:</label>
+                                    <input type="number" id="weight-${t.id}" class="w-16 h-8 text-center border border-slate-300 rounded-lg text-xs font-bold outline-none focus:border-violet-500" placeholder="Poin" value="${presetBobot}">
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick="siadminAction('${t.id}', 'approve')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[10px] font-bold transition-colors shadow-sm"><i class="fa-solid fa-check mr-1"></i> Apprv Score</button>
+                                    <button onclick="siadminAction('${t.id}', 'revisi')" class="px-3 py-1.5 bg-amber-100 text-amber-700 hover:bg-amber-500 hover:text-white rounded-lg text-[10px] font-bold transition-colors"><i class="fa-solid fa-rotate-left mr-1"></i> Revisi</button>
+                                    <button onclick="siadminAction('${t.id}', 'reject')" class="px-3 py-1.5 bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-500 hover:text-white rounded-lg text-[10px] font-bold transition-colors"><i class="fa-solid fa-xmark mr-1"></i> Reject (-1)</button>
+                                </div>
                             </div>
                         </div>`;
                     });
@@ -859,7 +862,7 @@
                     else sBadge = '<span class="px-2 py-1 bg-slate-100 text-slate-700 rounded text-[9px] font-bold">Pending</span>';
 
                     let dStr = t.completed_at ? new Date(t.completed_at).toLocaleDateString('id-ID', {day:'2-digit', month:'short'}) : '-';
-                    let pStr = (t.status === 'rejected') ? '<span class="text-rose-600 font-black">-1</span>' : ((t.status === 'completed') ? `<span class="text-emerald-600 font-bold">+${t.weight}</span>` : '-');
+                    let pStr = (t.status === 'rejected') ? '<span class="text-rose-600 font-black">-1</span>' : ((t.status === 'completed') ? `<span class="text-emerald-600 font-bold">+${t.earned || 0} <span class="text-[8px] font-normal text-slate-400">/ ${t.weight}</span></span>` : '-');
 
                     historyHtml += `<tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors"><td class="px-4 py-3 text-[9px] text-slate-400 font-mono tracking-tighter">${t.id}</td><td class="px-4 py-3 font-bold text-slate-700 text-[11px]">${t.title}</td><td class="px-4 py-3 text-[11px]">${t.assignee}</td><td class="px-4 py-3">${sBadge}</td><td class="px-4 py-3 text-center">${pStr}</td><td class="px-4 py-3 text-[10px] text-slate-500">${dStr}</td></tr>`;
                 });
@@ -869,17 +872,35 @@
                     <div class="premium-card p-6 bg-white border-t-4 border-t-indigo-500 shadow-sm">
                         <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-chart-simple mr-2"></i> KPI Mawardah</h4>
                         <div class="grid grid-cols-3 gap-3">
-                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100"><p class="text-[9px] font-bold text-indigo-400 uppercase">Poin Minggu Ini</p><h3 class="text-2xl font-black text-indigo-700">${kpiMawardah.week}</h3></div>
-                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100"><p class="text-[9px] font-bold text-indigo-400 uppercase">Poin Bulan Ini</p><h3 class="text-2xl font-black text-indigo-700">${kpiMawardah.month}</h3></div>
-                            <div class="bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="text-[9px] font-bold text-rose-400 uppercase">Tugas Pending</p><h3 class="text-2xl font-black text-rose-700">${kpiMawardah.pending}</h3></div>
+                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100 flex flex-col justify-center">
+                                <p class="text-[9px] font-bold text-indigo-400 uppercase">Akurasi Minggu Ini</p>
+                                <div class="flex items-baseline gap-1 mt-1"><h3 class="text-2xl font-black text-indigo-700">${kpiMawardah.wPct}%</h3><span class="text-[9px] font-bold text-indigo-500">(${kpiMawardah.wEarned}/${kpiMawardah.wTarget})</span></div>
+                            </div>
+                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100 flex flex-col justify-center">
+                                <p class="text-[9px] font-bold text-indigo-400 uppercase">Akurasi Bulan Ini</p>
+                                <div class="flex items-baseline gap-1 mt-1"><h3 class="text-2xl font-black text-indigo-700">${kpiMawardah.mPct}%</h3><span class="text-[9px] font-bold text-indigo-500">(${kpiMawardah.mEarned}/${kpiMawardah.mTarget})</span></div>
+                            </div>
+                            <div class="bg-rose-50 p-3 rounded-xl border border-rose-100 flex flex-col justify-center">
+                                <p class="text-[9px] font-bold text-rose-400 uppercase">Tugas Pending</p>
+                                <h3 class="text-2xl font-black text-rose-700 mt-1">${kpiMawardah.pending}</h3>
+                            </div>
                         </div>
                     </div>
                     <div class="premium-card p-6 bg-white border-t-4 border-t-sky-500 shadow-sm">
                         <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-chart-simple mr-2"></i> KPI M Kiki Firmansyah</h4>
                         <div class="grid grid-cols-3 gap-3">
-                            <div class="bg-sky-50 p-3 rounded-xl border border-sky-100"><p class="text-[9px] font-bold text-sky-400 uppercase">Poin Minggu Ini</p><h3 class="text-2xl font-black text-sky-700">${kpiKiki.week}</h3></div>
-                            <div class="bg-sky-50 p-3 rounded-xl border border-sky-100"><p class="text-[9px] font-bold text-sky-400 uppercase">Poin Bulan Ini</p><h3 class="text-2xl font-black text-sky-700">${kpiKiki.month}</h3></div>
-                            <div class="bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="text-[9px] font-bold text-rose-400 uppercase">Tugas Pending</p><h3 class="text-2xl font-black text-rose-700">${kpiKiki.pending}</h3></div>
+                            <div class="bg-sky-50 p-3 rounded-xl border border-sky-100 flex flex-col justify-center">
+                                <p class="text-[9px] font-bold text-sky-400 uppercase">Akurasi Minggu Ini</p>
+                                <div class="flex items-baseline gap-1 mt-1"><h3 class="text-2xl font-black text-sky-700">${kpiKiki.wPct}%</h3><span class="text-[9px] font-bold text-sky-500">(${kpiKiki.wEarned}/${kpiKiki.wTarget})</span></div>
+                            </div>
+                            <div class="bg-sky-50 p-3 rounded-xl border border-sky-100 flex flex-col justify-center">
+                                <p class="text-[9px] font-bold text-sky-400 uppercase">Akurasi Bulan Ini</p>
+                                <div class="flex items-baseline gap-1 mt-1"><h3 class="text-2xl font-black text-sky-700">${kpiKiki.mPct}%</h3><span class="text-[9px] font-bold text-sky-500">(${kpiKiki.mEarned}/${kpiKiki.mTarget})</span></div>
+                            </div>
+                            <div class="bg-rose-50 p-3 rounded-xl border border-rose-100 flex flex-col justify-center">
+                                <p class="text-[9px] font-bold text-rose-400 uppercase">Tugas Pending</p>
+                                <h3 class="text-2xl font-black text-rose-700 mt-1">${kpiKiki.pending}</h3>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -891,7 +912,7 @@
                             <div><label class="text-[10px] font-bold text-slate-500 uppercase">Deskripsi Pekerjaan</label><input type="text" id="add-task-title" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-violet-500 outline-none" placeholder="Contoh: Rekap data PJB bulan ini..."></div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div><label class="text-[10px] font-bold text-slate-500 uppercase">Tugaskan Ke</label><select id="add-task-assignee" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"><option value="Mawardah">Mawardah (Admin Ops)</option><option value="M Kiki Firmansyah">M Kiki Firmansyah (Admin NOP)</option></select></div>
-                                <div><label class="text-[10px] font-bold text-slate-500 uppercase">Bobot / Poin</label><input type="number" id="add-task-weight" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-violet-500 outline-none" placeholder="10"></div>
+                                <div><label class="text-[10px] font-bold text-slate-500 uppercase">Bobot / Poin Max</label><input type="number" id="add-task-weight" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-violet-500 outline-none" placeholder="Misal: 10"></div>
                             </div>
                             <div><label class="text-[10px] font-bold text-slate-500 uppercase">Batas Waktu (Deadline)</label><input type="date" id="add-task-deadline" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-violet-500 outline-none"></div>
                             <button onclick="siadminAssignTask()" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-xl transition-all shadow-[0_4px_10px_rgba(139,92,246,0.3)] hover:-translate-y-0.5 mt-2"><i class="fa-solid fa-plus mr-1"></i> Berikan Tugas</button>
@@ -900,7 +921,7 @@
                     
                     <div class="premium-card bg-white p-6 shadow-sm flex flex-col h-[400px]">
                         <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest mb-2 border-b border-slate-100 pb-3 flex justify-between items-center">
-                            <span><i class="fa-solid fa-list-check text-amber-500 mr-2"></i> Validasi Pekerjaan Admin</span>
+                            <span><i class="fa-solid fa-list-check text-amber-500 mr-2"></i> Validasi Progres Pekerjaan</span>
                             <span class="bg-rose-500 text-white text-[9px] px-2 py-0.5 rounded-full shadow-sm">${waitingTasks.length} Menunggu</span>
                         </h4>
                         <div class="flex-1 overflow-y-auto mini-scroll pr-1">${waitingHtml}</div>
@@ -915,7 +936,7 @@
                     <div class="overflow-x-auto mini-scroll max-h-[350px]">
                         <table class="w-full text-left text-xs whitespace-nowrap text-slate-600 custom-table">
                             <thead class="bg-slate-50 text-slate-500 sticky top-0 z-10 shadow-sm border-b-2 border-slate-200">
-                                <tr><th class="px-4 py-3 font-black">ID Tugas</th><th class="px-4 py-3 font-black">Deskripsi Pekerjaan</th><th class="px-4 py-3 font-black">PIC</th><th class="px-4 py-3 font-black">Status</th><th class="px-4 py-3 font-black text-center">Poin</th><th class="px-4 py-3 font-black">Tgl Selesai</th></tr>
+                                <tr><th class="px-4 py-3 font-black">ID Tugas</th><th class="px-4 py-3 font-black">Deskripsi Pekerjaan</th><th class="px-4 py-3 font-black">PIC</th><th class="px-4 py-3 font-black">Status</th><th class="px-4 py-3 font-black text-center">Poin</th><th class="px-4 py-3 font-black">Tgl Validasi</th></tr>
                             </thead>
                             <tbody>
                                 ${historyHtml || '<tr><td colspan="6" class="text-center py-8 text-slate-400 font-bold">Belum ada riwayat pekerjaan yang terekam.</td></tr>'}
@@ -934,28 +955,47 @@
                 let myCompletedList = myTasks.filter(t => t.status === 'completed' || t.status === 'rejected').sort((a,b) => b.completed_at - a.completed_at).slice(0, 10);
                 
                 if (myPendingList.length === 0) {
-                    pendingHtml = `<div class="p-8 text-center text-slate-400 font-bold bg-slate-50 rounded-xl border border-dashed border-slate-200 mt-4"><i class="fa-solid fa-face-laugh-beam text-3xl mb-2 text-slate-300 block"></i>Kerja bagus! Tidak ada tugas yang pending.</div>`;
+                    pendingHtml = `<div class="p-8 text-center text-slate-400 font-bold bg-slate-50 rounded-xl border border-dashed border-slate-200 mt-4"><i class="fa-solid fa-face-laugh-beam text-3xl mb-2 text-slate-300 block"></i>Kerja bagus! Tidak ada instruksi tugas yang aktif.</div>`;
                 } else {
                     myPendingList.forEach(t => {
                         let isWaiting = t.status === 'waiting_approval';
                         let isRevisi = t.status === 'revisi';
                         
                         let badge = '';
-                        if(isWaiting) badge = `<span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-black rounded ml-2 shadow-sm">Menunggu Validasi Koordinator</span>`;
+                        if(isWaiting) badge = `<span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-black rounded ml-2 shadow-sm">Menunggu Validasi</span>`;
                         else if(isRevisi) badge = `<span class="px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-black rounded ml-2 shadow-sm border border-rose-200 animate-pulse">Butuh Revisi Segera</span>`;
-                        else badge = `<span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded ml-2 shadow-sm">Instruksi Baru</span>`;
+                        else badge = `<span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded ml-2 shadow-sm">Instruksi Aktif</span>`;
 
                         let btn = isWaiting 
-                            ? `<button disabled class="px-4 py-2 bg-slate-100 text-slate-400 rounded-xl text-xs font-bold"><i class="fa-solid fa-clock"></i> Diproses...</button>` 
-                            : `<button onclick="siadminAction('${t.id}', 'complete')" class="px-4 py-2 ${isRevisi ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-500 hover:bg-emerald-600'} text-white rounded-xl text-xs font-bold transition-all shadow-[0_4px_10px_rgba(16,185,129,0.3)] hover:-translate-y-0.5"><i class="fa-solid fa-paper-plane mr-1"></i> ${isRevisi ? 'Submit Revisi' : 'Laporkan Selesai'}</button>`;
+                            ? `<button disabled class="px-4 py-2 bg-slate-100 text-slate-400 rounded-xl text-xs font-bold"><i class="fa-solid fa-clock mr-1"></i> Diproses...</button>` 
+                            : `<button onclick="document.getElementById('update-form-${t.id}').classList.toggle('hidden')" class="px-4 py-2 ${isRevisi ? 'bg-amber-500 hover:bg-amber-600' : 'bg-indigo-500 hover:bg-indigo-600'} text-white rounded-xl text-xs font-bold transition-all shadow-[0_4px_10px_rgba(79,70,229,0.3)] hover:-translate-y-0.5"><i class="fa-solid fa-pen mr-1"></i> Update Progres</button>`;
                         
                         pendingHtml += `
-                        <div class="flex items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors ${isRevisi ? 'bg-rose-50/20' : ''}">
-                            <div class="flex-1">
-                                <h4 class="font-bold text-sm text-slate-800">${t.title} ${badge}</h4>
-                                <p class="text-[10px] text-slate-500 mt-1">Deadline: <b class="text-rose-600">${t.deadline || '-'}</b> • Poin Target: <b class="text-indigo-600">${t.weight > 0 ? t.weight : '?'}</b></p>
+                        <div class="p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors ${isRevisi ? 'bg-rose-50/20' : ''}">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-sm text-slate-800">${t.title} ${badge}</h4>
+                                    <p class="text-[10px] text-slate-500 mt-1">Deadline: <b class="text-rose-600">${t.deadline || '-'}</b> • Bobot Max: <b class="text-indigo-600">${t.weight > 0 ? t.weight : '?'}</b></p>
+                                </div>
+                                <div>${btn}</div>
                             </div>
-                            <div>${btn}</div>
+                            
+                            <div id="update-form-${t.id}" class="hidden mt-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm animate-[floatIn_0.3s_ease-out]">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">Progress Pekerjaan (%)</label>
+                                        <div class="flex items-center gap-3 mt-2">
+                                            <input type="range" id="slider-${t.id}" min="0" max="100" value="${t.progress || 100}" oninput="document.getElementById('prog-val-${t.id}').innerText = this.value + '%'" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                                            <span id="prog-val-${t.id}" class="text-xs font-black text-indigo-700 w-10 text-right">${t.progress || 100}%</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">Catatan Kendala (Opsional)</label>
+                                        <input type="text" id="note-${t.id}" class="w-full mt-1.5 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 outline-none" placeholder="Misal: Kurang dokumen vendor..." value="${t.notes || ''}">
+                                    </div>
+                                </div>
+                                <button onclick="siadminSubmitProgress('${t.id}')" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-sm transition-transform hover:-translate-y-0.5"><i class="fa-solid fa-paper-plane mr-1"></i> Kirim Laporan ke Koordinator</button>
+                            </div>
                         </div>`;
                     });
                 }
@@ -963,10 +1003,10 @@
                 myCompletedList.forEach(t => {
                     let dStr = new Date(t.completed_at).toLocaleDateString('id-ID', {day: 'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
                     let icon = (t.status === 'completed') ? `<i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i>` : `<i class="fa-solid fa-circle-xmark text-rose-500 text-sm"></i>`;
-                    let pointLabel = (t.status === 'completed') ? `<span class="text-emerald-500 text-[9px] font-black">+${t.weight} Poin</span>` : `<span class="text-rose-500 text-[9px] font-black">-1 Poin (Rejected)</span>`;
+                    let pointLabel = (t.status === 'completed') ? `<span class="text-emerald-600 text-[9px] font-black">+${t.earned || 0} Poin Didapat (dari target ${t.weight})</span>` : `<span class="text-rose-500 text-[9px] font-black">-1 Poin (Pekerjaan Ditolak)</span>`;
 
                     doneHtml += `
-                    <div class="flex flex-col py-2 border-b border-slate-50 last:border-0">
+                    <div class="flex flex-col py-2 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">${icon}<span class="text-xs font-bold text-slate-600 truncate max-w-[200px]">${t.title}</span></div>
                             <span class="text-[9px] font-bold text-slate-400">${dStr}</span>
@@ -978,24 +1018,30 @@
                 container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="premium-card p-6 bg-gradient-to-br from-violet-600 to-indigo-700 text-white shadow-lg shadow-violet-200 flex flex-col justify-center relative overflow-hidden">
-                        <div class="absolute -right-4 -bottom-4 text-6xl opacity-10"><i class="fa-solid fa-medal"></i></div>
-                        <p class="text-[10px] font-black text-violet-200 uppercase tracking-widest"><i class="fa-solid fa-star text-amber-300 mr-1"></i> Poin Minggu Ini</p>
-                        <h3 class="text-4xl font-black mt-1">${myKpi.week} <span class="text-sm font-normal text-violet-300">Poin</span></h3>
+                        <div class="absolute -right-4 -bottom-4 text-6xl opacity-10"><i class="fa-solid fa-crosshairs"></i></div>
+                        <p class="text-[10px] font-black text-violet-200 uppercase tracking-widest"><i class="fa-solid fa-star text-amber-300 mr-1"></i> Akurasi KPI Minggu Ini</p>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <h3 class="text-4xl font-black">${myKpi.wPct}%</h3>
+                            <span class="text-xs font-medium text-violet-300">(${myKpi.wEarned} / ${myKpi.wTarget} Poin)</span>
+                        </div>
                     </div>
                     <div class="premium-card p-6 bg-white border border-slate-200 flex flex-col justify-center">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Akumulasi Bulan Ini</p>
-                        <h3 class="text-3xl font-black text-slate-700 mt-1">${myKpi.month}</h3>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Akurasi KPI Bulan Ini</p>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <h3 class="text-3xl font-black text-slate-700">${myKpi.mPct}%</h3>
+                            <span class="text-[10px] font-bold text-slate-400">(${myKpi.mEarned} / ${myKpi.mTarget} Pts)</span>
+                        </div>
                     </div>
                     <div class="premium-card p-6 bg-white border-b-4 border-b-amber-500 flex flex-col justify-center bg-amber-50/30">
-                        <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest">Pekerjaan Aktif & Revisi</p>
-                        <h3 class="text-3xl font-black text-amber-700 mt-1">${myKpi.pending} <span class="text-sm font-normal text-amber-500">Tugas</span></h3>
+                        <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest">Tugas Aktif & Revisi</p>
+                        <h3 class="text-3xl font-black text-amber-700 mt-1">${myKpi.pending} <span class="text-sm font-normal text-amber-500">Pekerjaan</span></h3>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="premium-card bg-white p-0 shadow-sm lg:col-span-2 overflow-hidden flex flex-col h-[400px]">
                         <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                            <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-list-ol text-violet-500 mr-2"></i> Daftar Tugas & Pekerjaan Saya</h4>
+                            <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-list-ol text-violet-500 mr-2"></i> Daftar Tugas & Instruksi (Update Progress)</h4>
                         </div>
                         <div class="flex-1 overflow-y-auto mini-scroll">${pendingHtml}</div>
                     </div>
@@ -1003,17 +1049,45 @@
                     <div class="flex flex-col gap-6">
                         <div class="premium-card bg-white p-5 shadow-sm border-t-4 border-t-emerald-500">
                             <h4 class="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-3 border-b border-slate-100 pb-2 flex items-center"><i class="fa-solid fa-pen-to-square text-emerald-500 mr-2"></i> Report Pekerjaan Mandiri</h4>
-                            <p class="text-[9px] font-bold text-slate-400 mb-3 leading-relaxed">Laporkan pekerjaan Anda yang tidak ada di instruksi untuk divalidasi dan diberi poin oleh Koordinator.</p>
-                            <input type="text" id="report-task-title" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs focus:border-emerald-500 outline-none mb-3" placeholder="Nama pekerjaan yang diselesaikan...">
-                            <button onclick="siadminReportTask()" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-500 hover:text-white font-bold py-2 rounded-lg transition-colors text-xs"><i class="fa-solid fa-paper-plane mr-1"></i> Submit Progress ke Koordinator</button>
+                            <p class="text-[9px] font-bold text-slate-400 mb-3 leading-relaxed">Pekerjaan di luar instruksi. Masukkan capaian progres dan keterangan Anda.</p>
+                            
+                            <input type="text" id="report-task-title" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs focus:border-emerald-500 outline-none mb-3 font-medium text-slate-700" placeholder="Nama pekerjaan yang diselesaikan...">
+                            
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase block mb-1">Progress (%)</label>
+                                    <input type="number" id="report-task-prog" class="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:border-emerald-500 outline-none font-black text-emerald-700" value="100" min="1" max="100">
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-slate-500 uppercase block mb-1">Keterangan</label>
+                                    <input type="text" id="report-task-note" class="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:border-emerald-500 outline-none" placeholder="Kendala/Catatan...">
+                                </div>
+                            </div>
+
+                            <button onclick="siadminReportTask()" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-500 hover:text-white font-bold py-2.5 rounded-xl transition-colors text-xs"><i class="fa-solid fa-paper-plane mr-1"></i> Submit Laporan Baru</button>
                         </div>
                         
-                        <div class="premium-card bg-white p-5 shadow-sm flex-1 overflow-y-auto mini-scroll max-h-[200px]">
+                        <div class="premium-card bg-white p-5 shadow-sm flex-1 overflow-y-auto mini-scroll max-h-[180px]">
                             <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3"><i class="fa-solid fa-clock-rotate-left mr-1"></i> History Validasi Terakhir</h4>
                             <div class="space-y-1">${doneHtml || '<p class="text-[10px] text-slate-300 font-bold">Belum ada riwayat.</p>'}</div>
                         </div>
                     </div>
                 </div>`;
+            }
+        }
+
+        // AKSI ADMIN MENSUBMIT PROGRES (DARI TUGAS YANG SUDAH ADA)
+        function siadminSubmitProgress(taskId) {
+            let prog = document.getElementById('slider-' + taskId).value;
+            let note = document.getElementById('note-' + taskId).value.trim();
+            let tasks = getSiadminTasks();
+            let idx = tasks.findIndex(t => t.id === taskId);
+            if(idx > -1) {
+                tasks[idx].progress = parseInt(prog);
+                tasks[idx].notes = note || 'Tidak ada catatan/kendala';
+                tasks[idx].status = 'waiting_approval';
+                saveSiadminTasks(tasks);
+                renderSiadminLayout();
             }
         }
 
@@ -1024,36 +1098,45 @@
             let d = document.getElementById('add-task-deadline').value;
             if(!t || !w || !d) { alert('Semua kolom tugas wajib diisi!'); return; }
             let tasks = getSiadminTasks();
-            tasks.push({ id: 'T' + Date.now(), title: t, assignee: a, deadline: d, weight: w, status: 'pending', created_at: Date.now(), completed_at: null });
+            tasks.push({ id: 'T' + Date.now(), title: t, assignee: a, deadline: d, weight: w, progress: 0, notes: '', earned: 0, status: 'pending', created_at: Date.now(), completed_at: null });
             saveSiadminTasks(tasks); alert(`Tugas berhasil diberikan ke ${a}.`); renderSiadminLayout();
         }
 
         function siadminReportTask() {
             let t = document.getElementById('report-task-title').value.trim();
+            let p = document.getElementById('report-task-prog').value;
+            let n = document.getElementById('report-task-note').value.trim();
             if(!t) { alert('Isi nama pekerjaan terlebih dahulu!'); return; }
+            
             let tasks = getSiadminTasks();
-            tasks.push({ id: 'M' + Date.now(), title: t, assignee: currentSiadminUser, deadline: '-', weight: 0, status: 'waiting_approval', created_at: Date.now(), completed_at: null });
-            saveSiadminTasks(tasks); alert(`Progress pekerjaan berhasil dilaporkan! Menunggu validasi dari Okta Pradika.`); renderSiadminLayout();
+            tasks.push({ 
+                id: 'M' + Date.now(), title: t, assignee: currentSiadminUser, deadline: 'Laporan Mandiri', 
+                weight: 0, progress: parseInt(p) || 100, notes: n || 'Tidak ada catatan/kendala', earned: 0, 
+                status: 'waiting_approval', created_at: Date.now(), completed_at: null 
+            });
+            saveSiadminTasks(tasks); alert(`Laporan berhasil disubmit! Menunggu validasi dari Okta Pradika.`); renderSiadminLayout();
         }
 
         function siadminAction(taskId, actionType) {
             let tasks = getSiadminTasks();
             let idx = tasks.findIndex(t => t.id === taskId);
             if (idx > -1) {
-                if (actionType === 'complete') {
-                    // Berubah dari completed menjadi waiting_approval untuk divalidasi boss
-                    tasks[idx].status = 'waiting_approval';
-                } else if (actionType === 'approve') {
+                if (actionType === 'approve') {
                     let wInput = document.getElementById('weight-' + taskId);
-                    let newWeight = wInput ? parseInt(wInput.value) : 0;
-                    if (isNaN(newWeight) || newWeight <= 0) { alert('Harap tentukan nilai poin (bobot) tugas ini terlebih dahulu sebelum di-approve!'); return; }
-                    tasks[idx].weight = newWeight;
+                    let targetWeight = wInput ? parseInt(wInput.value) : 0;
+                    if (isNaN(targetWeight) || targetWeight <= 0) { alert('Harap tentukan Bobot Max (Poin Target) terlebih dahulu sebelum melakukan Approve!'); return; }
+                    
+                    let progress = tasks[idx].progress || 100;
+                    let calculatedPoints = (targetWeight * progress) / 100;
+                    
+                    tasks[idx].weight = targetWeight;
+                    tasks[idx].earned = calculatedPoints;
                     tasks[idx].status = 'completed';
                     tasks[idx].completed_at = Date.now();
                 } else if (actionType === 'revisi') {
                     tasks[idx].status = 'revisi';
                 } else if (actionType === 'reject') {
-                    tasks[idx].weight = -1; // Poin -1 jika di reject
+                    tasks[idx].earned = -1; // Penalti mutlak saat di-reject
                     tasks[idx].status = 'rejected';
                     tasks[idx].completed_at = Date.now();
                 }
@@ -1061,6 +1144,7 @@
             }
         }
 
+        // FUNGSI DOWNLOAD EXCEL DATABASE REPORT TIM
         function downloadSiadminReport() {
             let tasks = getSiadminTasks();
             if(tasks.length === 0) { alert('Tidak ada data pekerjaan yang tersimpan untuk didownload.'); return; }
@@ -1068,31 +1152,38 @@
             let exportData = tasks.map(t => {
                 let statusLabel = '';
                 if(t.status === 'completed') statusLabel = 'Approved / Selesai';
-                else if(t.status === 'rejected') statusLabel = 'Ditolak (Poin -1)';
+                else if(t.status === 'rejected') statusLabel = 'Ditolak / Rejected';
                 else if(t.status === 'revisi') statusLabel = 'Menunggu Revisi Admin';
                 else if(t.status === 'waiting_approval') statusLabel = 'Menunggu Validasi Koordinator';
-                else statusLabel = 'Pending (Belum Dikerjakan)';
+                else statusLabel = 'Pending (Belum Dilaporkan)';
+
+                let finalEarned = 0;
+                if(t.status === 'completed') finalEarned = t.earned || 0;
+                if(t.status === 'rejected') finalEarned = -1;
 
                 return {
                     'ID Tugas': t.id,
                     'Nama / Deskripsi Pekerjaan': t.title,
                     'PIC (Admin)': t.assignee,
                     'Deadline Pekerjaan': t.deadline,
+                    'Progress Disubmit (%)': (t.progress || 0) + '%',
+                    'Catatan Kendala': t.notes || 'Tidak ada',
                     'Status Terakhir': statusLabel,
-                    'Bobot / Poin': t.status === 'rejected' ? -1 : t.weight,
+                    'Poin Didapat': finalEarned,
+                    'Target Bobot': t.weight || 0,
                     'Tanggal Dibuat': new Date(t.created_at).toLocaleString('id-ID'),
-                    'Tanggal Selesai / Validasi': t.completed_at ? new Date(t.completed_at).toLocaleString('id-ID') : '-'
+                    'Tanggal Tervalidasi': t.completed_at ? new Date(t.completed_at).toLocaleString('id-ID') : '-'
                 };
             });
 
             let ws = XLSX.utils.json_to_sheet(exportData);
             
-            // Atur lebar kolom untuk kerapian
-            ws['!cols'] = [ {wch: 15}, {wch: 45}, {wch: 25}, {wch: 15}, {wch: 25}, {wch: 15}, {wch: 25}, {wch: 25} ];
+            // Atur lebar kolom untuk kerapian Excel
+            ws['!cols'] = [ {wch: 15}, {wch: 40}, {wch: 25}, {wch: 15}, {wch: 20}, {wch: 35}, {wch: 25}, {wch: 15}, {wch: 15}, {wch: 20}, {wch: 20} ];
             
             let wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Rekap_Pekerjaan_Tim");
-            XLSX.writeFile(wb, "Rekap_Database_SIADMIN.xlsx");
+            XLSX.writeFile(wb, "Database_KPI_SIADMIN.xlsx");
         }
         // ==============================================================
 
@@ -1279,9 +1370,6 @@
             }, 1500);
         }
 
-        // =========================================================
-        // SIMONA FILTER LOGIC
-        // =========================================================
         function setSimonaCategoryFilter(catName) {
             simonaCurrentCategory = catName;
             document.getElementById('btn-reset-cat').classList.remove('hidden');
@@ -1295,15 +1383,11 @@
             renderActiveView(globalDataset);
         }
 
-        // =========================================================
-        // BREAKDOWN TIKET MBP BBM (ON CLICK)
-        // =========================================================
         function showTicketBreakdown(picKey) {
             let picData = window.currentMbpTickets[picKey];
             if(!picData || !picData.tickets || picData.tickets.length === 0) {
                 alert('Tidak ada rincian tiket untuk PIC ini di database MBP.'); return;
             }
-
             let html = '';
             picData.tickets.forEach((t, idx) => {
                 html += `
@@ -1313,18 +1397,13 @@
                     <td class="px-6 py-3 border-b border-slate-700/50 font-bold text-emerald-300">${t.colB}</td>
                 </tr>`;
             });
-            
             document.getElementById('mbp-bbm-breakdown-content').innerHTML = html;
             document.getElementById('mbp-bbm-breakdown-title').innerHTML = `<i class="fa-solid fa-list-check mr-2"></i>Validasi Tiket SWFM: ${picKey}`;
-            
             const container = document.getElementById('mbp-bbm-breakdown-container');
             container.classList.remove('hidden');
             container.scrollIntoView({behavior: 'smooth', block: 'center'});
         }
 
-        // =========================================================
-        // RENDER ACTIVE VIEW (CORE LOGIC)
-        // =========================================================
         function renderActiveView(data) {
             try {
                 if (currentView === 'operational') {
