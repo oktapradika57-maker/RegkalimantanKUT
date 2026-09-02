@@ -107,7 +107,6 @@
          HALAMAN LOGIN (AUTHENTICATION SYSTEM)
          ========================================== -->
     <div id="login-screen" class="fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-500">
-        <!-- Dekorasi Background -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
             <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-indigo-500/20 blur-[120px]"></div>
             <div class="absolute bottom-[10%] -right-[10%] w-[40%] h-[60%] rounded-full bg-cyan-500/20 blur-[100px]"></div>
@@ -153,10 +152,8 @@
             </p>
         </div>
     </div>
-    <!-- Akhir Halaman Login -->
 
-
-    <!-- SPLASH SCREEN (Tersembunyi Awal, Muncul Setelah Login) -->
+    <!-- SPLASH SCREEN -->
     <div id="splash-screen" class="fixed inset-0 bg-white z-[70] hidden flex-col items-center justify-center transition-opacity duration-700 opacity-0">
         <div class="text-center space-y-8 max-w-md px-6">
             <div class="logo-glow inline-block">
@@ -254,16 +251,13 @@
             <a href="https://348tselkut-fgzcdv4podogncuvznj7xm.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-tower-broadcast text-lg w-8 text-pink-500"></i><span>G348TSEL</span></a>
             <a href="https://sirapi-kut.streamlit.app/" target="_blank" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-fire text-lg w-8 text-orange-500"></i><span>SIRAPI</span></a>
             
-            <!-- TAMBAHAN MENU SIADMIN (TASK & KPI MANAGER) -->
             <a href="#siadmin" id="btn-siadmin" class="menu-btn w-full flex items-center px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 border-l-4 border-transparent hover:border-violet-500 group">
                 <i class="fa-solid fa-user-shield text-lg w-8 text-violet-500 group-hover:scale-110 transition-transform"></i><span>SIADMIN</span>
             </a>
-            <!-- END MENU SIADMIN -->
             
         </nav>
         
         <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center text-xs">
-            <!-- Tombol Logout -->
             <button onclick="doLogout()" class="text-rose-500 hover:text-rose-700 font-bold flex items-center gap-2 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-lg border border-rose-100 transition-colors">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
             </button>
@@ -271,7 +265,6 @@
         </div>
     </aside>
 
-    <!-- WORKSPACE UTAMA FULL-SCREEN -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
         <header class="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between flex-shrink-0 z-10 w-full shadow-sm">
             <div class="flex items-center space-x-4">
@@ -306,7 +299,7 @@
         <!-- DASHBOARD CONTENT -->
         <div class="flex-1 overflow-y-auto p-8 bg-slate-50/50" id="dashboard-content">
             
-            <!-- MENU UTAMA & AI SMARTKUT -->
+            <!-- MENU UTAMA -->
             <section id="view-home" class="view-pane active max-w-7xl mx-auto space-y-6 pb-10">
                 <div class="relative overflow-hidden premium-card p-8 magic-bg text-white shadow-2xl shadow-indigo-900/20 border-0 mb-8 flex flex-col">
                     <div class="absolute -top-10 -right-10 opacity-10 transform rotate-12 pointer-events-none"><i class="fa-solid fa-microchip text-[12rem]"></i></div>
@@ -321,13 +314,11 @@
                             </div>
                         </div>
                         
-                        <!-- KOTAK HASIL ANALISA AI -->
                         <div id="smartkut-content" class="text-sm font-medium text-slate-200 leading-relaxed bg-black/30 p-6 rounded-2xl border border-white/10 backdrop-blur-sm shadow-inner min-h-[120px] transition-all">
                             <i class="fa-solid fa-circle-notch fa-spin text-cyan-400 mr-2"></i> Menganalisa seluruh database perusahaan...
                         </div>
                     </div>
                     
-                    <!-- INPUT PROMPT AI -->
                     <div class="relative z-10 mt-5 border-t border-white/10 pt-5">
                         <p class="text-[10px] text-indigo-200 font-bold uppercase tracking-widest mb-2"><i class="fa-solid fa-bolt text-amber-400 mr-1"></i> Minta Analisis AI Khusus:</p>
                         <div class="flex gap-2 relative">
@@ -382,7 +373,6 @@
                         <h3 class="text-xl font-black text-slate-800 tracking-tight">Integrasi <span class="text-sky-500">Modul</span></h3>
                     </div>
                     
-                    <!-- GRID DIMODIFIKASI MENJADI 4 KOLOM AGAR SIADMIN BISA MASUK RAPI -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         <a href="https://simakin-kut.streamlit.app/" target="_blank" class="menu-grid-card border-sky-100 shadow-sm" style="--hover-color: #0ea5e9;">
                             <div class="menu-grid-icon-box bg-sky-50 text-sky-500"><i class="fa-solid fa-satellite-dish"></i></div>
@@ -399,20 +389,16 @@
                             <h3 class="font-black text-slate-800 text-sm">SIRAPI</h3>
                             <p class="text-[11px] text-slate-400 mt-2 font-medium">Sistem Rekapitulasi Anggaran</p>
                         </a>
-                        <!-- TAMBAHAN CARD MENU SIADMIN DI DASHBOARD -->
                         <a href="#siadmin" class="menu-grid-card border-violet-100 shadow-sm" style="--hover-color: #8b5cf6;">
                             <div class="menu-grid-icon-box bg-violet-50 text-violet-500"><i class="fa-solid fa-user-shield"></i></div>
                             <h3 class="font-black text-slate-800 text-sm">SIADMIN</h3>
                             <p class="text-[11px] text-slate-400 mt-2 font-medium">Task Management & KPI</p>
                         </a>
-                        <!-- END TAMBAHAN MENU SIADMIN -->
                     </div>
                 </div>
             </section>
             
-            <!-- ============================================================== -->
-            <!-- SECTION BARU: SIADMIN (TASK & KPI MANAGER) -->
-            <!-- ============================================================== -->
+            <!-- SIADMIN (TASK & KPI MANAGER) -->
             <section id="view-siadmin" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 
                 <!-- STAGE 1: LOCK SCREEN (Master Password) -->
@@ -442,36 +428,33 @@
                 <div id="siadmin-role-screen" class="hidden py-8">
                     <div class="text-center mb-10">
                         <h2 class="text-3xl font-black text-slate-800 tracking-tight">Pilih Akun <span class="text-violet-600">SIADMIN</span></h2>
-                        <p class="text-sm font-medium text-slate-500 mt-2">Silakan pilih profil Anda untuk masuk ke dashboard manajemen kerja.</p>
+                        <p class="text-sm font-medium text-slate-500 mt-2">Silakan profil untuk masuk ke dashboard pribadi dan ketikkan password otorisasi Anda.</p>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                        <!-- Admin 1 -->
-                        <div onclick="selectSiadminRole('Mawarda', 'admin')" class="premium-card bg-white p-8 text-center cursor-pointer hover:border-emerald-400 hover:shadow-xl group transition-all duration-300 transform hover:-translate-y-2">
+                        <div onclick="promptAdminPassword('Mawardah', 'admin', 'Adops')" class="premium-card bg-white p-8 text-center cursor-pointer hover:border-emerald-400 hover:shadow-xl group transition-all duration-300 transform hover:-translate-y-2">
                             <div class="w-24 h-24 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-5 border-2 border-emerald-100 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all">👩‍💼</div>
-                            <h3 class="font-black text-slate-800 text-xl">Mawarda</h3>
-                            <p class="text-xs font-bold text-emerald-500 uppercase tracking-widest mt-1">Tim Admin</p>
+                            <h3 class="font-black text-slate-800 text-xl">Mawardah</h3>
+                            <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-1">Admin Operational P.Raya</p>
                         </div>
                         
-                        <!-- Admin 2 -->
-                        <div onclick="selectSiadminRole('M Kiki Firmansyah', 'admin')" class="premium-card bg-white p-8 text-center cursor-pointer hover:border-sky-400 hover:shadow-xl group transition-all duration-300 transform hover:-translate-y-2">
+                        <!-- PASSWORD BARU UNTUK M KIKI (Adnop26) DITERAPKAN DI SINI -->
+                        <div onclick="promptAdminPassword('M Kiki Firmansyah', 'admin', 'Adnop26')" class="premium-card bg-white p-8 text-center cursor-pointer hover:border-sky-400 hover:shadow-xl group transition-all duration-300 transform hover:-translate-y-2">
                             <div class="w-24 h-24 bg-sky-50 text-sky-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-5 border-2 border-sky-100 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition-all">👨‍💼</div>
                             <h3 class="font-black text-slate-800 text-xl">M Kiki Firmansyah</h3>
-                            <p class="text-xs font-bold text-sky-500 uppercase tracking-widest mt-1">Tim Admin</p>
+                            <p class="text-[10px] font-bold text-sky-500 uppercase tracking-widest mt-1">Admin NOP P.Raya</p>
                         </div>
                         
-                        <!-- Boss / Supervisor -->
                         <div onclick="promptBossPassword()" class="premium-card bg-white p-8 text-center cursor-pointer hover:border-rose-400 hover:shadow-xl group transition-all duration-300 transform hover:-translate-y-2 border-b-4 border-b-rose-500">
                             <div class="w-24 h-24 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-5 border-2 border-rose-100 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition-all">👨‍💻</div>
                             <h3 class="font-black text-slate-800 text-xl">Okta Pradika</h3>
-                            <p class="text-xs font-bold text-rose-500 uppercase tracking-widest mt-1">Pemberi Kerja / Supervisor</p>
+                            <p class="text-[10px] font-bold text-rose-500 uppercase tracking-widest mt-1">Koordinator</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- STAGE 3: DASHBOARD KHUSUS (Di-render dinamis melalui JS) -->
+                <!-- STAGE 3: DASHBOARD KHUSUS -->
                 <div id="siadmin-dashboard" class="hidden space-y-6">
-                    <!-- Header Info Pengguna -->
                     <div class="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                         <div class="flex items-center gap-4">
                             <div id="siadmin-user-avatar" class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-2xl border border-violet-200 shadow-inner"></div>
@@ -484,13 +467,9 @@
                             <i class="fa-solid fa-right-from-bracket"></i> Ganti Akun
                         </button>
                     </div>
-
-                    <!-- Area Render Layout Dinamis -->
                     <div id="siadmin-dynamic-layout" class="space-y-6"></div>
                 </div>
             </section>
-            <!-- ============================================================== -->
-
 
             <!-- SIMONA (OPERASIONAL) -->
             <section id="view-operational" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
@@ -501,7 +480,6 @@
                         </h3>
                         <p class="text-[11px] text-amber-700 font-medium mt-1">Sistem Monitoring Pengeluaran Operasional</p>
                     </div>
-                    <!-- FILTER ROLE TETAP ADA -->
                     <div class="flex items-center gap-3">
                         <select id="filter-simona-periode" onchange="renderActiveView(globalDataset)" class="filter-select text-xs shadow-sm"><option value="ALL">Semua Periode</option></select>
                         <select id="filter-simona-cluster" onchange="renderActiveView(globalDataset)" class="filter-select text-xs shadow-sm"><option value="ALL">Semua Cluster</option></select>
@@ -585,9 +563,7 @@
                     </select>
                 </div>
 
-                <div id="mbp-bbm-komparasi" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
-                    <!-- Cards komparasi dirender via JS -->
-                </div>
+                <div id="mbp-bbm-komparasi" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8"></div>
 
                 <div id="mbp-bbm-breakdown-container" class="hidden mb-10 premium-card overflow-hidden bg-slate-800 text-white shadow-xl shadow-slate-900/20 border-t-4 border-t-cyan-400 transform transition-all duration-300">
                     <div class="p-5 border-b border-slate-700/50 flex justify-between items-center bg-slate-900/40">
@@ -684,11 +660,14 @@
     <script>
         // ==========================================
         // DATABASE LOGIN
+        // (AKUN MAWARDAH DAN KIKI DITAMBAHKAN DI SINI UNTUK BYPASS)
         // ==========================================
         const USERS_DATABASE = {
             "Elysabeth": "2026KUTManager",
             "Oktapradika": "2026KUTKoord",
-            "Rian Saron": "2026KUTSvp"
+            "Rian Saron": "2026KUTSvp",
+            "Mawardah": "Adops",
+            "M Kiki Firmansyah": "Adnop26"
         };
 
         Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif"; Chart.defaults.color = '#94a3b8'; Chart.defaults.scale.grid.color = 'rgba(241, 245, 249, 0.5)'; Chart.defaults.scale.grid.drawBorder = false; Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)'; Chart.defaults.plugins.tooltip.titleFont = { size: 13, weight: 'bold' }; Chart.defaults.plugins.tooltip.padding = 12; Chart.defaults.plugins.tooltip.cornerRadius = 8; Chart.defaults.elements.line.tension = 0.4;
@@ -699,12 +678,46 @@
 
         const titleLabels = { 'home': 'Menu Utama', 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'SIMONA Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Konsumsi BBM & Komparasi', 'siadmin': 'SIADMIN (Task & KPI Manager)' };
 
+        // ==============================================================
+        // LOGIKA BARU: APLIKASI SIADMIN (TASK MANAGER & KPI)
+        // ==============================================================
+        let currentSiadminUser = null;
+        let currentSiadminRoleType = null; // 'admin' atau 'boss'
+        
+        const SIADMIN_DB_KEY = 'KUT_SIADMIN_TASKS_DB';
+        function getSiadminTasks() { return JSON.parse(localStorage.getItem(SIADMIN_DB_KEY) || '[]'); }
+        function saveSiadminTasks(tasks) { localStorage.setItem(SIADMIN_DB_KEY, JSON.stringify(tasks)); }
+
+        // FUNGSI AUTO ROLE: Jika yang login adalah Mawardah/Kiki, kunci profil SIADMIN-nya
+        function applyAutoRole(user) {
+            if (user === 'Mawardah' || user === 'M Kiki Firmansyah') {
+                sessionStorage.setItem('siadmin_master_unlocked', 'true');
+                sessionStorage.setItem('siadmin_auto_role', user);
+                
+                currentSiadminUser = user;
+                currentSiadminRoleType = 'admin';
+                
+                let label = (user === 'Mawardah') ? 'Admin Operational Palangkaraya' : 'Admin Nop Palangkaraya';
+                let emoji = (user === 'Mawardah') ? '👩‍💼' : '👨‍💼';
+                
+                document.getElementById('siadmin-user-name').innerText = user;
+                document.getElementById('siadmin-user-role-label').innerText = label;
+                document.getElementById('siadmin-user-avatar').innerText = emoji;
+                
+                // Paksakan lompat ke menu siadmin jika belum
+                if(window.location.hash !== '#siadmin') {
+                    window.location.hash = '#siadmin';
+                }
+            }
+        }
+
         // ==========================================
         // SISTEM AUTHENTICATION LOGIN & ROOT
         // ==========================================
         window.addEventListener('DOMContentLoaded', () => { 
             const currentUser = sessionStorage.getItem('kut_logged_in_user');
             if (currentUser && USERS_DATABASE[currentUser]) {
+                applyAutoRole(currentUser);
                 hideLoginShowSplash();
                 document.getElementById('header-username-display').innerText = currentUser.toUpperCase();
             } else {
@@ -723,6 +736,9 @@
                 errorBox.classList.add('hidden');
                 sessionStorage.setItem('kut_logged_in_user', user);
                 document.getElementById('header-username-display').innerText = user.toUpperCase();
+                
+                // Terapkan Bypass Otorisasi Jika user adalah admin lapangan
+                applyAutoRole(user);
                 
                 const loginScreen = document.getElementById('login-screen');
                 loginScreen.classList.add('opacity-0');
@@ -750,21 +766,12 @@
 
         function doLogout() {
             sessionStorage.removeItem('kut_logged_in_user');
+            sessionStorage.removeItem('siadmin_auto_role');
+            sessionStorage.removeItem('siadmin_master_unlocked');
             window.location.reload(); 
         }
 
-        // ==============================================================
-        // LOGIKA BARU: APLIKASI SIADMIN (TASK MANAGER & KPI)
-        // ==============================================================
-        let currentSiadminUser = null;
-        let currentSiadminRoleType = null; // 'admin' atau 'boss'
-        
-        // Simpan database lokal array of objects (agar tidak hilang)
-        const SIADMIN_DB_KEY = 'KUT_SIADMIN_TASKS_DB';
-        function getSiadminTasks() { return JSON.parse(localStorage.getItem(SIADMIN_DB_KEY) || '[]'); }
-        function saveSiadminTasks(tasks) { localStorage.setItem(SIADMIN_DB_KEY, JSON.stringify(tasks)); }
-
-        // Master Unlock Password
+        // Master Unlock Password (Untuk Okta Pradika)
         function attemptMasterSiadmin() {
             const pass = document.getElementById('siadmin-master-input').value;
             if (pass === 'Kutplk2026') {
@@ -773,6 +780,15 @@
                 renderSiadminFlow();
             } else {
                 document.getElementById('siadmin-master-error').classList.remove('hidden');
+            }
+        }
+
+        function promptAdminPassword(name, roleType, correctPass) {
+            let pass = prompt(`Masukkan Password Khusus untuk ${name}:`);
+            if (pass === correctPass) {
+                selectSiadminRole(name, roleType);
+            } else if (pass !== null) {
+                alert("Password Salah! Akses ditolak.");
             }
         }
 
@@ -790,17 +806,31 @@
             currentSiadminRoleType = roleType;
             
             document.getElementById('siadmin-user-name').innerText = name;
-            document.getElementById('siadmin-user-role-label').innerText = roleType === 'boss' ? 'Supervisor Area' : 'Tim Administrasi';
             
+            let label = 'Koordinator';
             let emoji = '👨‍💼';
+            
+            if (name === 'Mawardah') {
+                label = 'Admin Operational Palangkaraya';
+                emoji = '👩‍💼';
+            } else if (name === 'M Kiki Firmansyah') {
+                label = 'Admin Nop Palangkaraya';
+            }
+            
             if (roleType === 'boss') emoji = '👨‍💻';
-            else if (name === 'Mawarda') emoji = '👩‍💼';
+
+            document.getElementById('siadmin-user-role-label').innerText = label;
             document.getElementById('siadmin-user-avatar').innerText = emoji;
             
             renderSiadminFlow();
         }
 
         function logoutSiadminRole() {
+            // Cegah admin lapangan untuk log out ke halaman master/role selection
+            if (sessionStorage.getItem('siadmin_auto_role')) {
+                alert("Anda masuk menggunakan otorisasi sistem langsung. Silakan klik tombol 'Logout' merah di menu kiri bawah untuk keluar dari portal utama.");
+                return;
+            }
             currentSiadminUser = null;
             currentSiadminRoleType = null;
             renderSiadminFlow();
@@ -855,8 +885,8 @@
             let tasks = getSiadminTasks();
             
             if (currentSiadminRoleType === 'boss') {
-                // TAMPILAN OKTA PRADIKA (BOSS)
-                let kpiMawarda = kalkulasiKPI('Mawarda');
+                // TAMPILAN OKTA PRADIKA (BOSS/KOORDINATOR)
+                let kpiMawardah = kalkulasiKPI('Mawardah');
                 let kpiKiki = kalkulasiKPI('M Kiki Firmansyah');
                 
                 let waitingHtml = '';
@@ -870,9 +900,10 @@
                         <div class="flex items-center justify-between p-4 border-b border-slate-100 bg-amber-50/30">
                             <div class="flex-1">
                                 <h4 class="font-bold text-sm text-slate-800">${t.title}</h4>
-                                <p class="text-[10px] text-slate-500 mt-1">Diajukan oleh: <b class="text-amber-600">${t.assignee}</b> • Usulan Bobot: <b>${t.weight} Poin</b></p>
+                                <p class="text-[10px] text-slate-500 mt-1">Dilaporkan oleh: <b class="text-amber-600">${t.assignee}</b></p>
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex gap-2 items-center">
+                                <input type="number" id="weight-${t.id}" class="w-16 h-8 text-center border border-slate-300 rounded text-xs font-bold outline-none focus:border-violet-500" placeholder="Bobot" title="Tentukan bobot poin">
                                 <button onclick="siadminAction('${t.id}', 'approve')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"><i class="fa-solid fa-check"></i> Approve</button>
                                 <button onclick="siadminAction('${t.id}', 'reject')" class="px-3 py-1.5 bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-500 hover:text-white rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-xmark"></i> Reject</button>
                             </div>
@@ -883,11 +914,11 @@
                 container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="premium-card p-6 bg-white border-t-4 border-t-indigo-500 shadow-sm">
-                        <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-chart-simple mr-2"></i> KPI Mawarda</h4>
+                        <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-chart-simple mr-2"></i> KPI Mawardah</h4>
                         <div class="grid grid-cols-3 gap-3">
-                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100"><p class="text-[9px] font-bold text-indigo-400 uppercase">Poin Minggu Ini</p><h3 class="text-2xl font-black text-indigo-700">${kpiMawarda.week}</h3></div>
-                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100"><p class="text-[9px] font-bold text-indigo-400 uppercase">Poin Bulan Ini</p><h3 class="text-2xl font-black text-indigo-700">${kpiMawarda.month}</h3></div>
-                            <div class="bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="text-[9px] font-bold text-rose-400 uppercase">Tugas Pending</p><h3 class="text-2xl font-black text-rose-700">${kpiMawarda.pending}</h3></div>
+                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100"><p class="text-[9px] font-bold text-indigo-400 uppercase">Poin Minggu Ini</p><h3 class="text-2xl font-black text-indigo-700">${kpiMawardah.week}</h3></div>
+                            <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100"><p class="text-[9px] font-bold text-indigo-400 uppercase">Poin Bulan Ini</p><h3 class="text-2xl font-black text-indigo-700">${kpiMawardah.month}</h3></div>
+                            <div class="bg-rose-50 p-3 rounded-xl border border-rose-100"><p class="text-[9px] font-bold text-rose-400 uppercase">Tugas Pending</p><h3 class="text-2xl font-black text-rose-700">${kpiMawardah.pending}</h3></div>
                         </div>
                     </div>
                     <div class="premium-card p-6 bg-white border-t-4 border-t-sky-500 shadow-sm">
@@ -906,7 +937,7 @@
                         <div class="space-y-4">
                             <div><label class="text-[10px] font-bold text-slate-500 uppercase">Deskripsi Pekerjaan</label><input type="text" id="add-task-title" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-violet-500 outline-none" placeholder="Contoh: Rekap data PJB bulan ini..."></div>
                             <div class="grid grid-cols-2 gap-4">
-                                <div><label class="text-[10px] font-bold text-slate-500 uppercase">Tugaskan Ke</label><select id="add-task-assignee" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"><option value="Mawarda">Mawarda</option><option value="M Kiki Firmansyah">M Kiki Firmansyah</option></select></div>
+                                <div><label class="text-[10px] font-bold text-slate-500 uppercase">Tugaskan Ke</label><select id="add-task-assignee" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"><option value="Mawardah">Mawardah (Admin Ops)</option><option value="M Kiki Firmansyah">M Kiki Firmansyah (Admin NOP)</option></select></div>
                                 <div><label class="text-[10px] font-bold text-slate-500 uppercase">Bobot / Poin</label><input type="number" id="add-task-weight" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-violet-500 outline-none" placeholder="10"></div>
                             </div>
                             <div><label class="text-[10px] font-bold text-slate-500 uppercase">Batas Waktu (Deadline)</label><input type="date" id="add-task-deadline" class="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-violet-500 outline-none"></div>
@@ -916,35 +947,35 @@
                     
                     <div class="premium-card bg-white p-6 shadow-sm flex flex-col h-[400px]">
                         <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest mb-2 border-b border-slate-100 pb-3 flex justify-between items-center">
-                            <span><i class="fa-solid fa-list-check text-amber-500 mr-2"></i> Laporan Mandiri Admin (Butuh Approve)</span>
+                            <span><i class="fa-solid fa-list-check text-amber-500 mr-2"></i> Validasi Pekerjaan Admin</span>
                             <span class="bg-rose-500 text-white text-[9px] px-2 py-0.5 rounded-full shadow-sm">${waitingTasks.length}</span>
                         </h4>
                         <div class="flex-1 overflow-y-auto mini-scroll pr-1">${waitingHtml}</div>
                     </div>
                 </div>`;
             } else {
-                // TAMPILAN ADMIN (MAWARDA / KIKI)
+                // TAMPILAN ADMIN (MAWARDAH / KIKI)
                 let myKpi = kalkulasiKPI(currentSiadminUser);
                 let myTasks = tasks.filter(t => t.assignee === currentSiadminUser);
                 
                 let pendingHtml = ''; let doneHtml = '';
                 
                 let myPendingList = myTasks.filter(t => t.status === 'pending' || t.status === 'waiting_approval');
-                let myCompletedList = myTasks.filter(t => t.status === 'completed').sort((a,b) => b.completed_at - a.completed_at).slice(0, 5); // 5 history terakhir
+                let myCompletedList = myTasks.filter(t => t.status === 'completed').sort((a,b) => b.completed_at - a.completed_at).slice(0, 5);
                 
                 if (myPendingList.length === 0) {
                     pendingHtml = `<div class="p-8 text-center text-slate-400 font-bold bg-slate-50 rounded-xl border border-dashed border-slate-200 mt-4"><i class="fa-solid fa-face-laugh-beam text-3xl mb-2 text-slate-300 block"></i>Kerja bagus! Tidak ada tugas yang pending.</div>`;
                 } else {
                     myPendingList.forEach(t => {
                         let isWaiting = t.status === 'waiting_approval';
-                        let badge = isWaiting ? `<span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-black rounded ml-2 shadow-sm">Menunggu Approve Boss</span>` : `<span class="px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-black rounded ml-2 shadow-sm">Instruksi Okta</span>`;
+                        let badge = isWaiting ? `<span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-black rounded ml-2 shadow-sm">Menunggu Validasi</span>` : `<span class="px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-black rounded ml-2 shadow-sm">Instruksi Koordinator</span>`;
                         let btn = isWaiting ? `<button disabled class="px-4 py-2 bg-slate-100 text-slate-400 rounded-xl text-xs font-bold"><i class="fa-solid fa-clock"></i></button>` : `<button onclick="siadminAction('${t.id}', 'complete')" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all shadow-[0_4px_10px_rgba(16,185,129,0.3)] hover:-translate-y-0.5"><i class="fa-solid fa-check mr-1"></i> Selesaikan</button>`;
                         
                         pendingHtml += `
                         <div class="flex items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors">
                             <div class="flex-1">
                                 <h4 class="font-bold text-sm text-slate-800">${t.title} ${badge}</h4>
-                                <p class="text-[10px] text-slate-500 mt-1">Deadline: <b class="text-rose-600">${t.deadline || '-'}</b> • Poin: <b class="text-indigo-600">${t.weight}</b></p>
+                                <p class="text-[10px] text-slate-500 mt-1">Deadline: <b class="text-rose-600">${t.deadline || '-'}</b> • Poin: <b class="text-indigo-600">${t.weight > 0 ? t.weight : '?'}</b></p>
                             </div>
                             <div>${btn}</div>
                         </div>`;
@@ -984,10 +1015,9 @@
                     <div class="flex flex-col gap-6">
                         <div class="premium-card bg-white p-5 shadow-sm border-t-4 border-t-emerald-500">
                             <h4 class="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-3 border-b border-slate-100 pb-2 flex items-center"><i class="fa-solid fa-pen-to-square text-emerald-500 mr-2"></i> Report Pekerjaan Mandiri</h4>
-                            <p class="text-[9px] font-bold text-slate-400 mb-3 leading-relaxed">Laporkan pekerjaan Anda yang tidak ada di list Okta Pradika untuk dapat poin tambahan setelah di-approve.</p>
-                            <input type="text" id="report-task-title" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs focus:border-emerald-500 outline-none mb-2" placeholder="Nama pekerjaan yang diselesaikan...">
-                            <input type="number" id="report-task-weight" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs focus:border-emerald-500 outline-none mb-3" placeholder="Estimasi Bobot Poin (Misal: 5)">
-                            <button onclick="siadminReportTask()" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-500 hover:text-white font-bold py-2 rounded-lg transition-colors text-xs"><i class="fa-solid fa-paper-plane mr-1"></i> Submit ke Supervisor</button>
+                            <p class="text-[9px] font-bold text-slate-400 mb-3 leading-relaxed">Laporkan pekerjaan Anda yang tidak ada di instruksi untuk divalidasi dan diberi poin oleh Koordinator.</p>
+                            <input type="text" id="report-task-title" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs focus:border-emerald-500 outline-none mb-3" placeholder="Nama pekerjaan yang diselesaikan...">
+                            <button onclick="siadminReportTask()" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-500 hover:text-white font-bold py-2 rounded-lg transition-colors text-xs"><i class="fa-solid fa-paper-plane mr-1"></i> Submit ke Koordinator</button>
                         </div>
                         
                         <div class="premium-card bg-white p-5 shadow-sm flex-1">
@@ -999,7 +1029,6 @@
             }
         }
 
-        // Action CRUD Siadmin
         function siadminAssignTask() {
             let t = document.getElementById('add-task-title').value.trim();
             let a = document.getElementById('add-task-assignee').value;
@@ -1013,18 +1042,27 @@
 
         function siadminReportTask() {
             let t = document.getElementById('report-task-title').value.trim();
-            let w = document.getElementById('report-task-weight').value;
-            if(!t || !w) { alert('Isi nama pekerjaan dan usulan poin!'); return; }
+            if(!t) { alert('Isi nama pekerjaan terlebih dahulu!'); return; }
             let tasks = getSiadminTasks();
-            tasks.push({ id: 'M' + Date.now(), title: t, assignee: currentSiadminUser, deadline: '-', weight: w, status: 'waiting_approval', created_at: Date.now(), completed_at: null });
-            saveSiadminTasks(tasks); alert(`Berhasil dilaporkan! Menunggu validasi dari Okta Pradika.`); renderSiadminLayout();
+            tasks.push({ id: 'M' + Date.now(), title: t, assignee: currentSiadminUser, deadline: '-', weight: 0, status: 'waiting_approval', created_at: Date.now(), completed_at: null });
+            saveSiadminTasks(tasks); alert(`Berhasil dilaporkan! Menunggu validasi dan pemberian bobot dari Okta Pradika.`); renderSiadminLayout();
         }
 
         function siadminAction(taskId, actionType) {
             let tasks = getSiadminTasks();
             let idx = tasks.findIndex(t => t.id === taskId);
             if (idx > -1) {
-                if (actionType === 'complete' || actionType === 'approve') {
+                if (actionType === 'complete') {
+                    tasks[idx].status = 'completed';
+                    tasks[idx].completed_at = Date.now();
+                } else if (actionType === 'approve') {
+                    let wInput = document.getElementById('weight-' + taskId);
+                    let newWeight = wInput ? parseInt(wInput.value) : 0;
+                    if (isNaN(newWeight) || newWeight <= 0) {
+                        alert('Harap tentukan nilai poin (bobot) tugas ini terlebih dahulu!');
+                        return;
+                    }
+                    tasks[idx].weight = newWeight;
                     tasks[idx].status = 'completed';
                     tasks[idx].completed_at = Date.now();
                 } else if (actionType === 'reject') {
@@ -1035,11 +1073,9 @@
         }
         // ==============================================================
 
-
         function evaluateRoute() {
             let hash = window.location.hash.replace('#', '') || 'home'; currentView = hash;
             
-            // JIKA MENU SIADMIN, render ulang UI SIADMIN nya
             if (currentView === 'siadmin') { renderSiadminFlow(); }
 
             document.querySelectorAll('.view-pane').forEach(el => { el.style.display = 'none'; el.classList.remove('active'); });
@@ -1327,7 +1363,7 @@
                     document.getElementById('simona-kpi-total').innerText = formatIDR(totalNominal); 
                     document.getElementById('simona-kpi-count').innerText = filteredArr.length + ' Item';
 
-                    // CATEGORY CARDS - DIKEMBALIKAN KE VERSI AWAL YANG PRO
+                    // CATEGORY CARDS 
                     let cardsContainer = document.getElementById('simona-category-cards');
                     if (cardsContainer) {
                         let cardHTML = ''; let sortedCats = Object.keys(categoryMap).sort((a, b) => categoryMap[b] - categoryMap[a]); const bgColors = ['from-amber-400 to-orange-500', 'from-blue-400 to-cyan-500', 'from-emerald-400 to-teal-500', 'from-purple-400 to-pink-500', 'from-rose-400 to-red-500', 'from-indigo-400 to-violet-500'];
@@ -1338,7 +1374,7 @@
                         cardsContainer.innerHTML = cardHTML;
                     }
 
-                    // TOP SPENDERS - DIKEMBALIKAN KE VERSI AWAL YANG PRO
+                    // TOP SPENDERS 
                     let spendersContainer = document.getElementById('simona-top-spenders');
                     if (spendersContainer) {
                         let spenderHTML = ''; let sortedPICs = Object.keys(picCostMap).filter(n => n !== '-' && n !== 'TANPA NAMA' && n !== 'UNDEFINED').sort((a, b) => picCostMap[b].total - picCostMap[a].total).slice(0, 6);
