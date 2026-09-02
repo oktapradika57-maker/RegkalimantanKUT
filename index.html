@@ -438,7 +438,6 @@
                             <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-1">Admin Operational P.Raya</p>
                         </div>
                         
-                        <!-- PASSWORD BARU UNTUK M KIKI (Adnop26) DITERAPKAN DI SINI -->
                         <div onclick="promptAdminPassword('M Kiki Firmansyah', 'admin', 'Adnop26')" class="premium-card bg-white p-8 text-center cursor-pointer hover:border-sky-400 hover:shadow-xl group transition-all duration-300 transform hover:-translate-y-2">
                             <div class="w-24 h-24 bg-sky-50 text-sky-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-5 border-2 border-sky-100 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition-all">👨‍💼</div>
                             <h3 class="font-black text-slate-800 text-xl">M Kiki Firmansyah</h3>
@@ -658,10 +657,6 @@
          JAVASCRIPT LOGIC
          ========================================== -->
     <script>
-        // ==========================================
-        // DATABASE LOGIN
-        // (AKUN MAWARDAH DAN KIKI DITAMBAHKAN DI SINI UNTUK BYPASS)
-        // ==========================================
         const USERS_DATABASE = {
             "Elysabeth": "2026KUTManager",
             "Oktapradika": "2026KUTKoord",
@@ -679,16 +674,15 @@
         const titleLabels = { 'home': 'Menu Utama', 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'SIMONA Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Konsumsi BBM & Komparasi', 'siadmin': 'SIADMIN (Task & KPI Manager)' };
 
         // ==============================================================
-        // LOGIKA BARU: APLIKASI SIADMIN (TASK MANAGER & KPI)
+        // APLIKASI SIADMIN (TASK MANAGER, REPORTING, & EXPORT EXCEL)
         // ==============================================================
         let currentSiadminUser = null;
-        let currentSiadminRoleType = null; // 'admin' atau 'boss'
+        let currentSiadminRoleType = null;
         
         const SIADMIN_DB_KEY = 'KUT_SIADMIN_TASKS_DB';
         function getSiadminTasks() { return JSON.parse(localStorage.getItem(SIADMIN_DB_KEY) || '[]'); }
         function saveSiadminTasks(tasks) { localStorage.setItem(SIADMIN_DB_KEY, JSON.stringify(tasks)); }
 
-        // FUNGSI AUTO ROLE: Jika yang login adalah Mawardah/Kiki, kunci profil SIADMIN-nya
         function applyAutoRole(user) {
             if (user === 'Mawardah' || user === 'M Kiki Firmansyah') {
                 sessionStorage.setItem('siadmin_master_unlocked', 'true');
@@ -704,16 +698,10 @@
                 document.getElementById('siadmin-user-role-label').innerText = label;
                 document.getElementById('siadmin-user-avatar').innerText = emoji;
                 
-                // Paksakan lompat ke menu siadmin jika belum
-                if(window.location.hash !== '#siadmin') {
-                    window.location.hash = '#siadmin';
-                }
+                if(window.location.hash !== '#siadmin') { window.location.hash = '#siadmin'; }
             }
         }
 
-        // ==========================================
-        // SISTEM AUTHENTICATION LOGIN & ROOT
-        // ==========================================
         window.addEventListener('DOMContentLoaded', () => { 
             const currentUser = sessionStorage.getItem('kut_logged_in_user');
             if (currentUser && USERS_DATABASE[currentUser]) {
@@ -737,17 +725,11 @@
                 sessionStorage.setItem('kut_logged_in_user', user);
                 document.getElementById('header-username-display').innerText = user.toUpperCase();
                 
-                // Terapkan Bypass Otorisasi Jika user adalah admin lapangan
                 applyAutoRole(user);
                 
                 const loginScreen = document.getElementById('login-screen');
                 loginScreen.classList.add('opacity-0');
-                
-                setTimeout(() => {
-                    loginScreen.style.display = 'none';
-                    loginScreen.classList.remove('opacity-0');
-                    hideLoginShowSplash();
-                }, 500);
+                setTimeout(() => { loginScreen.style.display = 'none'; loginScreen.classList.remove('opacity-0'); hideLoginShowSplash(); }, 500);
             } else {
                 errorBox.classList.remove('hidden');
                 document.getElementById('password-input').value = '';
@@ -771,79 +753,46 @@
             window.location.reload(); 
         }
 
-        // Master Unlock Password (Untuk Okta Pradika)
         function attemptMasterSiadmin() {
             const pass = document.getElementById('siadmin-master-input').value;
             if (pass === 'Kutplk2026') {
                 sessionStorage.setItem('siadmin_master_unlocked', 'true');
                 document.getElementById('siadmin-master-error').classList.add('hidden');
                 renderSiadminFlow();
-            } else {
-                document.getElementById('siadmin-master-error').classList.remove('hidden');
-            }
+            } else { document.getElementById('siadmin-master-error').classList.remove('hidden'); }
         }
 
         function promptAdminPassword(name, roleType, correctPass) {
             let pass = prompt(`Masukkan Password Khusus untuk ${name}:`);
-            if (pass === correctPass) {
-                selectSiadminRole(name, roleType);
-            } else if (pass !== null) {
-                alert("Password Salah! Akses ditolak.");
-            }
+            if (pass === correctPass) { selectSiadminRole(name, roleType); } else if (pass !== null) { alert("Password Salah! Akses ditolak."); }
         }
 
         function promptBossPassword() {
             let pass = prompt("Masukkan Password Khusus Bapak Okta Pradika:");
-            if (pass === 'Yui2025') {
-                selectSiadminRole('Okta Pradika', 'boss');
-            } else if (pass !== null) {
-                alert("Password Salah! Akses ditolak.");
-            }
+            if (pass === 'Yui2025') { selectSiadminRole('Okta Pradika', 'boss'); } else if (pass !== null) { alert("Password Salah! Akses ditolak."); }
         }
 
         function selectSiadminRole(name, roleType) {
-            currentSiadminUser = name;
-            currentSiadminRoleType = roleType;
-            
+            currentSiadminUser = name; currentSiadminRoleType = roleType;
             document.getElementById('siadmin-user-name').innerText = name;
-            
-            let label = 'Koordinator';
-            let emoji = '👨‍💼';
-            
-            if (name === 'Mawardah') {
-                label = 'Admin Operational Palangkaraya';
-                emoji = '👩‍💼';
-            } else if (name === 'M Kiki Firmansyah') {
-                label = 'Admin Nop Palangkaraya';
-            }
-            
+            let label = 'Koordinator'; let emoji = '👨‍💼';
+            if (name === 'Mawardah') { label = 'Admin Operational Palangkaraya'; emoji = '👩‍💼'; } 
+            else if (name === 'M Kiki Firmansyah') { label = 'Admin Nop Palangkaraya'; }
             if (roleType === 'boss') emoji = '👨‍💻';
-
             document.getElementById('siadmin-user-role-label').innerText = label;
             document.getElementById('siadmin-user-avatar').innerText = emoji;
-            
             renderSiadminFlow();
         }
 
         function logoutSiadminRole() {
-            // Cegah admin lapangan untuk log out ke halaman master/role selection
             if (sessionStorage.getItem('siadmin_auto_role')) {
-                alert("Anda masuk menggunakan otorisasi sistem langsung. Silakan klik tombol 'Logout' merah di menu kiri bawah untuk keluar dari portal utama.");
-                return;
+                alert("Anda masuk menggunakan otorisasi sistem langsung. Silakan klik tombol 'Logout' merah di menu kiri bawah untuk keluar dari portal utama."); return;
             }
-            currentSiadminUser = null;
-            currentSiadminRoleType = null;
-            renderSiadminFlow();
+            currentSiadminUser = null; currentSiadminRoleType = null; renderSiadminFlow();
         }
 
-        function getStartOfWeek() {
-            let d = new Date(); d.setHours(0,0,0,0);
-            let day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1); 
-            return new Date(d.setDate(diff)).getTime();
-        }
-        function getStartOfMonth() {
-            let d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1).getTime();
-        }
+        function getStartOfWeek() { let d = new Date(); d.setHours(0,0,0,0); let day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.setDate(diff)).getTime(); }
+        function getStartOfMonth() { let d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1).getTime(); }
 
         function kalkulasiKPI(adminName) {
             let tasks = getSiadminTasks();
@@ -852,9 +801,10 @@
             
             tasks.forEach(t => {
                 if (t.assignee === adminName) {
-                    if (t.status === 'pending' || t.status === 'waiting_approval') {
+                    if (t.status === 'pending' || t.status === 'waiting_approval' || t.status === 'revisi') {
                         pending++;
-                    } else if (t.status === 'completed') {
+                    } else if (t.status === 'completed' || t.status === 'rejected') {
+                        // Jika rejected, bobotnya adalah -1. Ini otomatis terkurangi.
                         if (t.completed_at >= startW) pWeek += parseInt(t.weight || 0);
                         if (t.completed_at >= startM) pMonth += parseInt(t.weight || 0);
                     }
@@ -864,20 +814,11 @@
         }
 
         function renderSiadminFlow() {
-            const elLock = document.getElementById('siadmin-lock-screen');
-            const elRole = document.getElementById('siadmin-role-screen');
-            const elDash = document.getElementById('siadmin-dashboard');
-            
+            const elLock = document.getElementById('siadmin-lock-screen'); const elRole = document.getElementById('siadmin-role-screen'); const elDash = document.getElementById('siadmin-dashboard');
             elLock.classList.add('hidden'); elRole.classList.add('hidden'); elDash.classList.add('hidden');
-            
-            if (!sessionStorage.getItem('siadmin_master_unlocked')) {
-                elLock.classList.remove('hidden');
-            } else if (!currentSiadminUser) {
-                elRole.classList.remove('hidden');
-            } else {
-                elDash.classList.remove('hidden');
-                renderSiadminLayout();
-            }
+            if (!sessionStorage.getItem('siadmin_master_unlocked')) { elLock.classList.remove('hidden'); } 
+            else if (!currentSiadminUser) { elRole.classList.remove('hidden'); } 
+            else { elDash.classList.remove('hidden'); renderSiadminLayout(); }
         }
 
         function renderSiadminLayout() {
@@ -885,31 +826,43 @@
             let tasks = getSiadminTasks();
             
             if (currentSiadminRoleType === 'boss') {
-                // TAMPILAN OKTA PRADIKA (BOSS/KOORDINATOR)
-                let kpiMawardah = kalkulasiKPI('Mawardah');
-                let kpiKiki = kalkulasiKPI('M Kiki Firmansyah');
+                let kpiMawardah = kalkulasiKPI('Mawardah'); let kpiKiki = kalkulasiKPI('M Kiki Firmansyah');
                 
-                let waitingHtml = '';
-                let waitingTasks = tasks.filter(t => t.status === 'waiting_approval');
-                
+                let waitingHtml = ''; let waitingTasks = tasks.filter(t => t.status === 'waiting_approval');
                 if (waitingTasks.length === 0) {
-                    waitingHtml = `<div class="p-6 text-center text-slate-400 font-bold bg-slate-50 rounded-xl border border-dashed border-slate-200">Semua laporan sudah divalidasi.</div>`;
+                    waitingHtml = `<div class="p-6 text-center text-slate-400 font-bold bg-slate-50 rounded-xl border border-dashed border-slate-200">Semua laporan dari admin sudah divalidasi.</div>`;
                 } else {
                     waitingTasks.forEach(t => {
+                        let presetBobot = (t.id.startsWith('T') && t.weight > 0) ? t.weight : '';
                         waitingHtml += `
-                        <div class="flex items-center justify-between p-4 border-b border-slate-100 bg-amber-50/30">
-                            <div class="flex-1">
-                                <h4 class="font-bold text-sm text-slate-800">${t.title}</h4>
-                                <p class="text-[10px] text-slate-500 mt-1">Dilaporkan oleh: <b class="text-amber-600">${t.assignee}</b></p>
-                            </div>
+                        <div class="p-4 border-b border-slate-100 bg-amber-50/30 hover:bg-amber-50 transition-colors">
+                            <h4 class="font-bold text-sm text-slate-800">${t.title}</h4>
+                            <p class="text-[10px] text-slate-500 mt-1 mb-3">Dilaporkan oleh: <b class="text-amber-600">${t.assignee}</b></p>
                             <div class="flex gap-2 items-center">
-                                <input type="number" id="weight-${t.id}" class="w-16 h-8 text-center border border-slate-300 rounded text-xs font-bold outline-none focus:border-violet-500" placeholder="Bobot" title="Tentukan bobot poin">
-                                <button onclick="siadminAction('${t.id}', 'approve')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"><i class="fa-solid fa-check"></i> Approve</button>
-                                <button onclick="siadminAction('${t.id}', 'reject')" class="px-3 py-1.5 bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-500 hover:text-white rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-xmark"></i> Reject</button>
+                                <input type="number" id="weight-${t.id}" class="w-16 h-8 text-center border border-slate-300 rounded-lg text-xs font-bold outline-none focus:border-violet-500" placeholder="Poin" title="Tentukan bobot poin" value="${presetBobot}">
+                                <button onclick="siadminAction('${t.id}', 'approve')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"><i class="fa-solid fa-check"></i> Apprv</button>
+                                <button onclick="siadminAction('${t.id}', 'revisi')" class="px-3 py-1.5 bg-amber-100 text-amber-700 hover:bg-amber-500 hover:text-white rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-rotate-left"></i> Revisi</button>
+                                <button onclick="siadminAction('${t.id}', 'reject')" class="px-3 py-1.5 bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-500 hover:text-white rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-xmark"></i> Reject (-1)</button>
                             </div>
                         </div>`;
                     });
                 }
+                
+                let historyHtml = '';
+                let historyTasks = [...tasks].sort((a,b) => b.created_at - a.created_at).slice(0, 30);
+                historyTasks.forEach(t => {
+                    let sBadge = '';
+                    if(t.status === 'completed') sBadge = '<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[9px] font-bold">Approved</span>';
+                    else if(t.status === 'rejected') sBadge = '<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded text-[9px] font-bold">Rejected</span>';
+                    else if(t.status === 'revisi') sBadge = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-[9px] font-bold animate-pulse">Revisi</span>';
+                    else if(t.status === 'waiting_approval') sBadge = '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-[9px] font-bold">Menunggu</span>';
+                    else sBadge = '<span class="px-2 py-1 bg-slate-100 text-slate-700 rounded text-[9px] font-bold">Pending</span>';
+
+                    let dStr = t.completed_at ? new Date(t.completed_at).toLocaleDateString('id-ID', {day:'2-digit', month:'short'}) : '-';
+                    let pStr = (t.status === 'rejected') ? '<span class="text-rose-600 font-black">-1</span>' : ((t.status === 'completed') ? `<span class="text-emerald-600 font-bold">+${t.weight}</span>` : '-');
+
+                    historyHtml += `<tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors"><td class="px-4 py-3 text-[9px] text-slate-400 font-mono tracking-tighter">${t.id}</td><td class="px-4 py-3 font-bold text-slate-700 text-[11px]">${t.title}</td><td class="px-4 py-3 text-[11px]">${t.assignee}</td><td class="px-4 py-3">${sBadge}</td><td class="px-4 py-3 text-center">${pStr}</td><td class="px-4 py-3 text-[10px] text-slate-500">${dStr}</td></tr>`;
+                });
                 
                 container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -948,9 +901,26 @@
                     <div class="premium-card bg-white p-6 shadow-sm flex flex-col h-[400px]">
                         <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest mb-2 border-b border-slate-100 pb-3 flex justify-between items-center">
                             <span><i class="fa-solid fa-list-check text-amber-500 mr-2"></i> Validasi Pekerjaan Admin</span>
-                            <span class="bg-rose-500 text-white text-[9px] px-2 py-0.5 rounded-full shadow-sm">${waitingTasks.length}</span>
+                            <span class="bg-rose-500 text-white text-[9px] px-2 py-0.5 rounded-full shadow-sm">${waitingTasks.length} Menunggu</span>
                         </h4>
                         <div class="flex-1 overflow-y-auto mini-scroll pr-1">${waitingHtml}</div>
+                    </div>
+                </div>
+                
+                <div class="premium-card bg-white p-6 shadow-sm mt-6">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                        <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest"><i class="fa-solid fa-database text-sky-500 mr-2"></i> Database Laporan Pekerjaan Tim</h4>
+                        <button onclick="downloadSiadminReport()" class="px-4 py-2 bg-emerald-50 text-emerald-700 hover:bg-emerald-500 hover:text-white text-xs font-bold rounded-xl transition-all shadow-sm border border-emerald-200 flex items-center gap-2"><i class="fa-solid fa-file-excel"></i> Download Excel</button>
+                    </div>
+                    <div class="overflow-x-auto mini-scroll max-h-[350px]">
+                        <table class="w-full text-left text-xs whitespace-nowrap text-slate-600 custom-table">
+                            <thead class="bg-slate-50 text-slate-500 sticky top-0 z-10 shadow-sm border-b-2 border-slate-200">
+                                <tr><th class="px-4 py-3 font-black">ID Tugas</th><th class="px-4 py-3 font-black">Deskripsi Pekerjaan</th><th class="px-4 py-3 font-black">PIC</th><th class="px-4 py-3 font-black">Status</th><th class="px-4 py-3 font-black text-center">Poin</th><th class="px-4 py-3 font-black">Tgl Selesai</th></tr>
+                            </thead>
+                            <tbody>
+                                ${historyHtml || '<tr><td colspan="6" class="text-center py-8 text-slate-400 font-bold">Belum ada riwayat pekerjaan yang terekam.</td></tr>'}
+                            </tbody>
+                        </table>
                     </div>
                 </div>`;
             } else {
@@ -960,22 +930,30 @@
                 
                 let pendingHtml = ''; let doneHtml = '';
                 
-                let myPendingList = myTasks.filter(t => t.status === 'pending' || t.status === 'waiting_approval');
-                let myCompletedList = myTasks.filter(t => t.status === 'completed').sort((a,b) => b.completed_at - a.completed_at).slice(0, 5);
+                let myPendingList = myTasks.filter(t => t.status === 'pending' || t.status === 'waiting_approval' || t.status === 'revisi');
+                let myCompletedList = myTasks.filter(t => t.status === 'completed' || t.status === 'rejected').sort((a,b) => b.completed_at - a.completed_at).slice(0, 10);
                 
                 if (myPendingList.length === 0) {
                     pendingHtml = `<div class="p-8 text-center text-slate-400 font-bold bg-slate-50 rounded-xl border border-dashed border-slate-200 mt-4"><i class="fa-solid fa-face-laugh-beam text-3xl mb-2 text-slate-300 block"></i>Kerja bagus! Tidak ada tugas yang pending.</div>`;
                 } else {
                     myPendingList.forEach(t => {
                         let isWaiting = t.status === 'waiting_approval';
-                        let badge = isWaiting ? `<span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-black rounded ml-2 shadow-sm">Menunggu Validasi</span>` : `<span class="px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-black rounded ml-2 shadow-sm">Instruksi Koordinator</span>`;
-                        let btn = isWaiting ? `<button disabled class="px-4 py-2 bg-slate-100 text-slate-400 rounded-xl text-xs font-bold"><i class="fa-solid fa-clock"></i></button>` : `<button onclick="siadminAction('${t.id}', 'complete')" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-all shadow-[0_4px_10px_rgba(16,185,129,0.3)] hover:-translate-y-0.5"><i class="fa-solid fa-check mr-1"></i> Selesaikan</button>`;
+                        let isRevisi = t.status === 'revisi';
+                        
+                        let badge = '';
+                        if(isWaiting) badge = `<span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-black rounded ml-2 shadow-sm">Menunggu Validasi Koordinator</span>`;
+                        else if(isRevisi) badge = `<span class="px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-black rounded ml-2 shadow-sm border border-rose-200 animate-pulse">Butuh Revisi Segera</span>`;
+                        else badge = `<span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-black rounded ml-2 shadow-sm">Instruksi Baru</span>`;
+
+                        let btn = isWaiting 
+                            ? `<button disabled class="px-4 py-2 bg-slate-100 text-slate-400 rounded-xl text-xs font-bold"><i class="fa-solid fa-clock"></i> Diproses...</button>` 
+                            : `<button onclick="siadminAction('${t.id}', 'complete')" class="px-4 py-2 ${isRevisi ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-500 hover:bg-emerald-600'} text-white rounded-xl text-xs font-bold transition-all shadow-[0_4px_10px_rgba(16,185,129,0.3)] hover:-translate-y-0.5"><i class="fa-solid fa-paper-plane mr-1"></i> ${isRevisi ? 'Submit Revisi' : 'Laporkan Selesai'}</button>`;
                         
                         pendingHtml += `
-                        <div class="flex items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                        <div class="flex items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors ${isRevisi ? 'bg-rose-50/20' : ''}">
                             <div class="flex-1">
                                 <h4 class="font-bold text-sm text-slate-800">${t.title} ${badge}</h4>
-                                <p class="text-[10px] text-slate-500 mt-1">Deadline: <b class="text-rose-600">${t.deadline || '-'}</b> • Poin: <b class="text-indigo-600">${t.weight > 0 ? t.weight : '?'}</b></p>
+                                <p class="text-[10px] text-slate-500 mt-1">Deadline: <b class="text-rose-600">${t.deadline || '-'}</b> • Poin Target: <b class="text-indigo-600">${t.weight > 0 ? t.weight : '?'}</b></p>
                             </div>
                             <div>${btn}</div>
                         </div>`;
@@ -984,7 +962,17 @@
                 
                 myCompletedList.forEach(t => {
                     let dStr = new Date(t.completed_at).toLocaleDateString('id-ID', {day: 'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
-                    doneHtml += `<div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0"><div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i><span class="text-xs font-bold text-slate-600 truncate">${t.title}</span></div><span class="text-[9px] font-bold text-slate-400">${dStr}</span></div>`;
+                    let icon = (t.status === 'completed') ? `<i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i>` : `<i class="fa-solid fa-circle-xmark text-rose-500 text-sm"></i>`;
+                    let pointLabel = (t.status === 'completed') ? `<span class="text-emerald-500 text-[9px] font-black">+${t.weight} Poin</span>` : `<span class="text-rose-500 text-[9px] font-black">-1 Poin (Rejected)</span>`;
+
+                    doneHtml += `
+                    <div class="flex flex-col py-2 border-b border-slate-50 last:border-0">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">${icon}<span class="text-xs font-bold text-slate-600 truncate max-w-[200px]">${t.title}</span></div>
+                            <span class="text-[9px] font-bold text-slate-400">${dStr}</span>
+                        </div>
+                        <div class="ml-6 mt-0.5">${pointLabel}</div>
+                    </div>`;
                 });
 
                 container.innerHTML = `
@@ -998,9 +986,9 @@
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Akumulasi Bulan Ini</p>
                         <h3 class="text-3xl font-black text-slate-700 mt-1">${myKpi.month}</h3>
                     </div>
-                    <div class="premium-card p-6 bg-white border-b-4 border-b-rose-500 flex flex-col justify-center bg-rose-50/30">
-                        <p class="text-[10px] font-black text-rose-500 uppercase tracking-widest">Tugas Pending</p>
-                        <h3 class="text-3xl font-black text-rose-700 mt-1">${myKpi.pending} <span class="text-sm font-normal text-rose-400">Tugas</span></h3>
+                    <div class="premium-card p-6 bg-white border-b-4 border-b-amber-500 flex flex-col justify-center bg-amber-50/30">
+                        <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest">Pekerjaan Aktif & Revisi</p>
+                        <h3 class="text-3xl font-black text-amber-700 mt-1">${myKpi.pending} <span class="text-sm font-normal text-amber-500">Tugas</span></h3>
                     </div>
                 </div>
 
@@ -1017,11 +1005,11 @@
                             <h4 class="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-3 border-b border-slate-100 pb-2 flex items-center"><i class="fa-solid fa-pen-to-square text-emerald-500 mr-2"></i> Report Pekerjaan Mandiri</h4>
                             <p class="text-[9px] font-bold text-slate-400 mb-3 leading-relaxed">Laporkan pekerjaan Anda yang tidak ada di instruksi untuk divalidasi dan diberi poin oleh Koordinator.</p>
                             <input type="text" id="report-task-title" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs focus:border-emerald-500 outline-none mb-3" placeholder="Nama pekerjaan yang diselesaikan...">
-                            <button onclick="siadminReportTask()" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-500 hover:text-white font-bold py-2 rounded-lg transition-colors text-xs"><i class="fa-solid fa-paper-plane mr-1"></i> Submit ke Koordinator</button>
+                            <button onclick="siadminReportTask()" class="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-500 hover:text-white font-bold py-2 rounded-lg transition-colors text-xs"><i class="fa-solid fa-paper-plane mr-1"></i> Submit Progress ke Koordinator</button>
                         </div>
                         
-                        <div class="premium-card bg-white p-5 shadow-sm flex-1">
-                            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3"><i class="fa-solid fa-clock-rotate-left mr-1"></i> History Selesai</h4>
+                        <div class="premium-card bg-white p-5 shadow-sm flex-1 overflow-y-auto mini-scroll max-h-[200px]">
+                            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3"><i class="fa-solid fa-clock-rotate-left mr-1"></i> History Validasi Terakhir</h4>
                             <div class="space-y-1">${doneHtml || '<p class="text-[10px] text-slate-300 font-bold">Belum ada riwayat.</p>'}</div>
                         </div>
                     </div>
@@ -1045,7 +1033,7 @@
             if(!t) { alert('Isi nama pekerjaan terlebih dahulu!'); return; }
             let tasks = getSiadminTasks();
             tasks.push({ id: 'M' + Date.now(), title: t, assignee: currentSiadminUser, deadline: '-', weight: 0, status: 'waiting_approval', created_at: Date.now(), completed_at: null });
-            saveSiadminTasks(tasks); alert(`Berhasil dilaporkan! Menunggu validasi dan pemberian bobot dari Okta Pradika.`); renderSiadminLayout();
+            saveSiadminTasks(tasks); alert(`Progress pekerjaan berhasil dilaporkan! Menunggu validasi dari Okta Pradika.`); renderSiadminLayout();
         }
 
         function siadminAction(taskId, actionType) {
@@ -1053,23 +1041,58 @@
             let idx = tasks.findIndex(t => t.id === taskId);
             if (idx > -1) {
                 if (actionType === 'complete') {
-                    tasks[idx].status = 'completed';
-                    tasks[idx].completed_at = Date.now();
+                    // Berubah dari completed menjadi waiting_approval untuk divalidasi boss
+                    tasks[idx].status = 'waiting_approval';
                 } else if (actionType === 'approve') {
                     let wInput = document.getElementById('weight-' + taskId);
                     let newWeight = wInput ? parseInt(wInput.value) : 0;
-                    if (isNaN(newWeight) || newWeight <= 0) {
-                        alert('Harap tentukan nilai poin (bobot) tugas ini terlebih dahulu!');
-                        return;
-                    }
+                    if (isNaN(newWeight) || newWeight <= 0) { alert('Harap tentukan nilai poin (bobot) tugas ini terlebih dahulu sebelum di-approve!'); return; }
                     tasks[idx].weight = newWeight;
                     tasks[idx].status = 'completed';
                     tasks[idx].completed_at = Date.now();
+                } else if (actionType === 'revisi') {
+                    tasks[idx].status = 'revisi';
                 } else if (actionType === 'reject') {
+                    tasks[idx].weight = -1; // Poin -1 jika di reject
                     tasks[idx].status = 'rejected';
+                    tasks[idx].completed_at = Date.now();
                 }
                 saveSiadminTasks(tasks); renderSiadminLayout();
             }
+        }
+
+        function downloadSiadminReport() {
+            let tasks = getSiadminTasks();
+            if(tasks.length === 0) { alert('Tidak ada data pekerjaan yang tersimpan untuk didownload.'); return; }
+            
+            let exportData = tasks.map(t => {
+                let statusLabel = '';
+                if(t.status === 'completed') statusLabel = 'Approved / Selesai';
+                else if(t.status === 'rejected') statusLabel = 'Ditolak (Poin -1)';
+                else if(t.status === 'revisi') statusLabel = 'Menunggu Revisi Admin';
+                else if(t.status === 'waiting_approval') statusLabel = 'Menunggu Validasi Koordinator';
+                else statusLabel = 'Pending (Belum Dikerjakan)';
+
+                return {
+                    'ID Tugas': t.id,
+                    'Nama / Deskripsi Pekerjaan': t.title,
+                    'PIC (Admin)': t.assignee,
+                    'Deadline Pekerjaan': t.deadline,
+                    'Status Terakhir': statusLabel,
+                    'Bobot / Poin': t.status === 'rejected' ? -1 : t.weight,
+                    'Tanggal Dibuat': new Date(t.created_at).toLocaleString('id-ID'),
+                    'Tanggal Selesai / Validasi': t.completed_at ? new Date(t.completed_at).toLocaleString('id-ID') : '-'
+                };
+            });
+
+            let ws = XLSX.utils.json_to_sheet(exportData);
+            
+            // Atur lebar kolom untuk kerapian
+            ws['!cols'] = [ {wch: 15}, {wch: 45}, {wch: 25}, {wch: 15}, {wch: 25}, {wch: 15}, {wch: 25}, {wch: 25} ];
+            
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Rekap_Pekerjaan_Tim");
+            XLSX.writeFile(wb, "Rekap_Database_SIADMIN.xlsx");
         }
         // ==============================================================
 
@@ -1363,7 +1386,6 @@
                     document.getElementById('simona-kpi-total').innerText = formatIDR(totalNominal); 
                     document.getElementById('simona-kpi-count').innerText = filteredArr.length + ' Item';
 
-                    // CATEGORY CARDS 
                     let cardsContainer = document.getElementById('simona-category-cards');
                     if (cardsContainer) {
                         let cardHTML = ''; let sortedCats = Object.keys(categoryMap).sort((a, b) => categoryMap[b] - categoryMap[a]); const bgColors = ['from-amber-400 to-orange-500', 'from-blue-400 to-cyan-500', 'from-emerald-400 to-teal-500', 'from-purple-400 to-pink-500', 'from-rose-400 to-red-500', 'from-indigo-400 to-violet-500'];
@@ -1374,7 +1396,6 @@
                         cardsContainer.innerHTML = cardHTML;
                     }
 
-                    // TOP SPENDERS 
                     let spendersContainer = document.getElementById('simona-top-spenders');
                     if (spendersContainer) {
                         let spenderHTML = ''; let sortedPICs = Object.keys(picCostMap).filter(n => n !== '-' && n !== 'TANPA NAMA' && n !== 'UNDEFINED').sort((a, b) => picCostMap[b].total - picCostMap[a].total).slice(0, 6);
@@ -1472,9 +1493,7 @@
                     });
 
                     let kompContainer = document.getElementById('mbp-bbm-komparasi');
-                    let chartLabels = [];
-                    let chartOpsData = [];
-                    let chartMbpData = [];
+                    let chartLabels = []; let chartOpsData = []; let chartMbpData = [];
 
                     if (kompContainer) {
                         let kompHTML = '';
@@ -1482,24 +1501,16 @@
                             kompHTML = `<div class="col-span-full text-slate-400 text-center py-4 font-bold">Data komparasi kosong untuk Role yang dipilih.</div>`;
                         } else {
                             filteredPICs.sort((a,b) => (mbpMap[b]?.rev || 0) - (mbpMap[a]?.rev || 0));
-                            
                             filteredPICs.forEach((pic, idx) => {
-                                let hasOps = opsMap[pic] !== undefined;
-                                let hasMbp = mbpMap[pic] !== undefined;
-                                
-                                let opsCost = hasOps ? opsMap[pic].cost : 0;
-                                let mbpRev = hasMbp ? mbpMap[pic].rev : 0;
+                                let hasOps = opsMap[pic] !== undefined; let hasMbp = mbpMap[pic] !== undefined;
+                                let opsCost = hasOps ? opsMap[pic].cost : 0; let mbpRev = hasMbp ? mbpMap[pic].rev : 0;
                                 let tickets = hasMbp ? mbpMap[pic].tickets : [];
                                 
-                                chartLabels.push(pic.substring(0, 15));
-                                chartOpsData.push(opsCost);
-                                chartMbpData.push(mbpRev);
+                                chartLabels.push(pic.substring(0, 15)); chartOpsData.push(opsCost); chartMbpData.push(mbpRev);
                                 
                                 let isValid = (hasOps && hasMbp && opsCost > 0); 
-                                let labelStatus = isValid ? "Terverifikasi" : "Validasi Ulang";
-                                let bgClass = isValid ? "border-t-emerald-500 hover:border-emerald-400" : "border-t-rose-500 hover:border-rose-400";
-                                let iconStatus = isValid ? "fa-circle-check text-emerald-500" : "fa-triangle-exclamation text-rose-500";
-                                let textStatus = isValid ? "text-emerald-700 bg-emerald-100 border-emerald-200" : "text-rose-700 bg-rose-100 border-rose-200";
+                                let labelStatus = isValid ? "Terverifikasi" : "Validasi Ulang"; let bgClass = isValid ? "border-t-emerald-500 hover:border-emerald-400" : "border-t-rose-500 hover:border-rose-400";
+                                let iconStatus = isValid ? "fa-circle-check text-emerald-500" : "fa-triangle-exclamation text-rose-500"; let textStatus = isValid ? "text-emerald-700 bg-emerald-100 border-emerald-200" : "text-rose-700 bg-rose-100 border-rose-200";
 
                                 kompHTML += `
                                 <div onclick="showTicketBreakdown('${pic.replace(/'/g, "\\'")}')" class="cursor-pointer premium-card p-5 bg-white relative overflow-hidden group border-t-4 ${bgClass} transition-all duration-300 flex flex-col h-full shadow-sm">
@@ -1517,7 +1528,6 @@
                                             <i class="fa-solid fa-arrow-pointer text-xs"></i>
                                         </div>
                                     </div>
-                                    
                                     <div class="grid grid-cols-2 gap-2 mt-2 mb-4">
                                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 group-hover:bg-rose-50 transition-colors">
                                             <p class="text-[8px] text-slate-400 group-hover:text-rose-500 uppercase font-black mb-1">Ops BBM (Col P)</p>
@@ -1528,7 +1538,6 @@
                                             <p class="text-[13px] font-black text-slate-700 group-hover:text-emerald-700">${formatIDR(mbpRev)}</p>
                                         </div>
                                     </div>
-                                    
                                     <div class="mt-auto pt-3 border-t border-slate-100/80 flex items-center justify-center">
                                         <span class="w-full text-center px-3 py-1.5 text-[10px] font-black uppercase rounded-lg border ${textStatus} transition-colors shadow-sm">
                                             <i class="fa-solid ${iconStatus} mr-1.5"></i>${labelStatus}
@@ -1553,17 +1562,7 @@
                                     { label: 'Estimasi Revenue MBP (Rp)', data: chartMbpData.slice(0, maxShow), backgroundColor: '#10b981', borderRadius: 4 }
                                 ]
                             },
-                            options: { 
-                                responsive: true, 
-                                maintainAspectRatio: false, 
-                                plugins: { 
-                                    datalabels: { display: false },
-                                    legend: { position: 'top', labels: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: 'bold' } } }
-                                },
-                                scales: {
-                                    y: { ticks: { callback: function(val) { return 'Rp ' + (val / 1000000).toFixed(0) + 'jt'; } } }
-                                }
-                            }
+                            options: { responsive: true, maintainAspectRatio: false, plugins: { datalabels: { display: false }, legend: { position: 'top', labels: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: 'bold' } } } }, scales: { y: { ticks: { callback: function(val) { return 'Rp ' + (val / 1000000).toFixed(0) + 'jt'; } } } } }
                         });
                     }
                 }
