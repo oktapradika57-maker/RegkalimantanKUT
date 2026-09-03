@@ -76,12 +76,15 @@
         .ai-pulse { animation: pulseAI 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulseAI { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
 
-        /* Login Screen CSS */
         #login-screen { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); backdrop-filter: blur(10px); }
         .login-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         .login-input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; }
         .login-input:focus { background: rgba(255, 255, 255, 0.15); border-color: #38bdf8; outline: none; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3); }
         .login-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+        
+        /* Cloud Sync Loading Animation */
+        .sync-pulse { animation: syncPulse 1.5s infinite; }
+        @keyframes syncPulse { 0% { opacity: 0.5; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.5; transform: scale(0.95); } }
     </style>
 </head>
 <body class="text-slate-800 h-screen flex overflow-hidden">
@@ -378,7 +381,7 @@
                 </div>
             </section>
             
-            <!-- SIADMIN (TASK & KPI MANAGER) -->
+            <!-- SIADMIN (TASK & KPI MANAGER - CLOUD SYNC) -->
             <section id="view-siadmin" class="view-pane space-y-6 max-w-7xl mx-auto pb-10">
                 
                 <!-- STAGE 1: LOCK SCREEN (Master Password) -->
@@ -432,9 +435,9 @@
                     </div>
                 </div>
 
-                <!-- STAGE 3: DASHBOARD KHUSUS -->
+                <!-- STAGE 3: DASHBOARD KHUSUS (CLOUD) -->
                 <div id="siadmin-dashboard" class="hidden space-y-6">
-                    <div class="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex-wrap gap-4">
                         <div class="flex items-center gap-4">
                             <div id="siadmin-user-avatar" class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-2xl border border-violet-200 shadow-inner"></div>
                             <div>
@@ -442,9 +445,14 @@
                                 <p id="siadmin-user-role-label" class="text-[10px] font-bold text-violet-600 uppercase tracking-widest">Role</p>
                             </div>
                         </div>
-                        <button onclick="logoutSiadminRole()" class="px-4 py-2 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 text-xs font-bold rounded-xl transition-colors border border-slate-200 flex items-center gap-2 shadow-sm">
-                            <i class="fa-solid fa-right-from-bracket"></i> Ganti Akun
-                        </button>
+                        <div class="flex items-center gap-4">
+                            <div id="cloud-sync-status" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-2">
+                                <i class="fa-solid fa-cloud"></i> Menunggu...
+                            </div>
+                            <button onclick="logoutSiadminRole()" class="px-4 py-2 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 text-xs font-bold rounded-xl transition-colors border border-slate-200 flex items-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-right-from-bracket"></i> Ganti Akun
+                            </button>
+                        </div>
                     </div>
                     <div id="siadmin-dynamic-layout" class="space-y-6"></div>
                 </div>
@@ -646,22 +654,74 @@
         };
 
         Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif"; Chart.defaults.color = '#94a3b8'; Chart.defaults.scale.grid.color = 'rgba(241, 245, 249, 0.5)'; Chart.defaults.scale.grid.drawBorder = false; Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)'; Chart.defaults.plugins.tooltip.titleFont = { size: 13, weight: 'bold' }; Chart.defaults.plugins.tooltip.padding = 12; Chart.defaults.plugins.tooltip.cornerRadius = 8; Chart.defaults.elements.line.tension = 0.4;
+        
         const SPREADSHEET_ID = '1hIeT51_SVdNrz62s93zpZNyqepBMdNCa-mDRH-wVOIw'; 
+        
+        // ==============================================================
+        // GAS URL KHUSUS UNTUK SIADMIN CLOUD SYNC
+        // ==============================================================
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbziit-SnPIu6CGOjgXilJy9diYAN9mQRCULbcBv-N26LugoG0lwcNIIskZwHVA--xvTLw/exec';
+
         let globalDataset = {}; let charts = {}; let currentView = 'home';
         let simonaCurrentCategory = 'ALL';
         window.currentMbpTickets = {}; 
+        window.siadminTasks = []; // Cloud state memory
 
         const titleLabels = { 'home': 'Menu Utama', 'analisa-pm': 'Analisa PM', 'analisa-prod': 'Produktivitas Tiketing', 'sva': 'Dashboard SVA', 'sdm': 'SDM & Tools', 'kpi': 'Data KPI', 'operational': 'SIMONA Analytics', 'aging-sva': 'Aging SVA', 'aging-ops': 'Aging OPS', 'aging-lainnya': 'Aging Lainnya', 'project': 'Project Tracker', 'pm-target': 'PM Target', 'pm-curvas': 'PM S-Curve', 'mbp-rh': 'Analisa Delta & Revenue', 'mbp-bbm': 'Konsumsi BBM & Komparasi', 'siadmin': 'SIADMIN (Task & KPI Manager)' };
 
         // ==============================================================
-        // APLIKASI SIADMIN (TASK MANAGER, KPI, & EXPORT EXCEL)
+        // APLIKASI SIADMIN (TASK MANAGER, KPI, & CLOUD SYNC)
         // ==============================================================
         let currentSiadminUser = null;
         let currentSiadminRoleType = null;
         
-        const SIADMIN_DB_KEY = 'KUT_SIADMIN_TASKS_DB';
-        function getSiadminTasks() { return JSON.parse(localStorage.getItem(SIADMIN_DB_KEY) || '[]'); }
-        function saveSiadminTasks(tasks) { localStorage.setItem(SIADMIN_DB_KEY, JSON.stringify(tasks)); }
+        async function fetchSiadminCloud() {
+            const statusEl = document.getElementById('cloud-sync-status');
+            if(!statusEl) return;
+            statusEl.innerHTML = '<i class="fa-solid fa-cloud-arrow-down animate-bounce text-sky-500"></i> Syncing Cloud...';
+            
+            try {
+                if (GAS_URL === 'ISI_DENGAN_URL_WEB_APP_GOOGLE_SCRIPT_ANDA') throw new Error("URL GAS Belum Diisi");
+                
+                let res = await fetch(GAS_URL);
+                let data = await res.json();
+                
+                window.siadminTasks = Array.isArray(data) ? data : [];
+                localStorage.setItem('KUT_SIADMIN_BACKUP', JSON.stringify(window.siadminTasks));
+                
+                statusEl.innerHTML = '<i class="fa-solid fa-cloud-check text-emerald-500"></i> Cloud Synced';
+                renderSiadminLayout();
+            } catch(e) {
+                console.warn('Gagal koneksi cloud, menggunakan backup lokal', e);
+                window.siadminTasks = JSON.parse(localStorage.getItem('KUT_SIADMIN_BACKUP') || '[]');
+                statusEl.innerHTML = '<i class="fa-solid fa-cloud-xmark text-rose-500"></i> Offline Mode';
+                renderSiadminLayout();
+            }
+        }
+
+        async function saveSiadminCloud() {
+            const statusEl = document.getElementById('cloud-sync-status');
+            localStorage.setItem('KUT_SIADMIN_BACKUP', JSON.stringify(window.siadminTasks));
+            renderSiadminLayout();
+            
+            if(!statusEl) return;
+            statusEl.innerHTML = '<i class="fa-solid fa-cloud-arrow-up text-amber-500 sync-pulse"></i> Saving...';
+            
+            try {
+                if (GAS_URL === 'ISI_DENGAN_URL_WEB_APP_GOOGLE_SCRIPT_ANDA') throw new Error("URL GAS Belum Diisi");
+
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'sync', tasks: window.siadminTasks })
+                });
+                
+                statusEl.innerHTML = '<i class="fa-solid fa-cloud-check text-emerald-500"></i> Data Tersimpan';
+            } catch(e) {
+                console.error("Gagal push ke cloud", e);
+                statusEl.innerHTML = '<i class="fa-solid fa-cloud-xmark text-rose-500"></i> Tersimpan Lokal';
+            }
+        }
 
         function applyAutoRole(user) {
             if (user === 'Mawardah' || user === 'M Kiki Firmansyah') {
@@ -774,11 +834,8 @@
         function getStartOfWeek() { let d = new Date(); d.setHours(0,0,0,0); let day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.setDate(diff)).getTime(); }
         function getStartOfMonth() { let d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1).getTime(); }
 
-        // ==========================================
-        // PROPORTIONAL KPI CALCULATION
-        // ==========================================
         function kalkulasiKPI(adminName) {
-            let tasks = getSiadminTasks();
+            let tasks = window.siadminTasks;
             let startW = getStartOfWeek(); let startM = getStartOfMonth();
             let kpi = { wTarget: 0, wEarned: 0, mTarget: 0, mEarned: 0, pending: 0 };
             
@@ -807,12 +864,15 @@
             elLock.classList.add('hidden'); elRole.classList.add('hidden'); elDash.classList.add('hidden');
             if (!sessionStorage.getItem('siadmin_master_unlocked')) { elLock.classList.remove('hidden'); } 
             else if (!currentSiadminUser) { elRole.classList.remove('hidden'); } 
-            else { elDash.classList.remove('hidden'); renderSiadminLayout(); }
+            else { 
+                elDash.classList.remove('hidden'); 
+                if (window.siadminTasks.length === 0) fetchSiadminCloud(); else renderSiadminLayout(); 
+            }
         }
 
         function renderSiadminLayout() {
             const container = document.getElementById('siadmin-dynamic-layout');
-            let tasks = getSiadminTasks();
+            let tasks = window.siadminTasks;
             
             if (currentSiadminRoleType === 'boss') {
                 let kpiMawardah = kalkulasiKPI('Mawardah'); let kpiKiki = kalkulasiKPI('M Kiki Firmansyah');
@@ -945,7 +1005,6 @@
                     </div>
                 </div>`;
             } else {
-                // TAMPILAN ADMIN (MAWARDAH / KIKI)
                 let myKpi = kalkulasiKPI(currentSiadminUser);
                 let myTasks = tasks.filter(t => t.assignee === currentSiadminUser);
                 
@@ -1076,18 +1135,16 @@
             }
         }
 
-        // AKSI ADMIN MENSUBMIT PROGRES (DARI TUGAS YANG SUDAH ADA)
+        // AKSI SIADMIN (CLOUD SYNC ENABLED)
         function siadminSubmitProgress(taskId) {
             let prog = document.getElementById('slider-' + taskId).value;
             let note = document.getElementById('note-' + taskId).value.trim();
-            let tasks = getSiadminTasks();
-            let idx = tasks.findIndex(t => t.id === taskId);
+            let idx = window.siadminTasks.findIndex(t => t.id === taskId);
             if(idx > -1) {
-                tasks[idx].progress = parseInt(prog);
-                tasks[idx].notes = note || 'Tidak ada catatan/kendala';
-                tasks[idx].status = 'waiting_approval';
-                saveSiadminTasks(tasks);
-                renderSiadminLayout();
+                window.siadminTasks[idx].progress = parseInt(prog);
+                window.siadminTasks[idx].notes = note || 'Tidak ada catatan/kendala';
+                window.siadminTasks[idx].status = 'waiting_approval';
+                saveSiadminCloud();
             }
         }
 
@@ -1097,9 +1154,8 @@
             let w = document.getElementById('add-task-weight').value;
             let d = document.getElementById('add-task-deadline').value;
             if(!t || !w || !d) { alert('Semua kolom tugas wajib diisi!'); return; }
-            let tasks = getSiadminTasks();
-            tasks.push({ id: 'T' + Date.now(), title: t, assignee: a, deadline: d, weight: w, progress: 0, notes: '', earned: 0, status: 'pending', created_at: Date.now(), completed_at: null });
-            saveSiadminTasks(tasks); alert(`Tugas berhasil diberikan ke ${a}.`); renderSiadminLayout();
+            window.siadminTasks.push({ id: 'T' + Date.now(), title: t, assignee: a, deadline: d, weight: w, progress: 0, notes: '', earned: 0, status: 'pending', created_at: Date.now(), completed_at: null });
+            saveSiadminCloud(); alert(`Tugas berhasil diberikan ke ${a}.`); 
         }
 
         function siadminReportTask() {
@@ -1108,45 +1164,42 @@
             let n = document.getElementById('report-task-note').value.trim();
             if(!t) { alert('Isi nama pekerjaan terlebih dahulu!'); return; }
             
-            let tasks = getSiadminTasks();
-            tasks.push({ 
+            window.siadminTasks.push({ 
                 id: 'M' + Date.now(), title: t, assignee: currentSiadminUser, deadline: 'Laporan Mandiri', 
                 weight: 0, progress: parseInt(p) || 100, notes: n || 'Tidak ada catatan/kendala', earned: 0, 
                 status: 'waiting_approval', created_at: Date.now(), completed_at: null 
             });
-            saveSiadminTasks(tasks); alert(`Laporan berhasil disubmit! Menunggu validasi dari Okta Pradika.`); renderSiadminLayout();
+            saveSiadminCloud(); alert(`Laporan berhasil disubmit! Menunggu validasi dari Koordinator.`);
         }
 
         function siadminAction(taskId, actionType) {
-            let tasks = getSiadminTasks();
-            let idx = tasks.findIndex(t => t.id === taskId);
+            let idx = window.siadminTasks.findIndex(t => t.id === taskId);
             if (idx > -1) {
                 if (actionType === 'approve') {
                     let wInput = document.getElementById('weight-' + taskId);
                     let targetWeight = wInput ? parseInt(wInput.value) : 0;
                     if (isNaN(targetWeight) || targetWeight <= 0) { alert('Harap tentukan Bobot Max (Poin Target) terlebih dahulu sebelum melakukan Approve!'); return; }
                     
-                    let progress = tasks[idx].progress || 100;
+                    let progress = window.siadminTasks[idx].progress || 100;
                     let calculatedPoints = (targetWeight * progress) / 100;
                     
-                    tasks[idx].weight = targetWeight;
-                    tasks[idx].earned = calculatedPoints;
-                    tasks[idx].status = 'completed';
-                    tasks[idx].completed_at = Date.now();
+                    window.siadminTasks[idx].weight = targetWeight;
+                    window.siadminTasks[idx].earned = calculatedPoints;
+                    window.siadminTasks[idx].status = 'completed';
+                    window.siadminTasks[idx].completed_at = Date.now();
                 } else if (actionType === 'revisi') {
-                    tasks[idx].status = 'revisi';
+                    window.siadminTasks[idx].status = 'revisi';
                 } else if (actionType === 'reject') {
-                    tasks[idx].earned = -1; // Penalti mutlak saat di-reject
-                    tasks[idx].status = 'rejected';
-                    tasks[idx].completed_at = Date.now();
+                    window.siadminTasks[idx].earned = -1; // Penalti
+                    window.siadminTasks[idx].status = 'rejected';
+                    window.siadminTasks[idx].completed_at = Date.now();
                 }
-                saveSiadminTasks(tasks); renderSiadminLayout();
+                saveSiadminCloud(); 
             }
         }
 
-        // FUNGSI DOWNLOAD EXCEL DATABASE REPORT TIM
         function downloadSiadminReport() {
-            let tasks = getSiadminTasks();
+            let tasks = window.siadminTasks;
             if(tasks.length === 0) { alert('Tidak ada data pekerjaan yang tersimpan untuk didownload.'); return; }
             
             let exportData = tasks.map(t => {
@@ -1177,10 +1230,7 @@
             });
 
             let ws = XLSX.utils.json_to_sheet(exportData);
-            
-            // Atur lebar kolom untuk kerapian Excel
             ws['!cols'] = [ {wch: 15}, {wch: 40}, {wch: 25}, {wch: 15}, {wch: 20}, {wch: 35}, {wch: 25}, {wch: 15}, {wch: 15}, {wch: 20}, {wch: 20} ];
-            
             let wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Rekap_Pekerjaan_Tim");
             XLSX.writeFile(wb, "Database_KPI_SIADMIN.xlsx");
